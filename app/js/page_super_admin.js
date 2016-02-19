@@ -245,8 +245,11 @@ var SUPER_ADMIN = (function () {
 		// Clone the array so as to not modify passed original
 		subscribers = JSON.parse(JSON.stringify(subscribers));
 
+		console.log(subscribers);
+
 		// Before passing dataset to table - add storage consumption per org
 		var orgAvgMiB = 0;
+/*
 		$.each(subscribers, function (org, orgObj) {
 			// Get avg storage for org this year
 //			orgAvgMiB = MEDIASITE.avgStorageMiBThisYearOrg(UTILS.mapFeideOrgToMediasiteFolder(orgData[0].org.split('.')[0]));
@@ -262,6 +265,7 @@ var SUPER_ADMIN = (function () {
 			//	}
 			//};
 		});
+*/
 
 		var table = $('#pageSuperAdmin').find('#subscribersTableSuperAdmin').DataTable({
 			"language": dataTablesLanguage,
@@ -293,7 +297,7 @@ var SUPER_ADMIN = (function () {
 					}
 				]
 			},
-			"data": subscribers,
+			"data": UTILS.convertDataTablesData(subscribers), // Obj to Array,
 			"columns": [
 				{
 					"data": "org_id",
@@ -339,7 +343,7 @@ var SUPER_ADMIN = (function () {
 					"width": "5%",
 					"render": function (data, type, full, meta) {
 						return '<div class="progress no-margin">' +
-							'<div class="progress-bar bg-gray tablePercentage" style="width: ' + 'N/A' + '%">' + 'N/A' + '</div>' +
+							'<div class="progress-bar bg-gray tablePercentage" style="width: ' + 'NA' + '%">' + 'NA' + '</div>' +
 							'</div>';
 						// return full[0].org;
 					}
@@ -349,7 +353,7 @@ var SUPER_ADMIN = (function () {
 					"data": "subscription_code",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return '<span class="text-muted">' + 'N/A' + 'kr</span>';
+						return '<span class="text-muted">' + 'NA' + 'kr</span>';
 					}
 				},
 				{

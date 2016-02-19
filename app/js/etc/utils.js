@@ -57,6 +57,19 @@ var UTILS = (function () {
 		return mapFolderToOrg[folder] || folder;
 	}
 
+	/**
+	 * Make the users JSON object more palatable for DataTables
+	 * @param dataObject
+	 * @returns {Array}
+	 */
+	function convertDataTablesData(dataObject) {
+		var dataArray = [];
+		$.each(dataObject, function (idx, obj) {
+			dataArray.push($.extend(obj, {name: idx}));
+		});
+		return dataArray;
+	}
+
 	/*** Expose public functions ***/
 	return {
 		updateAuthProgress: function (msg) {
@@ -85,8 +98,10 @@ var UTILS = (function () {
 		},
 		mib2tb: function (mib) {
 			return (mib * MiB_to_GB) * GB_to_TB;
+		},
+		convertDataTablesData : function(dataObject){
+			return convertDataTablesData(dataObject);
 		}
-
 	}
 })();
 
