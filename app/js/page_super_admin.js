@@ -331,7 +331,11 @@ var SUPER_ADMIN = (function () {
 					}
 				},
 				{
-					"data": "storage",
+					// TODO: Mistet datagrunnlag for lagring - hiver inn 'dummy' felt fra Kind midlertidig.
+					// Når vi har lagringsdata burde dette legges til i Kind-objektet igjen FØR denne tabellen bygges.
+					// Se også neste kolonne - samme greia
+					//"data": "storage",
+					"data": "subscription_code",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
 						return '<div class="progress no-margin">' +
@@ -341,7 +345,8 @@ var SUPER_ADMIN = (function () {
 					}
 				},
 				{
-					"data": "storage",
+					//"data": "storage",
+					"data": "subscription_code",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
 						return '<span class="text-muted">' + 'N/A' + 'kr</span>';
