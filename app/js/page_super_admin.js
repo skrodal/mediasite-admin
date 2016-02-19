@@ -247,7 +247,7 @@ var SUPER_ADMIN = (function () {
 
 		// Before passing dataset to table - add storage consumption per org
 		var orgAvgMiB = 0;
-		$.each(subscribers.data, function (org, orgObj) {
+		$.each(subscribers, function (org, orgObj) {
 			// Get avg storage for org this year
 //			orgAvgMiB = MEDIASITE.avgStorageMiBThisYearOrg(UTILS.mapFeideOrgToMediasiteFolder(orgData[0].org.split('.')[0]));
 
@@ -315,7 +315,7 @@ var SUPER_ADMIN = (function () {
 					}
 				},
 				{
-					"data": "[2].support",
+					"data": "contact_support",
 					"render": function (data, type, full, meta) {
 						var support;
 						try {
@@ -335,23 +335,23 @@ var SUPER_ADMIN = (function () {
 					"width": "5%",
 					"render": function (data, type, full, meta) {
 						return '<div class="progress no-margin">' +
-							'<div class="progress-bar bg-gray tablePercentage" style="width: ' + full[6].storage.percentage + '%">' + full[6].storage.tb + '</div>' +
+							'<div class="progress-bar bg-gray tablePercentage" style="width: ' + 'N/A' + '%">' + 'N/A' + '</div>' +
 							'</div>';
 						// return full[0].org;
 					}
 				},
 				{
-					"data": "[6].storage",
+					"data": "storage",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return '<span class="text-muted">' + full[6].storage.cost + 'kr</span>';
+						return '<span class="text-muted">' + 'N/A' + 'kr</span>';
 					}
 				},
 				{
-					"data": "[1].abbstatus",
+					"data": "subscription_code",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return "<span class='label bg-" + KIND.subscriptionCodesToColors()[full[1].abbstatus] + "'>" + KIND.subscriptionCodesToNames()[full[1].abbstatus] + "</span>";
+						return "<span class='label bg-" + KIND.subscriptionCodesToColors()[full.subscription_code] + "'>" + KIND.subscriptionCodesToNames()[full[1].abbstatus] + "</span>";
 					}
 				}
 			]
