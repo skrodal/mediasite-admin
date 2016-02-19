@@ -247,7 +247,7 @@ var SUPER_ADMIN = (function () {
 
 		// Before passing dataset to table - add storage consumption per org
 		var orgAvgMiB = 0;
-		$.each(subscribers, function (org, orgObj) {
+		$.each(subscribers.data, function (org, orgObj) {
 			// Get avg storage for org this year
 //			orgAvgMiB = MEDIASITE.avgStorageMiBThisYearOrg(UTILS.mapFeideOrgToMediasiteFolder(orgData[0].org.split('.')[0]));
 
