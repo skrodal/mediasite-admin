@@ -356,7 +356,7 @@ var SUPER_ADMIN = (function () {
 					"data": "subscription_code",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return "<span class='label bg-" + KIND.subscriptionCodesToColors()[full.subscription_code] + "'>" + KIND.subscriptionCodesToNames()[full[1].abbstatus] + "</span>";
+						return "<span class='label bg-" + KIND.subscriptionCodesToColors()[full.subscription_code] + "'>" + KIND.subscriptionCodesToNames()[full.subscription_code] + "</span>";
 					}
 				}
 			]
