@@ -28,7 +28,7 @@ var DATAPORTEN = (function () {
 					first: user.name.split(' ')[0]
 				};
 				USER.email = user.email;
-				USER.photo = jso.config.get("endpoints").photo + user.profilephoto;
+				USER.photo = DP_AUTH.config().dp_endpoints.photo + user.profilephoto;
 				USER.org.id = org;
 				USER.org.shortname = org.split('.')[0];
 				UTILS.updateAuthProgress("Brukerinfo");
