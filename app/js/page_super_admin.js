@@ -15,7 +15,7 @@ var SUPER_ADMIN = (function () {
 	function init() {
 
 		orgSubscribersTable = _buildOrgSubscribersTable(KIND.subscribers());
-		SELECTED_ORG = FEIDE_CONNECT.user().org.shortname
+		SELECTED_ORG = DATAPORTEN.user().org.shortname
 		$('#orgToFolderMap').html(JSON.stringify(UTILS.orgToFolderMap(), null, 4));
 	};
 

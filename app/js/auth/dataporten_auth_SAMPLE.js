@@ -1,5 +1,5 @@
 /**
- * Feide Connect JSO kickoff for this client.
+ * Dataporten JSO kickoff for this client.
  *
  * Auth and collection of user/group info, all combined in a USER object.
  *
@@ -15,20 +15,20 @@ JSO.enablejQuery($);
 
 // Settings pertaining to this client.
 var jso = new JSO({
-	providerID: "FC-MediasiteAdmin",
+	providerID: "DP-MediasiteAdmin",
 	client_id: "",
 	redirect_uri: "",
-	authorization: "https://auth.feideconnect.no/oauth/authorization",
+	authorization: "https://auth.dataporten.no/oauth/authorization",
 	debug: false,
 	scopes: {
-		// request: ["groups", "userinfo", "userinfo-feide", "userinfo-mail", "userinfo-photo", "gk_mediasiteapi", "gk_mediasiteapi_admin", "gk_ecampus-kind", "gk_ecampus-kind_admin"],
-		// require: ["groups", "userinfo", "userinfo-feide", "userinfo-mail", "userinfo-photo", "gk_mediasiteapi", "gk_mediasiteapi_admin", "gk_ecampus-kind", "gk_ecampus-kind_admin"]
+		// request: ["groups", "userinfo", "userinfo-feide", "userinfo-mail", "userinfo-photo", "gk_mediasite", "gk_mediasite_org", "gk_mediasite_admin", "gk_ecampus-kind", "gk_ecampus-kind_admin"],
+		// require: ["groups", "userinfo", "userinfo-feide", "userinfo-mail", "userinfo-photo", "gk_mediasite", "gk_mediasite_org", "gk_mediasite_admin", "gk_ecampus-kind", "gk_ecampus-kind_admin"]
 	},
 	endpoints: {
-		groups: "https://groups-api.feideconnect.no/groups/me/groups",
-		photo: "https://auth.feideconnect.no/user/media/",
-		userinfo: "https://auth.feideconnect.no/userinfo",
-		kind: "https://uninett-kind.gk.feideconnect.no/api/uninett-kind/"
+		groups: "https://groups-api.dataporten.no/groups/me/groups",
+		photo: "https://auth.dataporten.no/user/media/",
+		userinfo: "https://auth.dataporten.no/userinfo",
+		kind: "https://ecampus-kind.dataporten-api.no/api/ecampus-kind/"
 		// mediasite: "https://mediasiteapi.gk.feideconnect.no/api/v1/mediasite/"
 	},
 	kind: {

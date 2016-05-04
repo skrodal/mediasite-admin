@@ -11,6 +11,25 @@ var MEDIASITE = (function () {
 		XHR_DISKUSAGE,
 		XHR_DISKUSAGE_THIS_YEAR;
 
+
+
+	function TEST() {
+		console.log("RUNNING TEST");
+		return jso.ajax({
+				url: jso.config.get("endpoints").mediasite + "admin/orgs/", // Get routes
+				// oauth: { scopes: {require: ["gk_mediasite", "gk_mediasite_admin"], request: ["gk_mediasite", "gk_mediasite_admin"]} },
+				oauth: { scopes: { request: ["gk_mediasite", "gk_mediasite_org", "gk_mediasite_admin"] } },
+				dataType: 'json'
+			})
+			.fail(function (jqXHR, textStatus, error) {
+				UTILS.alertError("Mediasite API (diskusage):", "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?");
+				UTILS.showAuthError("Mediasite API (diskusage)", "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?.");
+			});
+		console.log("TEST DONE");
+	}
+	
+	
+	
 	// Autorun once
 /*
 	(function () {
@@ -19,7 +38,7 @@ var MEDIASITE = (function () {
 		//
 		$.when(XHR_DISKUSAGE).done(function (resultObj) {
 			orgsStorage = resultObj.data;
-			orgHomeStorage = _getDiskusageByOrg(FEIDE_CONNECT.user().org.id);
+			orgHomeStorage = _getDiskusageByOrg(DATAPORTEN.user().org.id);
 			orgsStorageTotals = _getOrgsStorageTotals();
 		});
 		//
@@ -129,6 +148,9 @@ var MEDIASITE = (function () {
 		},
 		ready: function () {
 			return XHR_DISKUSAGE;
+		},
+		test: function() {
+			return TEST();
 		},
 		// For single org
 		orgHomeStorage: function () {

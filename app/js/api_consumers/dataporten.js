@@ -1,4 +1,4 @@
-var FEIDE_CONNECT = (function () {
+var DATAPORTEN = (function () {
 	var USER = {};
 	USER.org = {};
 
@@ -12,7 +12,7 @@ var FEIDE_CONNECT = (function () {
 	function _getUserInfo() {
 		return jso.ajax({
 			url: jso.config.get("endpoints").userinfo,
-			oauth: { scopes: { request: ["userinfo userinfo-feide userinfo-mail userinfo-photo"] } },
+			oauth: { scopes: { request: ["profile userid-feide email"] } },
 			dataType: 'json'
 		})
 			.done(function (data, status, res) {

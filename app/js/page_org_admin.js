@@ -9,7 +9,7 @@ var ORG_ADMIN = (function () {
 		ORG_RECORDED_DATES_NUM = 0;
 
 	function init() {
-		MEDIASITE_FOLDER = UTILS.mapFeideOrgToMediasiteFolder(FEIDE_CONNECT.user().org.shortname);
+		MEDIASITE_FOLDER = UTILS.mapFeideOrgToMediasiteFolder(DATAPORTEN.user().org.shortname);
 		_updateOrgAdminKindUI();
 	}
 
@@ -81,7 +81,7 @@ var ORG_ADMIN = (function () {
 
 		// Sanity check
 		if (!MEDIASITE.orgHomeStorage()) {
-			UTILS.alertError('Fant ikke data for <code>' + FEIDE_CONNECT.user().org.name + '</code>', 'Fant ikke data for ditt l&aelig;rested. Dette betyr mest sannsynlig at org-navn i Mediasite folder ikke er det samme som det vi hentet fra Kind eller at abonnenten benytter lokal lagring.');
+			UTILS.alertError('Fant ikke data for <code>' + DATAPORTEN.user().org.name + '</code>', 'Fant ikke data for ditt l&aelig;rested. Dette betyr mest sannsynlig at org-navn i Mediasite folder ikke er det samme som det vi hentet fra Kind eller at abonnenten benytter lokal lagring.');
 			return false;
 		}
 		_destroyOrgDiskusageLineChart();

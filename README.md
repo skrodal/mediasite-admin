@@ -1,18 +1,15 @@
 # README #
 
-TODO: Update README ;-)
-
-NOTE 1: Non-functional; work in progress. 
-NOTE 2: This service is tailor-made for UNINETT. It requires the "Feide Connect" Service Platform and in-house developed APIs to function.
+Denne tjenesten er skreddersydd av/for UNINETT, krever UNINETT Dataporten og er avhengig av egenutviklede APIer.
 
 # Om MediasiteAdmin #
 
-MediasiteAdmin er en klient skreddersydd for UNINETTs Mediasite tjeneste. Den tilbyr to tilgangsnivå:
+MediasiteAdmin er en klient for UNINETTs Mediasite tjeneste. Den tilbyr to tilgangsnivå:
 
 * SuperAdmin - for UNINETT ansatte
 * OrgAdmin - for abonnent teknisk kontakt
 
-The app offers three views: 
+...og tre ulike views: 
 
 * Dashboard - for global stats; alle kan se
 * Superadmin - for internbruk (abonnenter, stats, kostnader, diskbruk, etc); krever SuperAdmin rolle

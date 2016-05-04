@@ -3,7 +3,7 @@ var DASHBOARD = (function() {
 	var chartOrgsUsageDashboard = false;          // The Chart instance
 
 	function init() {
-		buildOrgsTableDashboard(KIND.subscribers(), FEIDE_CONNECT.user());
+		buildOrgsTableDashboard(KIND.subscribers(), DATAPORTEN.user());
 //		$('.subscribersDiskusageTotal').html(UTILS.mib2tb(MEDIASITE.globalStorageMiB()).toFixed(2) + "TB");
 //		$('.homeOrgDiskusage').text(UTILS.mib2tb(MEDIASITE.orgHomeStorage()[MEDIASITE.orgHomeStorage().length-1].size_mib).toFixed(2)+"TB");
 	}
