@@ -7,7 +7,7 @@
 
 JSO.enablejQuery($);
 
-var CONNECT_AUTH = (function () {
+var DP_AUTH = (function () {
 	var CONFIG =
 	{
 		dp_auth: {

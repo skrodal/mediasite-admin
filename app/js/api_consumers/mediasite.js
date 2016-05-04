@@ -15,8 +15,8 @@ var MEDIASITE = (function () {
 
 	function TEST() {
 		console.log("RUNNING TEST");
-		return DATAPORTEN.jso().ajax({
-				url: jso.config().api_endpoints.mediasite + "admin/orgs/", // Get routes
+		return DP_AUTH.jso().ajax({
+				url: DP_AUTH.config().api_endpoints.mediasite + "admin/orgs/", // Get routes
 				// oauth: { scopes: {require: ["gk_mediasite", "gk_mediasite_admin"], request: ["gk_mediasite", "gk_mediasite_admin"]} },
 				oauth: { scopes: { request: ["gk_mediasite", "gk_mediasite_org", "gk_mediasite_admin"] } },
 				dataType: 'json'
