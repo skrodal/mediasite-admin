@@ -1,53 +1,67 @@
 /**
- * Dataporten JSO kickoff for this client.
+ * DATAPORTEN JSO kickoff for this client.
  *
  * Auth and collection of user/group info, all combined in a USER object.
  *
  */
 
-//
-// var XHR_ORG_SUBSCRIBERS, XHR_USER_INFO, XHR_USER_GROUPS;
-
-// Global vars
-var DEV = !true;
-//
 JSO.enablejQuery($);
 
-// Settings pertaining to this client.
-var jso = new JSO({
-	providerID: "DP-MediasiteAdmin",
-	client_id: "",
-	redirect_uri: "",
-	authorization: "https://auth.dataporten.no/oauth/authorization",
-	debug: false,
-	scopes: {
-		// request: ["groups", "userinfo", "userinfo-feide", "userinfo-mail", "userinfo-photo", "gk_mediasite", "gk_mediasite_org", "gk_mediasite_admin", "gk_ecampus-kind", "gk_ecampus-kind_admin"],
-		// require: ["groups", "userinfo", "userinfo-feide", "userinfo-mail", "userinfo-photo", "gk_mediasite", "gk_mediasite_org", "gk_mediasite_admin", "gk_ecampus-kind", "gk_ecampus-kind_admin"]
-	},
-	endpoints: {
-		groups: "https://groups-api.dataporten.no/groups/me/groups",
-		photo: "https://auth.dataporten.no/user/media/",
-		userinfo: "https://auth.dataporten.no/userinfo",
-		kind: "https://ecampus-kind.dataporten-api.no/api/ecampus-kind/"
-		// mediasite: "https://mediasiteapi.gk.feideconnect.no/api/v1/mediasite/"
-	},
-	kind: {
-		mediasiteID: "123845"
-	}
-});
+var CONNECT_AUTH = (function () {
+	var CONFIG =
+	{
+		dp_auth: {
+			providerID: "DP-MediasiteAdmin",
+			client_id: "DASHBOARD",
+			redirect_uri: "DASHBOARD",
+			authorization: "https://auth.dataporten.no/oauth/authorization",
+		},
+		dp_endpoints: {
+			groups: "https://groups-api.dataporten.no/groups/me/groups",
+			photo: "https://auth.dataporten.no/user/media/",
+			userinfo: "https://auth.dataporten.no/userinfo",
+		},
+		api_endpoints: {
+			kind: "DASHBOARD",
+			mediasite: "DASHBOARD"
+		},
+		kind: {
+			mediasiteID: "KIND SERVICE ID"
+		}
+	};
+
+	var jso = new JSO({
+		providerID: CONFIG.dp_auth.providerID,
+		client_id: CONFIG.dp_auth.client_id,
+		redirect_uri: CONFIG.dp_auth.redirect_uri,
+		authorization: CONFIG.dp_auth.authorization,
+		debug: true
+	});
 
 
-jso.callback();
-// Catch response
-jso.getToken(function (token) {
-	// Run the essential API calls
-	if (!DEV) {
-		//XHR_USER_INFO = getUserInfo();
-		//XHR_USER_GROUPS = getUserGroups();
-		//XHR_ORG_SUBSCRIBERS = KIND.subscribers();
-	}
-	// console.log('Authorization: Bearer ' + token.access_token);
-	// console.log(JSON.stringify(token, undefined, 2));
-});
+	jso.callback();
 
+	return {
+		jso: function () {
+			return jso;
+		},
+		token: function () {
+			return jso.getToken(function (token) {
+				return token;
+			});
+		},
+		// Dreper sesjonen, inkludert Feide-sesj.
+		logout: function () {
+			jso.wipeTokens();
+			window.location.replace("https://auth.dataporten.no/logout");
+		},
+		// Slett sesjon - krever ny runde med godkjenning (men slipper Feide-auth på nytt)
+		wipeTokens: function () {
+			jso.wipeTokens();
+		},
+		config: function () {
+			return CONFIG;
+		}
+	};
 
+})();

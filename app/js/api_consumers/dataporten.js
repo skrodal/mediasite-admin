@@ -10,8 +10,8 @@ var DATAPORTEN = (function () {
 	})();
 
 	function _getUserInfo() {
-		return jso.ajax({
-			url: jso.config.get("endpoints").userinfo,
+		return DATAPORTEN.jso().ajax({
+			url: DATAPORTEN.config().dp_endpoints.userinfo,
 			oauth: { scopes: { request: ["profile userid-feide email"] } },
 			dataType: 'json'
 		})
@@ -43,8 +43,8 @@ var DATAPORTEN = (function () {
 	 * Populate USER object with group info, mostly interested in EduPersonAffiliation...
 	 */
 	function _getUserGroups() {
-		return jso.ajax({
-			url: jso.config.get("endpoints").groups,
+		return DATAPORTEN.jso().ajax({
+			url: DATAPORTEN.config().dp_endpoints.groups,
 			oauth: { scopes: { request: ["groups"] } },
 			dataType: 'json'
 		})

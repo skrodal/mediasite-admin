@@ -16,8 +16,8 @@ var KIND = (function() {
 
 
 	function _getServiceSubscribers() {
-		return jso.ajax({
-			url: jso.config.get("endpoints").kind + "service/" + jso.config.get("kind").mediasiteID + '/subscribers/',
+		return DATAPORTEN.jso().ajax({
+			url: DATAPORTEN.config().api_endpoints.kind + "service/" + DATAPORTEN.config().kind.mediasiteID + '/subscribers/',
 			// oauth: { scopes: { request: ["gk_ecampus-kind", "gk_ecampus-kind_admin"] } },
 			dataType: 'json'
 		})
