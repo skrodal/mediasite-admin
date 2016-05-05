@@ -17,9 +17,9 @@ var DP_AUTH = (function () {
 			authorization: "https://auth.dataporten.no/oauth/authorization",
 		},
 		dp_endpoints: {
-			groups: "https://groups-api.dataporten.no/groups/me/groups",
+			groups: "https://groups-api.dataporten.no/groups/",
 			photo: "https://auth.dataporten.no/user/media/",
-			userinfo: "https://auth.dataporten.no/userinfo",
+			userinfo: "https://auth.dataporten.no/userinfo/",
 		},
 		api_endpoints: {
 			kind: "DASHBOARD",
@@ -27,15 +27,19 @@ var DP_AUTH = (function () {
 		},
 		kind: {
 			mediasiteID: "KIND SERVICE ID"
+		},
+		access_group: {
+			groupID: "DP AD-HOC GROUP ID"
 		}
 	};
 
+
 	var jso = new JSO({
-		providerID: CONFIG.dp_auth.providerID,
-		client_id: CONFIG.dp_auth.client_id,
-		redirect_uri: CONFIG.dp_auth.redirect_uri,
-		authorization: CONFIG.dp_auth.authorization,
-		debug: true
+		providerID		: 	CONFIG.dp_auth.providerID,
+		client_id		: 	CONFIG.dp_auth.client_id,
+		redirect_uri	: 	CONFIG.dp_auth.redirect_uri,
+		authorization	: 	CONFIG.dp_auth.authorization,
+		debug			: 	true
 	});
 
 

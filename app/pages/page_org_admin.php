@@ -131,7 +131,7 @@
 						<div class="row">
 									<div class="col-md-6">
 										<div class="description-block border-right">
-											<h5 class="description-header costTB"><!-- --></h5>
+											<h5 class="description-header costPerTB"><!-- --></h5>
 											<span class="description-text">PRIS PER TB</span>
 										</div><!-- /.description-block -->
 									</div><!-- /.col -->

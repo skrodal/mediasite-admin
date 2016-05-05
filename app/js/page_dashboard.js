@@ -40,11 +40,11 @@ var DASHBOARD = (function() {
 	function buildOrgsDiskusagePieChart(data) {
 		_destroyPieChart();
 		var orgsDiskUsageChartData = [];
-		$.each(data, function(org, storage){
+		$.each(data, function(index, orgObj){
 			// Chart prefs and data
 			orgsDiskUsageChartData.push({
 				//value: (Math.floor(Math.random() * 100) + 1),
-				value: +UTILS.mib2tb(storage).toFixed(2),
+				value: +UTILS.mib2tb(orgObj.storage_mib).toFixed(2),
 				color:'#'+(Math.random().toString(16) + '0000000').slice(2, 8),
 				highlight: '#'+(Math.random().toString(16) + '0000000').slice(2, 8),
 				label: ""
@@ -61,7 +61,14 @@ var DASHBOARD = (function() {
 	 * size is then set to 0.
 	 */
 	function onShowListener() {
-//		chartOrgsUsageDashboard = buildOrgsDiskusagePieChart(MEDIASITE.orgsStorageTotals());
+		$.when(MEDIASITE.orgsDiskUsageTodayXHR()).done(function (data){
+			chartOrgsUsageDashboard = buildOrgsDiskusagePieChart(data);
+			$.each(data, function(index, orgObj){
+				if(orgObj.org == DATAPORTEN.user().org.shortname){
+					$('.homeOrgDiskusage').text(UTILS.mib2tb(orgObj.storage_mib).toFixed(2)+"TB");
+				}
+			});
+		});
 	}
 
 	/**

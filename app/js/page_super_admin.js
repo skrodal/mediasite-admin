@@ -13,8 +13,12 @@ var SUPER_ADMIN = (function () {
 	var SELECTED_ORG_RECORDED_DATES_NUM = 0;
 
 	function init() {
+		
+		$.when(MEDIASITE.orgsDiskUsageTodayXHR()).done(function(storageData){
+			orgSubscribersTable = _buildOrgSubscribersTable(KIND.subscribers(), storageData);
+		});
 
-		orgSubscribersTable = _buildOrgSubscribersTable(KIND.subscribers());
+
 		SELECTED_ORG = DATAPORTEN.user().org.shortname
 		$('#orgToFolderMap').html(JSON.stringify(UTILS.orgToFolderMap(), null, 4));
 	};
@@ -33,15 +37,17 @@ var SUPER_ADMIN = (function () {
 		// Number of dates available in org's storage history (max 30 days)
 		$('#pageSuperAdmin').find('.selectedOrgRecordedDatesNum').text(SELECTED_ORG_RECORDED_DATES_NUM);
 		// Calculator
-//		$('#pageSuperAdmin').find('#inputCostTB').val(MEDIASITE.storageCostTB());
+		$('#pageSuperAdmin').find('#inputCostTB').val(MEDIASITE.storageCostTB());
 		// All fields referring to cost defined by calculator
-//		$('#pageSuperAdmin').find('.costTB').text("kr. " + MEDIASITE.storageCostTB());
-		// On disk as of last reading (total)
-//		$('#pageSuperAdmin').find('.subscribersDiskusageTotal').text(UTILS.mib2tb(MEDIASITE.globalStorageMiB()).toFixed(2) + "TB");
-		// The average usage this year
-//		$('#pageSuperAdmin').find('.subscribersDiskusageAvgThisYear').text(UTILS.mib2tb(MEDIASITE.avgStorageMiBThisYearAll()).toFixed(2) + "TB");
-		// Total invoiceable amount, based on average storage consumption this year
-//		$('#pageSuperAdmin').find('.totalAvgStorageCostEstimate').text("kr. " + (UTILS.mib2tb(MEDIASITE.avgStorageMiBThisYearAll()) * MEDIASITE.storageCostTB()).toFixed());
+		$('#pageSuperAdmin').find('.costPerTB').text("kr. " + MEDIASITE.storageCostTB());
+		// Total average this year
+		$.when(MEDIASITE.totalAvgDiskUsageXHR()).done(function (storage){
+			$('.subscribersDiskusageAvgThisYear').html(UTILS.mib2tb(storage).toFixed(2) + "TB");
+			// Total invoiceable amount, based on average storage consumption this year
+			$('#pageSuperAdmin').find('.totalAvgStorageCostEstimate').text("kr. " + (UTILS.mib2tb(storage) * MEDIASITE.storageCostTB()).toFixed());
+		});
+
+
 
 		// QuickStats below line graph
 //		var orgTotalStorageMiB = MEDIASITE.orgsStorageTotals()[SELECTED_ORG];
@@ -65,7 +71,12 @@ var SUPER_ADMIN = (function () {
 	}
 
 	function onShowListener() {
-		chartOrgsUsagePie = _buildOrgsDiskusagePieChart();
+		$.when(MEDIASITE.orgsDiskUsageTodayXHR()).done(function (data){
+			chartOrgsUsagePie = _buildOrgsDiskusagePieChart(data);
+		});
+
+
+		// TODO: Implement XHR route that gets all storage points for all orgs
 		chartOrgUsageLine = _buildOrgDiskusageLineChart(SELECTED_ORG);
 		_updateUI();
 	}
@@ -78,19 +89,19 @@ var SUPER_ADMIN = (function () {
 
 	/** ----------------- PIE CHART ----------------- **/
 
-	function _buildOrgsDiskusagePieChart() {
+	function _buildOrgsDiskusagePieChart(data) {
 		_destroyOrgsDiskusagePieChart();
 		var orgsUsageChartData = [];
 
-		//$.each(MEDIASITE.orgsStorageTotals(), function (org, storage) {
-		//	// Chart prefs and data
-		//	orgsUsageChartData.push({
-		//		value: +UTILS.mib2tb(storage).toFixed(2),
-		//		color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8),
-		//		highlight: '#' + (Math.random().toString(16) + '0000000').slice(2, 8),
-		//		label: org
-		//	});
-		//});
+		$.each(data, function (index, orgObj) {
+			// Chart prefs and data
+			orgsUsageChartData.push({
+				value: +UTILS.mib2tb(orgObj.storage_mib).toFixed(2),
+				color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8),
+				highlight: '#' + (Math.random().toString(16) + '0000000').slice(2, 8),
+				label: orgObj.org
+			});
+		});
 
 		var ctx = document.getElementById("chartOrgsUsagePieSuperAdmin").getContext("2d");
 		return new Chart(ctx).Pie(orgsUsageChartData, {
@@ -241,31 +252,49 @@ var SUPER_ADMIN = (function () {
 	 *
 	 * @param subscribersArr
 	 */
-	function _buildOrgSubscribersTable(subscribers) {
+	function _buildOrgSubscribersTable(subscribers, storageData) {
+
 		// Clone the array so as to not modify passed original
-		subscribers = JSON.parse(JSON.stringify(subscribers));
-
-		console.log(subscribers);
-
+		var orgs = JSON.parse(JSON.stringify(subscribers));
 		// Before passing dataset to table - add storage consumption per org
 		var orgAvgMiB = 0;
+		// Rename object keys from org.no to corresponding folder name
+		// TODO: Some folders do not have a corresponding org in KIND - ask someone...
+		$.each(orgs, function (org, orgObj) {
+			orgs[UTILS.mapFeideOrgToMediasiteFolder(orgObj.org_id.split('.')[0])] = orgs[org];
+			delete orgs[org];
+		});
+
+
+		$.each(storageData, function (index, storageObj) {
+			// Some physical org folders (e.g. bibsys) are NOT found in Kind subscribers list
+			if(orgs[storageObj.org] === undefined){
+				orgs[storageObj.org] = {};
+				orgs[storageObj.org].subscriber = false;
+				orgs[storageObj.org].org_id = UTILS.mapMediasiteFolderToFeideOrg(storageObj.org);
+				orgs[storageObj.org].subscription_code = "404";
+
+			}
+			orgs[storageObj.org].storage_mib = storageObj.storage_mib;
+		});
+
+		console.log(orgs);
 /*
-		$.each(subscribers, function (org, orgObj) {
+		$.each(orgs, function (org, orgObj) {
 			// Get avg storage for org this year
-//			orgAvgMiB = MEDIASITE.avgStorageMiBThisYearOrg(UTILS.mapFeideOrgToMediasiteFolder(orgData[0].org.split('.')[0]));
+            orgAvgMiB = MEDIASITE.avgStorageMiBThisYearOrg(UTILS.mapFeideOrgToMediasiteFolder(orgData[0].org.split('.')[0]));
 
 			// Get org from Kind array, map to corresponding Mediasite org and add storage to the end of the Kind array
-			//orgObj[orgObj.length] =
-			//{
-			//	storage: {
-			//		mib: MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])],
-			//		tb: (UTILS.mib2tb(MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])])).toFixed(2),
-			//		percentage: ( (MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])] / MEDIASITE.globalStorageMiB()) * 100 ).toFixed(),
-			//		cost: (UTILS.mib2tb(orgAvgMiB) * MEDIASITE.storageCostTB()).toFixed()
-			//	}
-			//};
+			orgObj.storage =
+			{
+					mib: MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])],
+					tb: (UTILS.mib2tb(MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])])).toFixed(2),
+					percentage: ( (MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])] / MEDIASITE.globalStorageMiB()) * 100 ).toFixed(),
+					cost: (UTILS.mib2tb(orgAvgMiB) * MEDIASITE.storageCostTB()).toFixed()
+			};
 		});
-*/
+		*/
+
 
 		var table = $('#pageSuperAdmin').find('#subscribersTableSuperAdmin').DataTable({
 			"language": dataTablesLanguage,
@@ -297,7 +326,7 @@ var SUPER_ADMIN = (function () {
 					}
 				]
 			},
-			"data": UTILS.convertDataTablesData(subscribers), // Obj to Array,
+			"data": UTILS.convertDataTablesData(orgs), // Obj to Array,
 			"columns": [
 				{
 					"data": "org_id",
@@ -335,25 +364,17 @@ var SUPER_ADMIN = (function () {
 					}
 				},
 				{
-					// TODO: Mistet datagrunnlag for lagring - hiver inn 'dummy' felt fra Kind midlertidig.
-					// Når vi har lagringsdata burde dette legges til i Kind-objektet igjen FØR denne tabellen bygges.
-					// Se også neste kolonne - samme greia
-					//"data": "storage",
-					"data": "subscription_code",
+					"data": "storage_mib",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return '<div class="progress no-margin">' +
-							'<div class="progress-bar bg-gray tablePercentage" style="width: ' + 'NA' + '%">' + 'NA' + '</div>' +
-							'</div>';
-						// return full[0].org;
+						return parseFloat(UTILS.mib2tb(full.storage_mib).toFixed(2));
 					}
 				},
 				{
-					//"data": "storage",
-					"data": "subscription_code",
+					"data": "cost",
 					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return '<span class="text-muted">' + 'NA' + 'kr</span>';
+						return parseInt(parseFloat(UTILS.mib2tb(full.storage_mib)) * MEDIASITE.storageCostTB());
 					}
 				},
 				{

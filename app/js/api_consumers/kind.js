@@ -18,7 +18,6 @@ var KIND = (function() {
 	function _getServiceSubscribers() {
 		return DP_AUTH.jso().ajax({
 			url: DP_AUTH.config().api_endpoints.kind + "service/" + DP_AUTH.config().kind.mediasiteID + '/subscribers/',
-			// oauth: { scopes: { request: ["gk_ecampus-kind", "gk_ecampus-kind_admin"] } },
 			dataType: 'json'
 		})
 			.then(function (subscribers, status, res) {
@@ -31,7 +30,7 @@ var KIND = (function() {
 				//subscribers = JSON.parse(subscribers).data;
 
 				subscriptionCount = _getSubscriptionCount(subscribers.data);
-
+				// subscriberDetails is set by _getSubscriptionCount and will be empty if logged on user is not from a subscribing org
 				if($.isEmptyObject(subscriberDetails)){
 					return $.Deferred().reject(res, status, "Din org abonnerer ikke p&aring; tjenesten.").promise();
 				}

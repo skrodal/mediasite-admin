@@ -7,19 +7,15 @@ var UTILS = (function () {
 	// When Org ID is not the same as folder name
 	var mapOrgToFolder =
 	{
-		"oslo-universitetssykehus": "radium",
+		//"oslo-universitetssykehus": "radium",
 		"c-k": "ck",
-		"hbv": "hibu",
-		"nmbu": "umb"
 	};
 
 	// Reverse the above
 	var mapFolderToOrg =
 	{
-		"radium": "oslo-universitetssykehus",
+		//"radium": "oslo-universitetssykehus",
 		"ck": "c-k",
-		"hibu": "hbv",
-		"umb": "nmbu"
 	};
 
 

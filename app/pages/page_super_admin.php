@@ -86,6 +86,7 @@
 						</div>
 					</div>
 					<div class="box-body table-responsive">
+						<h1>TODO: TRENGER SNITTLAGRING INN I TABELLEN, IKKE DAGENS SNAPSHOT!</h1>
 						<table id="subscribersTableSuperAdmin" class="table table-bordered table-striped table-hover" style="width: 100%; font-size: 13px;">
 	                        <thead class="text-muted">
 	                            <tr>
@@ -93,7 +94,7 @@
 	                                <th class="text-nowrap"><i class="icon ion-android-person"></i> Kontakt</th>
 	                                <th class="text-nowrap"><i class="icon ion-help-buoy"></i> Support</th>
 	                                <th class="text-nowrap"><i class="icon ion-upload"></i> Lagring (TB)</th>
-	                                <th class="text-nowrap"><i class="icon ion-cash"></i> Kostnad</th>
+	                                <th class="text-nowrap"><i class="icon ion-cash"></i> Kostnad (kr)</th>
 		                            <th class="text-nowrap"><i class="icon ion-key"></i> Status</th>
 	                            </tr>
 	                        </thead>
@@ -106,7 +107,7 @@
 	                                <th class="text-nowrap"><i class="icon ion-android-person"></i> Kontakt</th>
 	                                <th class="text-nowrap"><i class="icon ion-help-buoy"></i> Support</th>
 		                            <th class="text-nowrap"><i class="icon ion-upload"></i> Lagring (TB)</th>
-		                            <th class="text-nowrap"><i class="icon ion-cash"></i> Kostnad</th>
+		                            <th class="text-nowrap"><i class="icon ion-cash"></i> Kostnad (kr)</th>
 		                            <th class="text-nowrap"><i class="icon ion-key"></i> Status</th>
 	                            </tr>
 	                        </tfoot>
@@ -205,7 +206,7 @@
 						<div class="row">
 									<div class="col-md-6">
 										<div class="description-block border-right">
-											<h5 class="description-header costTB"><!-- --></h5>
+											<h5 class="description-header costPerTB"><!-- --></h5>
 											<span class="description-text">PRIS PER TB</span>
 										</div><!-- /.description-block -->
 									</div><!-- /.col -->

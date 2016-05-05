@@ -37,4 +37,6 @@
 
 <script src="app/js/api_consumers/dataporten.js"></script>
 <script src="app/js/api_consumers/mediasite.js"></script>
+<script src="app/js/api_consumers/mediasite_org.js"></script>
+<script src="app/js/api_consumers/mediasite_admin.js"></script>
 <script src="app/js/api_consumers/kind.js"></script>

@@ -14,8 +14,11 @@ var ORG_ADMIN = (function () {
 	}
 
 	function onShowListener() {
-		chartOrgUsageLine = _buildOrgDiskusageLineChart();
-		_updateUI();
+		$.when(MEDIASITE_ORG.storageRecordsThisYearXHR()).done(function (storageArr){
+			chartOrgUsageLine = _buildOrgDiskusageLineChart(storageArr);
+			_updateUI();
+		});
+
 	}
 
 	function onHideListener() {
@@ -28,12 +31,12 @@ var ORG_ADMIN = (function () {
 		// Calculator
 		$('#pageOrgAdmin').find('#inputCostTB').val(MEDIASITE.storageCostTB());
 		// All fields referring to cost defined by calculator
-		$('#pageOrgAdmin').find('.costTB').text("kr. " + MEDIASITE.storageCostTB());
+		$('#pageOrgAdmin').find('.costPerTB').text("kr. " + MEDIASITE.storageCostTB());
 
 		// QuickStats below line graph
-		var orgTotalStorageMiB = MEDIASITE.orgsStorageTotals()[MEDIASITE_FOLDER];
-		var orgStoragePercentageGlobal = ( (orgTotalStorageMiB / MEDIASITE.globalStorageMiB()) * 100).toFixed(2);
-		var orgAvgStorageMiB = MEDIASITE.avgStorageMiBThisYearOrg(MEDIASITE_FOLDER);
+		var orgTotalStorageMiB = MEDIASITE_ORG.totalStorage();
+		var orgStoragePercentageGlobal = ( (orgTotalStorageMiB / MEDIASITE.totalDiskUsageXHR()) * 100).toFixed(2);
+		var orgAvgStorageMiB = MEDIASITE_ORG.avgStorageThisYear();
 		var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
 
 		// -- QUICKSTATS
@@ -76,17 +79,17 @@ var ORG_ADMIN = (function () {
 
 	/** ----------------- LINE CHART ----------------- **/
 
-	function _buildOrgDiskusageLineChart() {
+	function _buildOrgDiskusageLineChart(storageArr) {
 		var orgUsageChartData = [];
 
 		// Sanity check
-		if (!MEDIASITE.orgHomeStorage()) {
+		if (!storageArr) {
 			UTILS.alertError('Fant ikke data for <code>' + DATAPORTEN.user().org.name + '</code>', 'Fant ikke data for ditt l&aelig;rested. Dette betyr mest sannsynlig at org-navn i Mediasite folder ikke er det samme som det vi hentet fra Kind eller at abonnenten benytter lokal lagring.');
 			return false;
 		}
 		_destroyOrgDiskusageLineChart();
 		// "Clone" since we will be reversing and shit later on
-		orgUsageChartData.storage = JSON.parse(JSON.stringify(MEDIASITE.orgHomeStorage()));
+		orgUsageChartData.storage = JSON.parse(JSON.stringify(storageArr));
 
 		// Max 30 days
 		var daysToShow = 30;
@@ -97,10 +100,10 @@ var ORG_ADMIN = (function () {
 		orgUsageChartData.storage.reverse();
 		//
 		$.each(orgUsageChartData.storage, function (index, storage) {
-			var date = new Date(storage.date.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
+			var date = new Date(storage.timestamp.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
 			// Chart labels and data
 			labels.push(date.getUTCDate() + '.' + date.getUTCMonth() + '.' + date.getUTCFullYear());    // Add label
-			data.push(UTILS.mib2gb(storage.size_mib).toFixed(2));                                       // And value
+			data.push(UTILS.mib2gb(storage.storage_mib).toFixed(2));                                       // And value
 			counter--;
 			if (counter == 0) return false;
 		});
