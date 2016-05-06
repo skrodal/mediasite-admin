@@ -7,7 +7,7 @@ var MEDIASITE_ORG = (function () {
 	function storageRecordsThisYearXHR() {
 		if (storageRecordsThisYear.length == 0) {
 			return DP_AUTH.jso().ajax({
-					url: DP_AUTH.config().api_endpoints.mediasite + "org/" + DATAPORTEN.user().org.shortname + "/diskusage/",
+					url: DP_AUTH.config().api_endpoints.mediasite + "org/" + DATAPORTEN.user().org.shortname + "/diskusage/list/",
 					datatype: 'json'
 				})
 				.pipe(function (response) {

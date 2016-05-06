@@ -1,21 +1,95 @@
 var MEDIASITE_ADMIN = (function () {
 
+var
+	orgsDiskusageList = null
+	orgsDiskusageAvgList = null, 
+	orgDiskusageList = [];
 
-	function _getDiskusageByOrg(org) {
-		// Populate only if needed/first time
-		if (!$.isEmptyObject(orgsStorage)) {
-			org = UTILS.mapFeideOrgToMediasiteFolder(org.split('.')[0]);
-			var storage = false;
-			$.each(orgsStorage, function (index, value) {
-				if (value.org.toLowerCase() === org.toLowerCase()) {
-					storage = value.storage;
-					return false;
-				}
-			});
-			if (storage) return storage;
+
+	function orgsDiskusageListXHR() {
+		var endpoint = "admin/orgs/diskusage/list/";
+
+		if (!orgsDiskusageList) {
+			return DP_AUTH.jso().ajax({
+					url: DP_AUTH.config().api_endpoints.mediasite + endpoint,
+					datatype: 'json'
+				})
+				.pipe(function (response) {
+					orgsDiskusageList = response.data;
+					return orgsDiskusageList;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>"+endpoint+"</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
 		}
-		UTILS.alertError('Fant ikke data for din organisasjon', 'Beklager! Fant ingen data for <code>' + org + '</code>. Dette betyr mest sannsynlig at org-navn i Mediasite folder ikke er det samme som det vi hentet fra Kind eller at din org benytter lokal lagring.');
-		return [];
+		return orgsDiskusageList;
+	}
+
+	function orgsDiskusageAvgListXHR() {
+		var endpoint = "admin/orgs/diskusage/avg/list/";
+
+		if (!orgsDiskusageAvgList) {
+			return DP_AUTH.jso().ajax({
+					url: DP_AUTH.config().api_endpoints.mediasite + endpoint,
+					datatype: 'json'
+				})
+				.pipe(function (response) {
+					orgsDiskusageAvgList = response.data;
+					return orgsDiskusageAvgList;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>"+endpoint+"</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return orgsDiskusageAvgList;
+	}
+
+	function orgDiskusageListXHR(org){
+		org = UTILS.mapFeideOrgToMediasiteFolder(org.split('.')[0]);
+		var endpoint = "org/"+org+"/diskusage/list/";
+		
+		if(!orgDiskusageList[org]) {
+			return DP_AUTH.jso().ajax({
+					url: DP_AUTH.config().api_endpoints.mediasite + endpoint,
+					datatype: 'json'
+				})
+				.pipe(function (response) {
+					orgDiskusageList[org] = response.data;
+					return orgDiskusageList[org];
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>"+endpoint+"</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return orgDiskusageList[org];
+	}
+
+
+	return {
+		// Usage as of latest records
+		orgsDiskusageListXHR: function () {
+			return orgsDiskusageListXHR();
+		},
+		// Usage average this year
+		orgsDiskusageAvgListXHR: function () {
+			return orgsDiskusageAvgListXHR();
+		},
+		// List of storage records for selected org for current year
+		orgDiskusageListXHR: function (org) {
+			return orgDiskusageListXHR(org);
+		}
+
+
+
 	}
 	
 })();

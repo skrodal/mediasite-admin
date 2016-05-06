@@ -1,19 +1,13 @@
-var APP = (function() {
+var APP = (function () {
 
 
 	//
 	$(document).ready(function () {
 		// User/groups first, then Kind (depends on readyUser)
-		$.when(DATAPORTEN.readyUser(), DATAPORTEN.readyGroups()).done( function (){
+		$.when(DATAPORTEN.readyUser(), DATAPORTEN.readyGroups()).done(function () {
 			$.when(KIND.ready()).done(function () {
-
-//				$.when(MEDIASITE.ready()).done(function (){
-					// Populate dashboard with Mediasite ajax data and Feide/Kind info
-					DASHBOARD.init();
-					//
-					MENU.init();
-//				});
-				//
+				DASHBOARD.init();
+				MENU.init();
 				updateUserUI();
 			});
 		});
@@ -24,6 +18,16 @@ var APP = (function() {
 	 * Update UI here and there...
 	 */
 	function updateUserUI() {
+		// Populate public Mediasite
+		updateMediasiteData();
+
+		if (KIND.isOrgAdmin()) {
+			$('.dashInfoForAdmins').html('<p>' + DATAPORTEN.user().name.first + ', du er <b>Org</b>Admin for <code>' + DATAPORTEN.user().org.name + '</code>!</p><p> Bruk menyen til venstre for å hente mer informasjon.</p>');
+		}
+		if (KIND.isSuperAdmin()) {
+			$('.dashInfoForAdmins').html('<p>' + DATAPORTEN.user().name.first + ', du er <b>Super</b>Admin for hele skiten <i class="icon ion-beer"></i></p><p>Bruk menyen til venstre for å hente mer detaljert informasjon.</p>');
+		}
+
 		// User-specific
 		$('.userFirstName').html(' ' + DATAPORTEN.user().name.first);
 		$('.userFullName').html(' ' + DATAPORTEN.user().name.full);
@@ -43,24 +47,20 @@ var APP = (function() {
 		$('#dataportenSessionInfo').text(JSON.stringify(DATAPORTEN.user(), undefined, 2));
 		// Show top logout dropdown
 		$('#userMenu').fadeIn().removeClass('hidden');
-		
-		updateMediasiteData();
 	}
-	
-	function updateMediasiteData(){
 
+	function updateMediasiteData() {
+
+		$.when(MEDIASITE.homeOrgDiskusageTotalXHR()).done(function (storage_mib) {
+			$('.homeOrgDiskusage').text(UTILS.mib2tb(storage_mib).toFixed(2) + "TB");
+		});
 		//
-		$.when(MEDIASITE.totalDiskUsageXHR()).done(function (storage){
+		$.when(MEDIASITE.serviceDiskusageTotalXHR()).done(function (storage) {
 			$('.subscribersDiskusageTotal').html(UTILS.mib2tb(storage).toFixed(2) + "TB");
 		});
 
 	}
 })();
-
-
-
-
-
 
 
 /*

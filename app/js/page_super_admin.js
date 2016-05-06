@@ -13,15 +13,33 @@ var SUPER_ADMIN = (function () {
 	var SELECTED_ORG_RECORDED_DATES_NUM = 0;
 
 	function init() {
-		
-		$.when(MEDIASITE.orgsDiskUsageTodayXHR()).done(function(storageData){
-			orgSubscribersTable = _buildOrgSubscribersTable(KIND.subscribers(), storageData);
+		// Use average storage data in table
+		$.when(MEDIASITE_ADMIN.orgsDiskusageAvgListXHR()).done(function (storageData) {
+			orgSubscribersTable = _buildOrgSubscribersTable(storageData);
 		});
 
-
-		SELECTED_ORG = DATAPORTEN.user().org.shortname
+		SELECTED_ORG = DATAPORTEN.user().org.shortname;
 		$('#orgToFolderMap').html(JSON.stringify(UTILS.orgToFolderMap(), null, 4));
 	};
+
+	// Refresh for each time
+	function onShowListener() {
+		// Use current storage data in pie
+		$.when(MEDIASITE_ADMIN.orgsDiskusageListXHR()).done(function (storageData) {
+			chartOrgsUsagePie = _buildOrgsDiskusagePieChart(storageData);
+		});
+
+		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (storageData) {
+			chartOrgUsageLine = _buildOrgDiskusageLineChart(SELECTED_ORG, storageData);
+			_updateUI();
+		});
+	}
+
+	function onHideListener() {
+		_destroyOrgsDiskusagePieChart();
+		_destroyOrgDiskusageLineChart();
+	}
+
 
 	function _updateUI() {
 		$('ul#orgListSuperAdmin').html('');
@@ -29,9 +47,8 @@ var SUPER_ADMIN = (function () {
 		$.each(KIND.subscribingOrgNames(), function (index, org) {
 			$('ul#orgListSuperAdmin').append('<li class="orgLineChartSelector" style="cursor: pointer;" data-org="' + org.split('.')[0] + '">' + org + '</li>');
 		});
-
+		//
 		var feideOrgID = UTILS.mapMediasiteFolderToFeideOrg(SELECTED_ORG);
-
 		// Selected from drop-down
 		$('#pageSuperAdmin').find('.selectedOrg').text(feideOrgID);
 		// Number of dates available in org's storage history (max 30 days)
@@ -41,49 +58,40 @@ var SUPER_ADMIN = (function () {
 		// All fields referring to cost defined by calculator
 		$('#pageSuperAdmin').find('.costPerTB').text("kr. " + MEDIASITE.storageCostTB());
 		// Total average this year
-		$.when(MEDIASITE.totalAvgDiskUsageXHR()).done(function (storage){
-			$('.subscribersDiskusageAvgThisYear').html(UTILS.mib2tb(storage).toFixed(2) + "TB");
-			// Total invoiceable amount, based on average storage consumption this year
+		$.when(MEDIASITE.serviceDiskusageAvgThisYearXHR()).done(function (storage) {
+			$('#pageSuperAdmin').find('.subscribersDiskusageAvgThisYear').html(UTILS.mib2tb(storage).toFixed(2) + "TB");
 			$('#pageSuperAdmin').find('.totalAvgStorageCostEstimate').text("kr. " + (UTILS.mib2tb(storage) * MEDIASITE.storageCostTB()).toFixed());
 		});
 
 
-
 		// QuickStats below line graph
-//		var orgTotalStorageMiB = MEDIASITE.orgsStorageTotals()[SELECTED_ORG];
-//		var orgStoragePercentageGlobal = (orgTotalStorageMiB / MEDIASITE.globalStorageMiB()) * 100;
-//		var orgAvgStorageMiB = MEDIASITE.avgStorageMiBThisYearOrg(SELECTED_ORG);
-//		var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
-
-//		$('#pageSuperAdmin').find('.orgTotalStorage').text(UTILS.mib2tb(orgTotalStorageMiB).toFixed(2) + " TB");
-//		$('#pageSuperAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal.toFixed(2));
-//		$('#pageSuperAdmin').find('.orgAvgStorageThisYear').text(UTILS.mib2tb(orgAvgStorageMiB).toFixed(2) + " TB");
-		// Avg storage is greater than today's storage use
-//		if (orgTotalStoragePercentageOfOrgAvg > 100) {
-//			$('#pageSuperAdmin').find('.orgTotalStoragePercentageOfOrgAvg').html('<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> ' + (orgTotalStoragePercentageOfOrgAvg - 100).toFixed(2) + '%</span>');
-//		} else {
-//			$('#pageSuperAdmin').find('.orgTotalStoragePercentageOfOrgAvg').html('<span class="description-percentage text-red"><i class="fa fa-caret-down"></i> ' + (orgTotalStoragePercentageOfOrgAvg - 100).toFixed(2) + '%</span>');
-//		}
-
-		$('#pageSuperAdmin').find('.orgSubscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.getOrgSubscriptionStatusCode(feideOrgID)] + '">' + KIND.subscriptionCodesToNames()[KIND.getOrgSubscriptionStatusCode(feideOrgID)] + '</span>');
-
-//		$('#pageSuperAdmin').find('.orgInvoiceEstimateThisYear').text("kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed());
-	}
-
-	function onShowListener() {
-		$.when(MEDIASITE.orgsDiskUsageTodayXHR()).done(function (data){
-			chartOrgsUsagePie = _buildOrgsDiskusagePieChart(data);
+		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (response) {
+			// Total storage now
+			var orgTotalStorageMiB = response[response.length - 1].storage_mib;
+			$('#pageSuperAdmin').find('.orgTotalStorage').text(UTILS.mib2tb(orgTotalStorageMiB).toFixed(2) + " TB");
+			// Percentage of entire service
+			var orgStoragePercentageGlobal = (orgTotalStorageMiB / MEDIASITE.serviceDiskusageTotalXHR()) * 100;
+			$('#pageSuperAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal.toFixed(2));
+			// Average this year
+			var orgAvgStorageMiB = 0;
+			$.each(response, function (index, data) {
+				orgAvgStorageMiB += data.storage_mib;
+			});
+			orgAvgStorageMiB = orgAvgStorageMiB / response.length;
+			$('#pageSuperAdmin').find('.orgAvgStorageThisYear').text(UTILS.mib2tb(orgAvgStorageMiB).toFixed(2) + " TB");
+			// Cost estimate based on average
+			$('#pageSuperAdmin').find('.orgInvoiceEstimateThisYear').text("kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed());
+			// 
+			var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
+			// Avg storage is greater than today's storage use
+			if (orgTotalStoragePercentageOfOrgAvg > 100) {
+				$('#pageSuperAdmin').find('.orgTotalStoragePercentageOfOrgAvg').html('<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> ' + (orgTotalStoragePercentageOfOrgAvg - 100).toFixed(2) + '%</span>');
+			} else {
+				$('#pageSuperAdmin').find('.orgTotalStoragePercentageOfOrgAvg').html('<span class="description-percentage text-red"><i class="fa fa-caret-down"></i> ' + (orgTotalStoragePercentageOfOrgAvg - 100).toFixed(2) + '%</span>');
+			}
 		});
 
-
-		// TODO: Implement XHR route that gets all storage points for all orgs
-		chartOrgUsageLine = _buildOrgDiskusageLineChart(SELECTED_ORG);
-		_updateUI();
-	}
-
-	function onHideListener() {
-		_destroyOrgsDiskusagePieChart();
-		_destroyOrgDiskusageLineChart();
+		$('#pageSuperAdmin').find('.orgSubscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.getOrgSubscriptionStatusCode(feideOrgID)] + '">' + KIND.subscriptionCodesToNames()[KIND.getOrgSubscriptionStatusCode(feideOrgID)] + '</span>');
 	}
 
 
@@ -106,19 +114,19 @@ var SUPER_ADMIN = (function () {
 		var ctx = document.getElementById("chartOrgsUsagePieSuperAdmin").getContext("2d");
 		return new Chart(ctx).Pie(orgsUsageChartData, {
 			legendTemplate: "<% for (var i=0; i<segments.length; i++){%>" +
-				"<tr>" +
-				"<td style='background-color:<%=segments[i].fillColor%>'></td>" +
-				//"<td><%if(segments[i].label){%> <%=segments[i].label%> <%}%></td>" +
-				//"<td><%if(segments[i].value){%> <%=segments[i].value%> <%}%></td>" +
-				"<td><%=segments[i].label%></td>" +
-				"<td><%=segments[i].value%></td>" +
-				"<% i = i+1; %> <%if(i<segments.length){%>" +
-				"<td style='background-color:<%=segments[i].fillColor%>'></td>" +
-				"<td><%=segments[i].label%></td>" +
-				"<td><%=segments[i].value%></td>" +
-				"<%}%>" +
-				"</tr>" +
-				"<%}%>"
+			"<tr>" +
+			"<td style='background-color:<%=segments[i].fillColor%>'></td>" +
+			//"<td><%if(segments[i].label){%> <%=segments[i].label%> <%}%></td>" +
+			//"<td><%if(segments[i].value){%> <%=segments[i].value%> <%}%></td>" +
+			"<td><%=segments[i].label%></td>" +
+			"<td><%=segments[i].value%></td>" +
+			"<% i = i+1; %> <%if(i<segments.length){%>" +
+			"<td style='background-color:<%=segments[i].fillColor%>'></td>" +
+			"<td><%=segments[i].label%></td>" +
+			"<td><%=segments[i].value%></td>" +
+			"<%}%>" +
+			"</tr>" +
+			"<%}%>"
 		});
 	}
 
@@ -130,11 +138,15 @@ var SUPER_ADMIN = (function () {
 	}
 
 	// Update line chart on click on pie
-	$("#chartOrgsUsagePieSuperAdmin").on('click', function(evt){
+	$("#chartOrgsUsagePieSuperAdmin").on('click', function (evt) {
 		var activePoints = chartOrgsUsagePie.getSegmentsAtEvent(evt);
 		//console.log(activePoints);
-		chartOrgUsageLine = _buildOrgDiskusageLineChart(activePoints[0].label, activePoints[0]._saved.fillColor); // Label is org name :-)
-		_updateUI();
+		var selected_org = activePoints[0].label;
+		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
+			$('#pageSuperAdmin').find('h2#org_details')[0].scrollIntoView(true);
+			chartOrgUsageLine = _buildOrgDiskusageLineChart(selected_org, storageData, activePoints[0]._saved.fillColor); // Label is org name :-)
+			_updateUI();
+		});
 	});
 
 
@@ -142,57 +154,53 @@ var SUPER_ADMIN = (function () {
 
 	/** ----------------- LINE CHART ----------------- **/
 
+	// Update line chart when selecting org from the list
 	$('ul#orgListSuperAdmin').on('click', 'li.orgLineChartSelector', function () {
-		chartOrgUsageLine = _buildOrgDiskusageLineChart($(this).data('org'));
-		_updateUI();
+		var selected_org = $(this).data('org');
+		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
+			chartOrgUsageLine = _buildOrgDiskusageLineChart(selected_org, storageData);
+			_updateUI();
+		});
 	});
 
-	function _buildOrgDiskusageLineChart(org, fillColor) {
+	function _buildOrgDiskusageLineChart(org, storageData, fillColor) {
 		var orgUsageChartData = [];
-		var selectedOrg = false;
-
-		fillColor = typeof fillColor !== 'undefined' ? fillColor : '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
-
+		//
 		org = UTILS.mapFeideOrgToMediasiteFolder(org);
-
-		// Find selected org's data
-		//$.each(MEDIASITE.orgsStorage(), function (index, data) {
-		//	if (data.org.toLowerCase() === org.toLowerCase()) {
-		//		selectedOrg = data.org;
-		//		// "Clone" since we will be reversing and shit later on
-		//		orgUsageChartData.storage = JSON.parse(JSON.stringify(data.storage));
-		//		return false;
-		//	}
-		//});
 		// Sanity check
-		if (!selectedOrg) {
+		if (!storageData) {
 			UTILS.alertError('Fant ikke data for <code>' + org + '</code>', 'Fant ikke noe data for organisasjonen du valgte. Dette betyr mest sannsynlig at org-navn i Mediasite folder ikke er det samme som det vi hentet fra Kind eller at abonnenten benytter lokal lagring.');
 			return false;
 		}
+		// Before we build a new one...
 		_destroyOrgDiskusageLineChart();
-		SELECTED_ORG = selectedOrg;
-
+		SELECTED_ORG = org;
 		// Max 30 days
 		var daysToShow = 30;
 		var counter = daysToShow;
 		var labels = [];
 		var data = [];
+		// "Clone" since we will be reversing and shit later on
+		orgUsageChartData.storage = JSON.parse(JSON.stringify(storageData));
 		// Start from most recent date and count backwards in time
 		orgUsageChartData.storage.reverse();
 		//
-		$.each(orgUsageChartData.storage, function (index, storage) {
-			var date = new Date(storage.date.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
+		$.each(orgUsageChartData.storage, function (index, storageObj) {
+			var date = new Date(storageObj.timestamp.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
 			// Chart labels and data
 			labels.push(date.getUTCDate() + '.' + date.getUTCMonth() + '.' + date.getUTCFullYear());      // Add label
-			data.push(UTILS.mib2gb(storage.size_mib).toFixed(2));    // And value
+			data.push(UTILS.mib2gb(storageObj.storage_mib).toFixed(2));    // And value
 			counter--;
 			if (counter == 0) return false;
 		});
+		console.log(data);
 		// In case there exist less than 30 days worth of data
 		SELECTED_ORG_RECORDED_DATES_NUM = daysToShow - counter;
 		// Reverse back so we get most recent date last
 		data.reverse();
 		labels.reverse();
+		//
+		fillColor = typeof fillColor !== 'undefined' ? fillColor : '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
 		// Build dataset
 		var lineChartData = {
 			labels: labels,
@@ -209,7 +217,6 @@ var SUPER_ADMIN = (function () {
 				}
 			]
 		};
-
 
 
 		var ctx = document.getElementById("orgUsageLineChartSuperAdmin").getContext("2d");
@@ -241,7 +248,7 @@ var SUPER_ADMIN = (function () {
 	}
 
 	// Update chart color
-	$("#orgUsageLineChartSuperAdmin").on('click', function(evt){
+	$("#orgUsageLineChartSuperAdmin").on('click', function (evt) {
 		chartOrgUsageLine.datasets[0].fillColor = '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
 		chartOrgUsageLine.update();
 	});
@@ -252,12 +259,12 @@ var SUPER_ADMIN = (function () {
 	 *
 	 * @param subscribersArr
 	 */
-	function _buildOrgSubscribersTable(subscribers, storageData) {
-
+	function _buildOrgSubscribersTable(storageData) {
 		// Clone the array so as to not modify passed original
-		var orgs = JSON.parse(JSON.stringify(subscribers));
+		var orgs = JSON.parse(JSON.stringify(KIND.subscribers()));
 		// Before passing dataset to table - add storage consumption per org
 		var orgAvgMiB = 0;
+
 		// Rename object keys from org.no to corresponding folder name
 		// TODO: Some folders do not have a corresponding org in KIND - ask someone...
 		$.each(orgs, function (org, orgObj) {
@@ -265,35 +272,17 @@ var SUPER_ADMIN = (function () {
 			delete orgs[org];
 		});
 
-
-		$.each(storageData, function (index, storageObj) {
+		$.each(storageData, function (org, storage) {
 			// Some physical org folders (e.g. bibsys) are NOT found in Kind subscribers list
-			if(orgs[storageObj.org] === undefined){
-				orgs[storageObj.org] = {};
-				orgs[storageObj.org].subscriber = false;
-				orgs[storageObj.org].org_id = UTILS.mapMediasiteFolderToFeideOrg(storageObj.org);
-				orgs[storageObj.org].subscription_code = "404";
+			if (orgs[org] === undefined) {
+				orgs[org] = {};
+				orgs[org].subscriber = false;
+				orgs[org].org_id = UTILS.mapMediasiteFolderToFeideOrg(org);
+				orgs[org].subscription_code = "404";
 
 			}
-			orgs[storageObj.org].storage_mib = storageObj.storage_mib;
+			orgs[org].storage_mib = storage;
 		});
-
-		console.log(orgs);
-/*
-		$.each(orgs, function (org, orgObj) {
-			// Get avg storage for org this year
-            orgAvgMiB = MEDIASITE.avgStorageMiBThisYearOrg(UTILS.mapFeideOrgToMediasiteFolder(orgData[0].org.split('.')[0]));
-
-			// Get org from Kind array, map to corresponding Mediasite org and add storage to the end of the Kind array
-			orgObj.storage =
-			{
-					mib: MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])],
-					tb: (UTILS.mib2tb(MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])])).toFixed(2),
-					percentage: ( (MEDIASITE.orgsStorageTotals()[UTILS.mapFeideOrgToMediasiteFolder(orgObj[0].org.split('.')[0])] / MEDIASITE.globalStorageMiB()) * 100 ).toFixed(),
-					cost: (UTILS.mib2tb(orgAvgMiB) * MEDIASITE.storageCostTB()).toFixed()
-			};
-		});
-		*/
 
 
 		var table = $('#pageSuperAdmin').find('#subscribersTableSuperAdmin').DataTable({
@@ -388,6 +377,8 @@ var SUPER_ADMIN = (function () {
 		});
 		$('#subscribersTableBoxSuperAdmin').find('.ajax').hide();
 		return table;
+
+
 	}
 
 	/**
@@ -449,12 +440,14 @@ var SUPER_ADMIN = (function () {
 			_updateUI();
 			// Rebuild the table
 			orgSubscribersTable.destroy();
-			orgSubscribersTable = _buildOrgSubscribersTable(KIND.subscribers());
+			$.when(MEDIASITE_ADMIN.orgsDiskusageAvgListXHR()).done(function (storageData) {
+				orgSubscribersTable = _buildOrgSubscribersTable(storageData);
+			});
 		}
 	}
 
+	//
 	$('#pageSuperAdmin #btnInvoiceCalc').on('click', _setInvoiceEstimate);
-
 
 	return {
 		init: function () {

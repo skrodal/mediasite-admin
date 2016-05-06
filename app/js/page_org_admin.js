@@ -35,7 +35,7 @@ var ORG_ADMIN = (function () {
 
 		// QuickStats below line graph
 		var orgTotalStorageMiB = MEDIASITE_ORG.totalStorage();
-		var orgStoragePercentageGlobal = ( (orgTotalStorageMiB / MEDIASITE.totalDiskUsageXHR()) * 100).toFixed(2);
+		var orgStoragePercentageGlobal = ( (orgTotalStorageMiB / MEDIASITE.serviceDiskusageTotalXHR()) * 100).toFixed(2);
 		var orgAvgStorageMiB = MEDIASITE_ORG.avgStorageThisYear();
 		var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
 

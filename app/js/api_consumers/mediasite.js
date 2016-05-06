@@ -1,55 +1,66 @@
 var MEDIASITE = (function () {
+	// CONSTANTS
 	var STORAGE_COST_PER_TB = 15000;
 
+	// FROM API
 	var
-		totalDiskUsageToday = -1,
-		totalAvgDiskusageThisYear = -1,
-		orgsDiskUsageToday = -1,
+		serviceDiskusageTotal = null,
+		serviceDiskusageAvgThisYear = null,
+		serviceDiskusageList = null,
+		homeOrgDiskusageTotal = null;
 
 
-		
-
-		orgsStorage = {},                   // Complete dump from API
-		orgsStorageRecordsThisYear = {},    // Dump of this year
-
-		orgsStorageTotals = {},             // org->storage per org
-		globalStorageTodayMiB = 0,          // Size on disk as of last reading
-		globalStorageMiBAvgThisYear = 0,    // Average disk usage this year (used for invoicing)
-		XHR_DISKUSAGE,
-		XHR_DISKUSAGE_THIS_YEAR;
 
 
-	// Total storage used as per last read
-	function totalDiskUsageTodayXHR() {
-		if (totalDiskUsageToday == -1) {
+	function homeOrgDiskusageTotalXHR() {
+		if (!homeOrgDiskusageTotal) {
 			return DP_AUTH.jso().ajax({
-					url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/",
+					url: DP_AUTH.config().api_endpoints.mediasite + "me/diskusage/total/",
 					datatype: 'json'
 				})
 				.pipe(function (response) {
-					totalDiskUsageToday = response.data;
-					return totalDiskUsageToday;
+					homeOrgDiskusageTotal = response.data;
+					return homeOrgDiskusageTotal;
 				})
 				.fail(function (jqXHR, textStatus, error) {
-					var title = "Mediasite API — <code>service/diskusage/</code>";
+					var title = "Mediasite API — <code>service/diskusage/total/</code>";
 					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
 					UTILS.alertError(title, message);
 					UTILS.showAuthError(title, message);
 				});
 		}
-		return totalDiskUsageToday;
+		return homeOrgDiskusageTotal;
 	}
 
-	// Average total diskusage throughout the current year
-	function totalAvgDiskUsageThisYearXHR() {
-		if (totalAvgDiskusageThisYear == -1) {
+	function serviceDiskusageTotalXHR() {
+		if (!serviceDiskusageTotal) {
+			return DP_AUTH.jso().ajax({
+					url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/total/",
+					datatype: 'json'
+				})
+				.pipe(function (response) {
+					serviceDiskusageTotal = response.data;
+					return serviceDiskusageTotal;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>service/diskusage/total/</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return serviceDiskusageTotal;
+	}
+
+	function serviceDiskusageAvgThisYearXHR() {
+		if (!serviceDiskusageAvgThisYear) {
 			return DP_AUTH.jso().ajax({
 					url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/avg/",
 					datatype: 'json'
 				})
 				.pipe(function (response) {
-					totalAvgDiskusageThisYear = response.data;
-					return totalAvgDiskusageThisYear;
+					serviceDiskusageAvgThisYear = response.data;
+					return serviceDiskusageAvgThisYear;
 				})
 				.fail(function (jqXHR, textStatus, error) {
 					var title = "Mediasite API — <code>service/diskusage/avg/</code>";
@@ -58,167 +69,53 @@ var MEDIASITE = (function () {
 					UTILS.showAuthError(title, message);
 				});
 		}
-		return totalAvgDiskusageThisYear;
+		return serviceDiskusageAvgThisYear;
 	}
 
-	// Storage used per org as per last read
-	function orgsDiskUsageTodayXHR() {
-		if(orgsDiskUsageToday == -1) {
+	// Array of storage numbers per folder. No folder names are returned.
+	function serviceDiskusageListXHR() {
+		if (!serviceDiskusageList) {
 			return DP_AUTH.jso().ajax({
-					url: DP_AUTH.config().api_endpoints.mediasite + "admin/orgs/diskusage/",
+					url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/list/",
 					datatype: 'json'
 				})
 				.pipe(function (response) {
-					orgsDiskUsageToday = response.data;
-					return orgsDiskUsageToday;
+					serviceDiskusageList = response.data;
+					return serviceDiskusageList;
 				})
 				.fail(function (jqXHR, textStatus, error) {
-					var title = "Mediasite API — <code>admin/orgs/diskusage/</code>";
+					var title = "Mediasite API — <code>service/diskusage/list/</code>";
 					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
 					UTILS.alertError(title, message);
 					UTILS.showAuthError(title, message);
 				});
 		}
-		return orgsDiskUsageToday;
-	}
-
-
-
-
-	// Autorun once
-	/*
-	 (function () {
-	 XHR_DISKUSAGE_THIS_YEAR = _orgsStorageThisYear();
-	 XHR_DISKUSAGE =  _orgsStorage();
-	 //
-	 $.when(XHR_DISKUSAGE).done(function (resultObj) {
-	 orgsStorage = resultObj.data;
-	 homeOrgStorageRecordsThisYear = _getDiskusageByOrg(DATAPORTEN.user().org.id);
-	 orgsStorageTotals = _getOrgsStorageTotals();
-	 });
-	 //
-	 $.when(XHR_DISKUSAGE_THIS_YEAR).done(function (data) {
-	 orgsStorageRecordsThisYear = data.data;
-	 });
-	 })();
-	 */
-
-
-
-
-
-	function _orgsStorage() {
-		return jso.ajax({
-				url: jso.config.get("endpoints").mediasite + "diskusage",
-				// oauth: { scopes: {require: ["gk_mediasiteapi", "gk_mediasiteapi_admin"], request: ["gk_mediasiteapi", "gk_mediasiteapi_admin"]} },
-				oauth: {scopes: {request: ["gk_mediasiteapi", "gk_mediasiteapi_admin"]}},
-				dataType: 'json'
-			})
-			.fail(function (jqXHR, textStatus, error) {
-				UTILS.alertError("Mediasite API (diskusage):", "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?");
-				UTILS.showAuthError("Mediasite API (diskusage)", "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?.");
-			});
-	}
-
-	/**
-	 * Get orgs storage for current year.
-	 */
-	function _orgsStorageThisYear() {
-		return jso.ajax({
-				url: jso.config.get("endpoints").mediasite + "diskusage/year/" + new Date().getUTCFullYear(),
-				// oauth: { scopes: {require: ["gk_mediasiteapi", "gk_mediasiteapi_admin"], request: ["gk_mediasiteapi", "gk_mediasiteapi_admin"]} },
-				oauth: {scopes: {request: ["gk_mediasiteapi", "gk_mediasiteapi_admin"]}},
-				dataType: 'json'
-			})
-			.fail(function (jqXHR, textStatus, error) {
-				UTILS.alertError("Mediasite API (year):", "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?.");
-				UTILS.showAuthError("Mediasite API (year)", "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?.");
-			});
-	}
-
-	function avgStorageMiBThisYearOrg(org) {
-		org = UTILS.mapFeideOrgToMediasiteFolder(org);
-		var avgStorage = 0;
-
-		$.each(orgsStorageRecordsThisYear, function (index, orgObj) {
-			if (org === orgObj.org.toLowerCase()) {
-				var totalStorage = 0;
-				$.each(orgObj.storage, function (entry, storageObj) {
-					totalStorage += storageObj.size_mib;
-				});
-				avgStorage = totalStorage / orgObj.storage.length;
-				// We got what we came for, break the loop
-				return false;
-			}
-		});
-		return avgStorage;
-	}
-
-	function avgStorageMiBThisYearAll() {
-		if (globalStorageMiBAvgThisYear !== 0) return globalStorageMiBAvgThisYear;
-		// Loop each org
-		$.each(orgsStorageRecordsThisYear, function (index, orgObj) {
-			var totalStorage = 0;
-			// Loop org's storage history
-			$.each(orgObj.storage, function (entry, storageObj) {
-				// Add up
-				totalStorage += storageObj.size_mib;
-			});
-			// Get org's average
-			globalStorageMiBAvgThisYear += totalStorage / orgObj.storage.length;
-		});
-		return globalStorageMiBAvgThisYear;
+		return serviceDiskusageList;
 	}
 
 
 	return {
-		init: function () {
-			init();
-		},
-		ready: function () {
-			return XHR_DISKUSAGE;
-		},
 
-		totalDiskUsageXHR: function () {
-			return totalDiskUsageTodayXHR();
+		homeOrgDiskusageTotalXHR: function(){
+			return homeOrgDiskusageTotalXHR();
 		},
-
-		totalAvgDiskUsageXHR: function () {
-			return totalAvgDiskUsageThisYearXHR();
+		// Total MiB on disk as of last read
+		serviceDiskusageTotalXHR: function () {
+			return serviceDiskusageTotalXHR();
 		},
-
-		orgsDiskUsageTodayXHR: function () {
-			return orgsDiskUsageTodayXHR();
+		// Average MiB on disk as of records from this year
+		serviceDiskusageAvgThisYearXHR: function () {
+			return serviceDiskusageAvgThisYearXHR();
 		},
-
-		homeOrgStorageRecordsThisYearXHR: function () {
-			return homeOrgStorageRecordsThisYearXHR();
+		// List of latest storage records. Values only, no folder/org names (basic scope).
+		serviceDiskusageListXHR: function () {
+			return serviceDiskusageListXHR();
 		},
-
-		// Dump /diskusage
-		orgsStorage: function () {
-			return orgsStorage;
-		},
-		// /diskusage/year/{year}
-		orgsStorageThisYear: function () {
-			return orgsStorageRecordsThisYear;
-		},
-		avgStorageMiBThisYearAll: function () {
-			return avgStorageMiBThisYearAll();
-		},
-		avgStorageMiBThisYearOrg: function (org) {
-			return avgStorageMiBThisYearOrg(org);
-		},
-		// { org: 000.00, ... }
-		orgsStorageTotals: function () {
-			return orgsStorageTotals;
-		},
-		globalStorageMiB: function () {
-			return globalStorageTodayMiB;
-		},
+		//
 		storageCostTB: function () {
 			return STORAGE_COST_PER_TB;
 		},
+		// UI can update TB storage
 		setStorageCost: function (cost) {
 			cost = Number(cost);
 			if (isNaN(cost)) {

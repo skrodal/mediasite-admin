@@ -16,12 +16,15 @@
 			</div>
 		</div>
 
+	    <div class="dashInfoForAdmins"></div>
+
+	    <h3>Oversikt</h3>
 	    <div class="row">
 			<div class="col-md-5">
 				<!-- PRODUCT LIST -->
 				<div class="box box-primary">
 					<div class="box-header with-border">
-						<h3 class="box-title icon ion-ios-list-outline"> Oversikt</h3>
+						<h3 class="box-title icon ion-ios-list-outline"> Oppsummering</h3>
 						<div class="box-tools pull-right">
 							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 						</div>

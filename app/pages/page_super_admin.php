@@ -41,7 +41,7 @@
 				</div><!-- /.info-box -->
 			</div><!-- /.col -->
 
-			<!-- fix for small devices only -->
+			      <!-- fix for small devices only -->
 			<div class="clearfix visible-sm-block"></div>
 
 			<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
@@ -86,7 +86,16 @@
 						</div>
 					</div>
 					<div class="box-body table-responsive">
-						<h1>TODO: TRENGER SNITTLAGRING INN I TABELLEN, IKKE DAGENS SNAPSHOT!</h1>
+
+						<div class="info-box">
+							<span class="info-box-icon bg-blue-active"><i class="ion ion-ios-home"></i></span>
+							<div class="info-box-content">
+										<p>Abonnementsinformasjon er hentet fra Kind. </p>
+										<p>Lagring er snittverdier for <?php echo date("Y"); ?> og brukt i utregning av kostnad  — <code>lagring * <span class="costPerTB"><!--updateUserUI()--></span></code> (pris per TB).</p>
+										<p>Status <code>ukjent</code> betyr at det ligger innhold (mappe) på filserver uten match på org i Kind</p>
+							</div><!-- /.info-box-content -->
+						</div>
+
 						<table id="subscribersTableSuperAdmin" class="table table-bordered table-striped table-hover" style="width: 100%; font-size: 13px;">
 	                        <thead class="text-muted">
 	                            <tr>
@@ -124,7 +133,7 @@
 						</div>
 					</div>
 
-					<!-- EMAIL EXPORT MODAL -->
+					      <!-- EMAIL EXPORT MODAL -->
 					<div class="modal fade" id="emailExportModal" tabindex="-1" role="dialog" aria-labelledby="modalExportTitle" aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -146,7 +155,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- //.modal -->
+					      <!-- //.modal -->
 
 					<div class="overlay ajax">
 						<i class="fa ion-load-d fa-spin"></i>
@@ -164,12 +173,12 @@
 						<h3 class="box-title icon ion-ios-pie"> Fordeling i TB</i></h3>
 					</div>
 					<div class="box-body">
-						<canvas id="chartOrgsUsagePieSuperAdmin">
+						<canvas id="chartOrgsUsagePieSuperAdmin" style="cursor: pointer;">
 							<!--buildOrgsDiskusageChart-->
 						</canvas>
 					</div><!-- /.box-body -->
 					<div class="box-footer text-muted">
-						Klikk for &aring; oppdatere detaljvisning nedenfor.
+						Klikk på paien for å oppdatere detaljvisning nedenfor :)
 					</div>
 				</div><!-- /.box -->
 			</div><!-- /.col -->
@@ -204,25 +213,25 @@
 
 					<div class="box-footer">
 						<div class="row">
-									<div class="col-md-6">
-										<div class="description-block border-right">
-											<h5 class="description-header costPerTB"><!-- --></h5>
-											<span class="description-text">PRIS PER TB</span>
-										</div><!-- /.description-block -->
-									</div><!-- /.col -->
-									<div class="col-md-6">
-										<div class="description-block border-right">
-											<h5 class="description-header totalAvgStorageCostEstimate"><!-- --></h5>
-											<span class="description-text">FAKTURAESTIMAT</span>
-										</div><!-- /.description-block -->
-									</div><!-- /.col -->
-								</div><!-- /.row -->
+							<div class="col-md-6">
+								<div class="description-block border-right">
+									<h5 class="description-header costPerTB"><!-- --></h5>
+									<span class="description-text">PRIS PER TB</span>
+								</div><!-- /.description-block -->
+							</div><!-- /.col -->
+							<div class="col-md-6">
+								<div class="description-block border-right">
+									<h5 class="description-header totalAvgStorageCostEstimate"><!-- --></h5>
+									<span class="description-text">FAKTURAESTIMAT</span>
+								</div><!-- /.description-block -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
 					</div>
 				</div><!-- /.box -->
 			</div><!-- /.col  -->
 		</div><!-- /.row -->
 
-		<h2 class="page-header">Detaljvisning</h2>
+		<h2 id="org_details" class="page-header">Detaljvisning</h2>
 
 		<div class="row">
 			<div class="col-md-12">
@@ -231,7 +240,7 @@
 						<h3 class="box-title icon ion-arrow-graph-up-right"> Viser oversikt for <code class="selectedOrg"></code></h3>
 						<div class="box-tools pull-right">
 							<div class="btn-group">
-								<button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="ion ion-university"></i> Velg org</button>
+								<button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="ion ion-university"></i> VELG ORG</button>
 								<ul id="orgListSuperAdmin" class="dropdown-menu" role="menu">
 									<!-- OrgList -->
 								</ul>
@@ -240,36 +249,27 @@
 						</div>
 					</div>
 					<div class="box-body">
-						<div class="row">
-							<div class="col-md-8">
-								<div class="chart">
-									<canvas id="orgUsageLineChartSuperAdmin" style="min-height: 350px; max-height: 350px;">
-										<!-- Line Chart -->
-									</canvas>
-								</div>
-							</div>
-
-							<div class="col-md-4">
-								<div class="box">
-									<div class="box-header">
-										<h3 class="box-title icon ion-ios-information-outline"> Info</h3>
-									</div>
-									<div class="box-body">
-										<p>
-											Grafen viser siste <code class="selectedOrgRecordedDatesNum"></code> dager med endringer i diskforbruk (i GB!) for <code class="selectedOrg"></code>.
-										</p>
-										<p>
-											Velg org i tittellinja over eller ved &aring; klikke p&aring; pai-grafen. Sistnevnte tar med ALLE mapper p&aring; filserver, ogs&aring; mapper som ikke
-											tilh&oslash;rer en abonnent/org (eks. "relay").
-										</p>
-
-										<p>
-											Grafer kan lagres som bildefil (png) med <code>h&oslash;yreklikk -> lagre som...</code>. <span class="text-muted">Klikk p&aring; grafen for &aring; endre farge...</span>
-										</p>
-									</div>
-								</div>
-							</div>
+						<div class="info-box">
+							<span class="info-box-icon bg-aqua"><i class="ion ion-arrow-graph-up-right"></i></span>
+							<div class="info-box-content">
+								<p>
+									Registrert diskforbruk siste <code class="selectedOrgRecordedDatesNum"></code> dager for <code class="selectedOrg"></code>.
+								</p>
+								<p>
+									Velg org i tittellinja over eller ved &aring; klikke p&aring; pai-grafen. Sistnevnte tar med ALLE mapper p&aring; filserver, ogs&aring; mapper som ikke
+									tilh&oslash;rer en abonnent/org.
+								</p>
+							</div><!-- /.info-box-content -->
 						</div>
+
+						<div class="chart">
+							<canvas id="orgUsageLineChartSuperAdmin" style="min-height: 350px; max-height: 350px;">
+								<!-- Line Chart -->
+							</canvas>
+
+							Grafer kan lagres som bildefil (png) med <code>h&oslash;yreklikk -> lagre som...</code>. <span class="text-muted">Klikk p&aring; grafen for &aring; endre farge...</span>
+						</div>
+
 
 					</div><!-- /.box-body -->
 
@@ -309,9 +309,20 @@
 			</div><!-- /.col -->
 		</div><!-- /.row -->
 
-	<p>Organisasjonsnavn og Mediasite foldernavn er ikke alltid i samsvar med hverandre.</p>
-	<p>Nedenfor vises hvilke mappinger som er hardkodet inn i denne klienten for at en orgs folder (p&aring; h&oslash;yre side) skal bli funnet.</p>
-    <pre id="orgToFolderMap" class="well"></pre>
+		<h2 class="page-header">Til info...</h2>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-warning">
+					<div class="box-body">
+						<p>Organisasjonsnavn og Mediasite foldernavn er ikke alltid i samsvar med hverandre.</p>
+						<p>Nedenfor vises hvilke mappinger som er hardkodet inn i denne klienten for at en orgs folder (p&aring; h&oslash;yre side) skal bli funnet.</p>
+					    <pre id="orgToFolderMap" class="well"></pre>
+					</div>
+				</div><!-- /.box -->
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+
+
 
     </section><!-- /.content -->
 

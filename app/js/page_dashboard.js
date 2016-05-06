@@ -4,10 +4,28 @@ var DASHBOARD = (function() {
 
 	function init() {
 		buildOrgsTableDashboard(KIND.subscribers(), DATAPORTEN.user());
-//		$('.subscribersDiskusageTotal').html(UTILS.mib2tb(MEDIASITE.globalStorageMiB()).toFixed(2) + "TB");
-//		$('.homeOrgDiskusage').text(UTILS.mib2tb(MEDIASITE.orgHomeStorage()[MEDIASITE.orgHomeStorage().length-1].size_mib).toFixed(2)+"TB");
 	}
 
+	/**
+	 * Draw/display things when page is finally visible (called by app_menu.js on show).
+	 *
+	 * Solves specific problem with Charts, as these will not draw on hidden DOM since
+	 * size is then set to 0.
+	 */
+	function onShowListener() {
+		$.when(MEDIASITE.serviceDiskusageListXHR()).done(function (data){
+			chartOrgsUsageDashboard = buildOrgsDiskusagePieChart(data);
+		});
+	}
+	/**
+	 * Destroy elements that can't be redrawn when hidden
+	 */
+	function onHideListener() {
+		_destroyPieChart();
+	}
+
+
+	// Build simple subscribers table from KIND data
 	function buildOrgsTableDashboard(subscribersArr, user){
 		$('#subscriber_table_body').empty();
 		var labelText = '---', labelColor = 'red';
@@ -32,6 +50,7 @@ var DASHBOARD = (function() {
 		$('#subscribersTableBoxDashboard').find('.ajax').hide();
 	}
 
+
 	/**
 	 * Simple pie chart with anonymous values. SuperAdmin gets the same,
 	 * but with legend.
@@ -44,7 +63,7 @@ var DASHBOARD = (function() {
 			// Chart prefs and data
 			orgsDiskUsageChartData.push({
 				//value: (Math.floor(Math.random() * 100) + 1),
-				value: +UTILS.mib2tb(orgObj.storage_mib).toFixed(2),
+				value: +UTILS.mib2tb(orgObj).toFixed(2),
 				color:'#'+(Math.random().toString(16) + '0000000').slice(2, 8),
 				highlight: '#'+(Math.random().toString(16) + '0000000').slice(2, 8),
 				label: ""
@@ -52,30 +71,6 @@ var DASHBOARD = (function() {
 		});
 		var ctx = document.getElementById("chartOrgsDiskusageDashboard").getContext("2d");
 		return new Chart(ctx).Pie(orgsDiskUsageChartData, {});
-	}
-
-	/**
-	 * Draw/display things when page is finally visible (called by app_menu.js on show).
-	 *
-	 * Solves specific problem with Charts, as these will not draw on hidden DOM since
-	 * size is then set to 0.
-	 */
-	function onShowListener() {
-		$.when(MEDIASITE.orgsDiskUsageTodayXHR()).done(function (data){
-			chartOrgsUsageDashboard = buildOrgsDiskusagePieChart(data);
-			$.each(data, function(index, orgObj){
-				if(orgObj.org == DATAPORTEN.user().org.shortname){
-					$('.homeOrgDiskusage').text(UTILS.mib2tb(orgObj.storage_mib).toFixed(2)+"TB");
-				}
-			});
-		});
-	}
-
-	/**
-	 * Destroy elements that can't be redrawn when hidden
-	 */
-	function onHideListener() {
-		_destroyPieChart();
 	}
 
 	function _destroyPieChart() {
