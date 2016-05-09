@@ -22,7 +22,13 @@ MediasiteAdmin er en klient for UNINETTs Mediasite tjeneste. Den tilbyr to tilga
 
 ### Avhengigheter ###
 
-Systemet leser fra UNINETTs egenutviklede Mediasite API og Kind-API.
+Systemet henter lagringsinfo fra UNINETTs egenutviklede Mediasite API:
+ 
+ * https://github.com/skrodal/mediasite-api
+ 
+ ...og eCampus Kind-API.
+ 
+ * https://github.com/skrodal/ecampus-kind-api
 
 Klient og APIer er registrert med Dataporten fra UNINETT AS.
 
@@ -33,4 +39,5 @@ Utviklet av Simon Skrødal
 ### 3rd parties ###
 
 - UI er en modifisert versjon av "AdminLTE", bruker UNINETTs Bootstrap template
-- Se JS plugins for andre 3.parts biblioteker brukt
+- JSO v2 av Andreas Åkre Solberg (https://github.com/andreassolberg/jso)
+- Se dist/plugins for andre 3rt party biblioteker brukt
