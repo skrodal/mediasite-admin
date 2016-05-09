@@ -1,5 +1,7 @@
 # README #
 
+_This service is tailor-made for UNINETT AS and uses in-house developed APIs pertaining to a specific use-case. As it does **not** access Sonic Foundry's official Mediasite API, its re-usability is limited._  
+
 Denne tjenesten er skreddersydd av/for UNINETT, krever UNINETT Dataporten og er avhengig av egenutviklede APIer.
 
 # Om MediasiteAdmin #
