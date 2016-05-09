@@ -15,6 +15,11 @@ MediasiteAdmin er en klient for UNINETTs Mediasite tjeneste. Den tilbyr to tilga
 * Superadmin - for internbruk (abonnenter, stats, kostnader, diskbruk, etc); krever SuperAdmin rolle
 * OrgAdmin - for abonnentbruk (stats, diskbruk, kostnader, etc); krever OrgAdmin rolle ('teknisk kontakt' i Kind)
 
+## TODO ##
+
+* Endre tilgangsstyring til å bruke ad-hoc gruppe istedenfor KIND...
+* Dato-selektor for lagringsdata (nå er siste 30 dager eneste valg i UI, API tillater mer...)
+
 ### Avhengigheter ###
 
 Systemet leser fra UNINETTs egenutviklede Mediasite API og Kind-API.
