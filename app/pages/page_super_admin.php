@@ -253,7 +253,7 @@
 							<span class="info-box-icon bg-aqua"><i class="ion ion-arrow-graph-up-right"></i></span>
 							<div class="info-box-content">
 								<p>
-									Registrert diskforbruk siste <code class="selectedOrgRecordedDatesNum"></code> dager for <code class="selectedOrg"></code>.
+									Registrert diskforbruk (i GB) siste <code class="selectedOrgRecordedDatesNum"></code> dager for <code class="selectedOrg"></code>.
 								</p>
 								<p>
 									Velg org i tittellinja over eller ved &aring; klikke p&aring; pai-grafen. Sistnevnte tar med ALLE mapper p&aring; filserver, ogs&aring; mapper som ikke

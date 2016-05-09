@@ -77,15 +77,21 @@
 			<div class="col-md-8">
 				<div class="box box-success">
 					<div class="box-header with-border">
-						<h3 class="box-title icon ion-arrow-graph-up-right"> Forbruk lagring (i GB)</h3>
+						<h3 class="box-title icon ion-arrow-graph-up-right"> Lagringshistorikk</h3>
 						<div class="box-tools pull-right">
 							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 						</div>
 					</div>
 					<div class="box-body">
-						<p>
-							Viser siste <code class="orgRecordedDatesNum"></code> dager med endringer i diskforbruk.
-						</p>
+						<div class="info-box">
+							<span class="info-box-icon bg-green"><i class="ion ion-arrow-graph-up-right"></i></span>
+							<div class="info-box-content">
+								<p>
+									Registrert diskforbruk (i GB) siste <code class="orgRecordedDatesNum"></code> dager for <code class="feideOrg"></code>.
+								</p>
+							</div><!-- /.info-box-content -->
+						</div>
+
 						<div class="chart">
 							<canvas id="orgUsageLineChartOrgAdmin" style="min-height: 300px;">
 								<!-- Line Chart -->
