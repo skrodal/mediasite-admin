@@ -81,7 +81,7 @@ var SUPER_ADMIN = (function () {
 			$('#pageSuperAdmin').find('.orgAvgStorageThisYear').text(UTILS.mib2tb(orgAvgStorageMiB).toFixed(2) + " TB");
 			// Cost estimate based on average
 			$('#pageSuperAdmin').find('.orgInvoiceEstimateThisYear').text("kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed());
-			// 
+			//
 			var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
 			// Avg storage is greater than today's storage use
 			if (orgTotalStoragePercentageOfOrgAvg > 100) {
@@ -193,7 +193,6 @@ var SUPER_ADMIN = (function () {
 			counter--;
 			if (counter == 0) return false;
 		});
-		console.log(data);
 		// In case there exist less than 30 days worth of data
 		SELECTED_ORG_RECORDED_DATES_NUM = daysToShow - counter;
 		// Reverse back so we get most recent date last

@@ -32,6 +32,8 @@ var ORG_ADMIN = (function () {
 		$('#pageOrgAdmin').find('#inputCostTB').val(MEDIASITE.storageCostTB());
 		// All fields referring to cost defined by calculator
 		$('#pageOrgAdmin').find('.costPerTB').text("kr. " + MEDIASITE.storageCostTB());
+		//
+		$('#pageOrgAdmin').find('.orgSubscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.getOrgSubscriptionStatusCode(DATAPORTEN.user().org.id)] + '">' + KIND.subscriptionCodesToNames()[KIND.getOrgSubscriptionStatusCode(DATAPORTEN.user().org.id)] + '</span>');
 
 		// QuickStats below line graph
 		var orgTotalStorageMiB = MEDIASITE_ORG.totalStorage();
@@ -41,11 +43,11 @@ var ORG_ADMIN = (function () {
 
 		// -- QUICKSTATS
 		// Usage percentage overall
-		$('#pageOrgAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal + "%");
+		$('#pageOrgAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal);
 		// On disk as of last reading (total)
-		$('#pageOrgAdmin').find('.orgTotalStorageMiB').text(UTILS.mib2tb(orgTotalStorageMiB).toFixed(2) + "TB");
+		$('#pageOrgAdmin').find('.orgTotalStorage').text(UTILS.mib2tb(orgTotalStorageMiB).toFixed(2) + "TB");
 		// The average usage this year
-		$('#pageOrgAdmin').find('.orgAvgStorageMiB').text(UTILS.mib2tb(orgAvgStorageMiB).toFixed(2) + "TB");
+		$('#pageOrgAdmin').find('.orgAvgStorageThisYear').text(UTILS.mib2tb(orgAvgStorageMiB).toFixed(2) + "TB");
 		// Total invoiceable amount, based on average storage consumption this year
 		$('#pageOrgAdmin').find('.orgAvgStorageCostEstimate').text("kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed());
 

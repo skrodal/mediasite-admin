@@ -34,7 +34,7 @@
 					<span class="info-box-icon bg-red"><i class="ion ion-upload"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">LAGRING</span>
-						<span class="info-box-number orgTotalStorageMiB"><!-- --></span>
+						<span class="info-box-number orgTotalStorage"><!-- --></span>
 						<div class="progress bg-red"></div>
 						<span class="progress-description text-muted">Akkurat n&aring;</span>
 					</div><!-- /.info-box-content -->
@@ -49,7 +49,7 @@
 					<span class="info-box-icon bg-yellow"><i class="ion ion-android-calendar"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">SNITT</span>
-						<span class="info-box-number orgAvgStorageMiB"><!-- --></span>
+						<span class="info-box-number orgAvgStorageThisYear"><!-- --></span>
 						<div class="progress bg-yellow"></div>
 						<span class="progress-description text-muted">For dette &aring;r</span>
 					</div><!-- /.info-box-content -->
@@ -74,8 +74,8 @@
 		<h2 class="page-header">Lagring &amp; Fakturering</h2>
 
 		<div class="row">
-			<div class="col-md-6">
-				<div class="box box-default">
+			<div class="col-md-8">
+				<div class="box box-success">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-arrow-graph-up-right"> Forbruk lagring (i GB)</h3>
 						<div class="box-tools pull-right">
@@ -90,17 +90,49 @@
 							<canvas id="orgUsageLineChartOrgAdmin" style="min-height: 300px;">
 								<!-- Line Chart -->
 							</canvas>
+
+							<span class="text-muted">Klikk for &aring; endre farge, høyreklikk for å lagre som bildefil (png).</span>
 						</div>
 					</div><!-- /.box-body -->
 					<div class="box-footer">
-						Grafen kan lagres som bildefil (png) med <code>h&oslash;yreklikk -> lagre som...</code>. <span class="text-muted">Klikk p&aring; grafen for &aring; endre farge...</span>
+						<div class="row">
+							<div class="col-sm-3 col-xs-6">
+								<div class="description-block border-right">
+									<span class="description-percentage text-green orgSubscriptionStatus">&nbsp;</span>
+									<h5 class="description-header">&nbsp;</h5>
+									<span class="description-text">STATUS</span>
+								</div><!-- /.description-block -->
+							</div><!-- /.col -->
+							<div class="col-sm-3 col-xs-6">
+								<div class="description-block border-right">
+									<span class="description-percentage text-green"><i class="fa fa-pie-chart"></i> <span class="orgStoragePercentageGlobal"><!-- --></span>%</span>
+									<h5 class="description-header orgTotalStorage"><!-- --></h5>
+									<span class="description-text">TOTALT</span>
+								</div><!-- /.description-block -->
+							</div><!-- /.col -->
+							<div class="col-sm-3 col-xs-6">
+								<div class="description-block border-right">
+									<span class="orgTotalStoragePercentageOfOrgAvg"><!-- --></span>
+									<h5 class="description-header orgAvgStorageThisYear"><!-- --></h5>
+									<span class="description-text">SNITT I &Aring;R</span>
+								</div><!-- /.description-block -->
+							</div><!-- /.col -->
+							<div class="col-sm-3 col-xs-6">
+								<div class="description-block">
+									<span class="description-percentage text-gray"><i class="fa fa-calendar-o"></i> Per i dag</span>
+									<h5 class="description-header orgInvoiceEstimateThisYear"><!-- --></h5>
+									<span class="description-text">ESTIMAT</span>
+								</div><!-- /.description-block -->
+							</div>
+						</div><!-- /.row -->
 					</div>
+
 				</div><!-- /.box -->
 			</div>
 
 
-			<div class="col-md-6">
-				<div class="box box-info">
+			<div class="col-md-4">
+				<div class="box box-success">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-arrow-graph-down-right"> Kostnadsestimator</h3>
 						<div class="box-tools pull-right">
@@ -129,16 +161,16 @@
 
 					<div class="box-footer">
 						<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-6 col-sm-6 col-xs-6">
 										<div class="description-block border-right">
 											<h5 class="description-header costPerTB"><!-- --></h5>
-											<span class="description-text">PRIS PER TB</span>
+											<span class="description-text">PER TB</span>
 										</div><!-- /.description-block -->
 									</div><!-- /.col -->
-									<div class="col-md-6">
+									<div class="col-md-6 col-sm-6 col-xs-6">
 										<div class="description-block border-right">
 											<h5 class="description-header orgAvgStorageCostEstimate"><!-- --></h5>
-											<span class="description-text">FAKTURAESTIMAT</span>
+											<span class="description-text">ESTIMAT</span>
 										</div><!-- /.description-block -->
 									</div><!-- /.col -->
 								</div><!-- /.row -->

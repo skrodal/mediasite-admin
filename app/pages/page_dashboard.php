@@ -59,6 +59,9 @@
 					<div class="box-body">
 						<canvas id="chartOrgsDiskusageDashboard">
 							<!--buildDashboardOrgsDiskusagePie-->
+							<div class="overlay ajax">
+								<i class="fa ion-load-d fa-spin"></i>
+							</div>
 						</canvas>
 
 						<p>

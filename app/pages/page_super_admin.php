@@ -74,7 +74,7 @@
 	    <div class="row">
 		    <div class="col-lg-12">
 				<!-- SUBSCRIBERS TABLE -->
-				<div id="subscribersTableBoxSuperAdmin" class="box box-primary collapsed-box">
+				<div id="subscribersTableBoxSuperAdmin" class="box box-primary">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-ios-home"> Abonnenter</h3>
 						<div class="box-tools pull-right">
@@ -82,7 +82,7 @@
 							<span data-toggle="tooltip" title="Aktive" class="badge bg-green subscribersCount"><!--updateUserUI--></span>
 							<span data-toggle="tooltip" title="Utpr&oslash;ving" class="badge bg-orange subscribersTrialCount"><!--updateUserUI--></span>
 							<span data-toggle="tooltip" title="Andre" class="badge bg-red subscribersOtherCount"><!--updateUserUI--></span>
-							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 						</div>
 					</div>
 					<div class="box-body table-responsive">
@@ -167,7 +167,7 @@
 	    <h2 class="page-header">Lagring &amp; Fakturering</h2>
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-8">
 				<div class="box box-success">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-ios-pie"> Fordeling i TB</i></h3>
@@ -183,7 +183,7 @@
 				</div><!-- /.box -->
 			</div><!-- /.col -->
 
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<div class="box box-success">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-arrow-graph-down-right"> Kostnadsestimator</h3>
@@ -213,16 +213,16 @@
 
 					<div class="box-footer">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6">
 								<div class="description-block border-right">
 									<h5 class="description-header costPerTB"><!-- --></h5>
-									<span class="description-text">PRIS PER TB</span>
+									<span class="description-text">PER TB</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->
-							<div class="col-md-6">
+							<div class="col-md-6 col-sm-6 col-xs-6">
 								<div class="description-block border-right">
 									<h5 class="description-header totalAvgStorageCostEstimate"><!-- --></h5>
-									<span class="description-text">FAKTURAESTIMAT</span>
+									<span class="description-text">ESTIMAT</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -266,8 +266,7 @@
 							<canvas id="orgUsageLineChartSuperAdmin" style="min-height: 350px; max-height: 350px;">
 								<!-- Line Chart -->
 							</canvas>
-
-							Grafer kan lagres som bildefil (png) med <code>h&oslash;yreklikk -> lagre som...</code>. <span class="text-muted">Klikk p&aring; grafen for &aring; endre farge...</span>
+							<span class="text-muted">Klikk for &aring; endre farge, høyreklikk for å lagre som bildefil (png).</span>
 						</div>
 
 
@@ -300,7 +299,7 @@
 								<div class="description-block">
 									<span class="description-percentage text-gray"><i class="fa fa-calendar-o"></i> Per i dag</span>
 									<h5 class="description-header orgInvoiceEstimateThisYear"><!-- --></h5>
-									<span class="description-text">FAKTURAESTIMAT</span>
+									<span class="description-text">ESTIMAT</span>
 								</div><!-- /.description-block -->
 							</div>
 						</div><!-- /.row -->
