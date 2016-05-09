@@ -19,6 +19,7 @@ MediasiteAdmin er en klient for UNINETTs Mediasite tjeneste. Den tilbyr to tilga
 
 * Endre tilgangsstyring til å bruke ad-hoc gruppe istedenfor KIND...
 * Dato-selektor for lagringsdata (nå er siste 30 dager eneste valg i UI, API tillater mer...)
+* Caching hadde vært fint, men absolutt ikke nødvendig 
 
 ### Avhengigheter ###
 
