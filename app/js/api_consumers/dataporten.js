@@ -18,8 +18,8 @@ var DATAPORTEN = (function () {
 			url: DP_AUTH.config().dp_endpoints.userinfo,
 			dataType: 'json'
 		}).pipe(function (data) {
-			console.log("Rådata fra endepunkt /userinfo: ");
-			console.log(data);
+			//console.log("Rådata fra endepunkt /userinfo: ");
+			//console.log(data);
 
 			var user = data.user;
 			var username = user.userid_sec[0].split('feide:')[1];
@@ -50,7 +50,8 @@ var DATAPORTEN = (function () {
 			url: DP_AUTH.config().dp_endpoints.groups + 'me/groups',
 			dataType: 'json'
 		}).pipe(function (groups) {
-				console.log(groups);
+				// console.log("Groups: ");
+				// console.log(groups);
 				// Defaults
 				USER.affiliation = null;
 				USER.org.name = null;

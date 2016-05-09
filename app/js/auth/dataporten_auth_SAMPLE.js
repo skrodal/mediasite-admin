@@ -8,6 +8,9 @@
 JSO.enablejQuery($);
 
 var DP_AUTH = (function () {
+	//
+	var DEBUG = !true;
+	//
 	var CONFIG =
 	{
 		dp_auth: {
@@ -39,8 +42,13 @@ var DP_AUTH = (function () {
 		client_id		: 	CONFIG.dp_auth.client_id,
 		redirect_uri	: 	CONFIG.dp_auth.redirect_uri,
 		authorization	: 	CONFIG.dp_auth.authorization,
-		debug			: 	true
+		debug: DEBUG
 	});
+
+	// Added debug flag to config and to JSO library. Below is mostly a reminder to myself :)
+	if(!DEBUG){
+		console.info("JSO debug/logging is turned off; turn on in JSO instantiation.")
+	}
 
 
 	jso.callback();
