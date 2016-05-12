@@ -1,6 +1,6 @@
 var MEDIASITE = (function () {
 	// CONSTANTS
-	var STORAGE_COST_PER_TB = 15000;
+	var STORAGE_COST_PER_TB = 12000;
 
 	// FROM API
 	var
