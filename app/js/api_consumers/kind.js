@@ -32,7 +32,7 @@ var KIND = (function() {
 				subscriptionCount = _getSubscriptionCount(subscribers.data);
 				// subscriberDetails is set by _getSubscriptionCount and will be empty if logged on user is not from a subscribing org
 				if($.isEmptyObject(subscriberDetails)){
-					return $.Deferred().reject(res, status, "Din org abonnerer ikke p&aring; tjenesten.").promise();
+					return $.Deferred().reject(res, status, "Din org abonnerer ikke p&aring; Mediasite fra UNINETT.").promise();
 				}
 				subscribersAll = subscribers.data;
 				return $.Deferred().resolve(subscribers.data, status, res).promise();;

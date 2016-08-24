@@ -23,9 +23,6 @@
 
 		<!-- jQuery -->
 		<script src="dist/plugins/jQuery/jQuery-2.1.3.min.js"></script>
-		<!-- JSO -->
-		<script src="app/js/auth/jso.js"></script>
-		<script src="app/js/auth/dataporten_auth.js"></script>
 		<!-- Bootstrap 3.3.2 JS -->
 		<script src="dist/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 		<!-- AdminLTE App -->
@@ -45,22 +42,22 @@
 				<!-- TODO: Using dummy vars ATM (in config.php) - switch to auth.php -->
 				<?php
 					include_once('app/pages/page_loading.php');
-					include_once('app/pages/page_dashboard.php');
-					include_once('app/pages/page_org_admin.php');
-					include_once('app/pages/page_super_admin.php');
+					//include_once('app/pages/page_dashboard.php');
+					//include_once('app/pages/page_org_admin.php');
+					//include_once('app/pages/page_super_admin.php');
 
-					/*
-										//echo $api_auth->getToken();
-										if($feideAuthObj->isOrgSubscriber()) {
-											include_once('app/pages/page_dashboard.php');
-										}
-										if($feideAuthObj->isSuperAdmin()) {
-											include_once('app/pages/page_super_admin.php');
-										}
-										if($feideAuthObj->isOrgAdmin()) {
-											include_once('app/pages/page_org_admin.php');
-										}
-					*/
+
+					//echo $api_auth->getToken();
+					if($feideAuthObj->isOrgSubscriber()) {
+						include_once('app/pages/page_dashboard.php');
+					}
+					if($feideAuthObj->isSuperAdmin()) {
+						include_once('app/pages/page_super_admin.php');
+					}
+					if($feideAuthObj->isOrgAdmin()) {
+						include_once('app/pages/page_org_admin.php');
+					}
+
 				?>
 			</div><!-- /.content-wrapper -->
 

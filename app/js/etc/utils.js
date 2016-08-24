@@ -34,7 +34,7 @@ var UTILS = (function () {
 
 	function showAuthError(funcname, msg) {
 		$('#authError').fadeIn().removeClass('hidden');
-		$('#authError').append("<p><code>" + funcname + ": " + JSON.stringify(msg, undefined, 2) + "</code></p>");
+		$('#authErrorMsg').append("<p><code>" + funcname + ": " + JSON.stringify(msg, undefined, 2) + "</code></p>");
 	}
 
 	function alertError(title, message) {

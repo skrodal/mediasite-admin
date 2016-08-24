@@ -11,12 +11,16 @@
 			</div>
 
 			<div id="authError" class="alert alert-danger hidden">
-				<h4><i class="icon fa fa-ban"></i> Beklager! P&aring;loggingsprosessen har dessverre feilet ;-(</h4>
+				<h4><i class="icon fa fa-ban"></i> Beklager!</h4>
 				<p>
-					<strong>
-						Rapporterte feil ser du under. Du kan fors&oslash;ke &aring; laste siden p&aring; nytt eller rapportere feilen til
-						<a href="mailto:support@ecampus.no">support@ecampus.no</a>
-					</strong>
+					<strong>Pålogging feilet fordi:</strong>
+				</p>
+				<div id="authErrorMsg">
+					<!-- -->
+				</div>
+				<p>
+					Dersom du mener dette dreier seg om en feil i tjenesten kan du fors&oslash;ke &aring; laste siden p&aring; nytt eller rapportere feilen til
+					<a href="mailto:support@ecampus.no">support@ecampus.no</a>
 				</p>
 			</div>
 
@@ -30,10 +34,9 @@
 </section>
 <!-- -->
 <script src="app/js/etc/utils.js"></script>
-<!-- JSO
+<!-- JSO -->
 <script src="app/js/auth/jso.js"></script>
 <script src="app/js/auth/dataporten_auth.js"></script>
- -->
 
 <script src="app/js/api_consumers/dataporten.js"></script>
 <script src="app/js/api_consumers/mediasite.js"></script>
