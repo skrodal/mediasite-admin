@@ -20,7 +20,7 @@
 				</div>
 				<p>
 					Dersom du mener dette dreier seg om en feil i tjenesten kan du fors&oslash;ke &aring; laste siden p&aring; nytt eller rapportere feilen til
-					<a href="mailto:support@ecampus.no">support@ecampus.no</a>
+					<a href="mailto:kontakt@uninett.no">kontakt@uninett.no</a>
 				</p>
 			</div>
 
