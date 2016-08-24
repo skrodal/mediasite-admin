@@ -30,10 +30,6 @@
 </section>
 <!-- -->
 <script src="app/js/etc/utils.js"></script>
-<!-- JSO -->
-<script src="app/js/auth/jso.js"></script>
-<script src="app/js/auth/dataporten_auth.js"></script>
-
 
 <script src="app/js/api_consumers/dataporten.js"></script>
 <script src="app/js/api_consumers/mediasite.js"></script>
