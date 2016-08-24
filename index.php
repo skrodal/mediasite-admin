@@ -7,10 +7,6 @@
 		<meta charset="UTF-8">
 		<title>MediasiteAdmin</title>
 		<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes' name='viewport'>
-
-		<!-- JSO -->
-		<script src="app/js/auth/jso.js"></script>
-		<script src="app/js/auth/dataporten_auth.js"></script>
 		<!-- Stylesheets -->
 		<link href="dist/AdminLTE/fonts/fontawesome/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 		<link href="dist/AdminLTE/fonts/ionicons/ionicons.min.css" rel="stylesheet" type="text/css"/>
@@ -27,6 +23,9 @@
 
 		<!-- jQuery -->
 		<script src="dist/plugins/jQuery/jQuery-2.1.3.min.js"></script>
+		<!-- JSO -->
+		<script src="app/js/auth/jso.js"></script>
+		<script src="app/js/auth/dataporten_auth.js"></script>
 		<!-- Bootstrap 3.3.2 JS -->
 		<script src="dist/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 		<!-- AdminLTE App -->
