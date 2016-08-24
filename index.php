@@ -42,11 +42,11 @@
 				<!-- TODO: Using dummy vars ATM (in config.php) - switch to auth.php -->
 				<?php
 					include_once('app/pages/page_loading.php');
-					//include_once('app/pages/page_dashboard.php');
-					//include_once('app/pages/page_org_admin.php');
-					//include_once('app/pages/page_super_admin.php');
+					include_once('app/pages/page_dashboard.php');
+					include_once('app/pages/page_org_admin.php');
+					include_once('app/pages/page_super_admin.php');
 
-
+				/*
 					//echo $api_auth->getToken();
 					if($feideAuthObj->isOrgSubscriber()) {
 						include_once('app/pages/page_dashboard.php');
@@ -57,7 +57,7 @@
 					if($feideAuthObj->isOrgAdmin()) {
 						include_once('app/pages/page_org_admin.php');
 					}
-
+				*/
 				?>
 			</div><!-- /.content-wrapper -->
 
