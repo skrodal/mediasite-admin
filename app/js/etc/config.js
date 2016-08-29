@@ -8,7 +8,7 @@ var CONFIG = (function () {
 	var orgToFolderMap =
 	{
 		"oslo-universitetssykehus": "medinfo",
-		"c-k": "ck",
+		"kristiania": "ck",
 		//"???": "kth",
 		//"kristiania": "???",
 
@@ -18,7 +18,7 @@ var CONFIG = (function () {
 	var folderToOrgMap =
 	{
 		"medinfo": "oslo-universitetssykehus",
-		"ck": "c-k",
+		"ck": "kristiania",
 		//"kth": "???"
 		//"???": "kristiania"
 	};
