@@ -1,9 +1,9 @@
 var DASHBOARD = (function() {
 	// Pie chart
-	var chartOrgsUsageDashboard = false;          // The Chart instance
+	var pieOrgsDiskusageDashboard = false;          // The Chart instance
 
 	function init() {
-		buildOrgsTableDashboard(KIND.subscribers(), DATAPORTEN.user());
+		_buildOrgsTableDashboard(KIND.subscribers(), DATAPORTEN.user());
 	}
 
 	/**
@@ -14,19 +14,19 @@ var DASHBOARD = (function() {
 	 */
 	function onShowListener() {
 		$.when(MEDIASITE.serviceDiskusageListXHR()).done(function (data){
-			chartOrgsUsageDashboard = buildOrgsDiskusagePieChart(data);
+			pieOrgsDiskusageDashboard = _buildPieOrgsDiskusageDashboard(data);
 		});
 	}
 	/**
 	 * Destroy elements that can't be redrawn when hidden
 	 */
 	function onHideListener() {
-		_destroyPieChart();
+		_destroyPieOrgsDiskusageDashboard();
 	}
 
 
 	// Build simple subscribers table from KIND data
-	function buildOrgsTableDashboard(subscribersArr, user){
+	function _buildOrgsTableDashboard(subscribersArr, user){
 		$('#subscriber_table_body').empty();
 		var labelText = '---', labelColor = 'red';
 		var rowClass;
@@ -56,28 +56,36 @@ var DASHBOARD = (function() {
 	 * but with legend.
 	 * @returns {*}
 	 */
-	function buildOrgsDiskusagePieChart(data) {
-		_destroyPieChart();
-		var orgsDiskUsageChartData = [];
+	function _buildPieOrgsDiskusageDashboard(data) {
+		_destroyPieOrgsDiskusageDashboard();
+		var orgNum = 0;
+		var pieOrgsDiskusageDashboardData = {};
+		pieOrgsDiskusageDashboardData.labels = [];
+		pieOrgsDiskusageDashboardData.datasets = [];
+		pieOrgsDiskusageDashboardData.datasets[0] = {};
+		pieOrgsDiskusageDashboardData.datasets[0].data = [];
+		pieOrgsDiskusageDashboardData.datasets[0].backgroundColor= [];
+		pieOrgsDiskusageDashboardData.datasets[0].hoverBackgroundColor= [];
+		//
 		$.each(data, function(index, orgObj){
 			// Chart prefs and data
-			orgsDiskUsageChartData.push({
-				//value: (Math.floor(Math.random() * 100) + 1),
-				value: +UTILS.mib2tb(orgObj).toFixed(2),
-				color:'#'+(Math.random().toString(16) + '0000000').slice(2, 8),
-				highlight: '#'+(Math.random().toString(16) + '0000000').slice(2, 8),
-				label: ""
-			});
+			pieOrgsDiskusageDashboardData.labels.push('Org #' + orgNum++ + ' TB');
+			pieOrgsDiskusageDashboardData.datasets[0].data.push(UTILS.mib2tb(orgObj).toFixed(2));
+			pieOrgsDiskusageDashboardData.datasets[0].backgroundColor.push(UTILS.randomRGBA(0.6));
+			pieOrgsDiskusageDashboardData.datasets[0].hoverBackgroundColor.push(UTILS.randomRGBA(1));
 		});
-		var ctx = document.getElementById("chartOrgsDiskusageDashboard").getContext("2d");
-		return new Chart(ctx).Pie(orgsDiskUsageChartData, {});
+		var ctx = $('#pieOrgsDiskusageDashboard');
+		return new Chart(ctx,{
+			type: 'pie',
+			data: pieOrgsDiskusageDashboardData
+		});
 	}
 
-	function _destroyPieChart() {
+	function _destroyPieOrgsDiskusageDashboard() {
 		// PIE CHART, destroy if already present (to get the animation effect)
-		if(chartOrgsUsageDashboard !== false) {
-			chartOrgsUsageDashboard.destroy();
-			chartOrgsUsageDashboard = false;
+		if(pieOrgsDiskusageDashboard !== false) {
+			pieOrgsDiskusageDashboard.destroy();
+			pieOrgsDiskusageDashboard = false;
 		}
 	}
 

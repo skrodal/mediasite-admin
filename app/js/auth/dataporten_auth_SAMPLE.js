@@ -30,11 +30,6 @@ var DP_AUTH = (function () {
 		},
 		kind: {
 			mediasiteID: "KIND SERVICE ID"
-		},
-		/* Ikke implementert enda */
-		access_group: {
-			groupID: "DP AD-HOC GROUP ID",
-			invitation: "URL"
 		}
 	};
 

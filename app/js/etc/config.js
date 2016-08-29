@@ -4,6 +4,7 @@
 
 // Charts.js global config
 Chart.defaults.global.responsive = true;
+Chart.defaults.global.legend = false;
 //
 var dataTablesLanguage =
 {

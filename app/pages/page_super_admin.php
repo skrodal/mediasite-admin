@@ -91,7 +91,7 @@
 							<span class="info-box-icon bg-blue-active"><i class="ion ion-ios-home"></i></span>
 							<div class="info-box-content">
 										<p>Abonnementsinformasjon er hentet fra Kind. </p>
-										<p>Lagring er snittverdier for <?php echo date("Y"); ?> og brukt i utregning av kostnad  — <code>lagring * <span class="costPerTB"><!--updateUserUI()--></span></code> (pris per TB).</p>
+										<p>Lagring er snittverdier for <?php echo date("Y"); ?> og brukt i utregning av kostnad  — <code>lagring * pris per TB</code>.</p>
 										<p>Status <code>ukjent</code> betyr at det ligger innhold (mappe) på filserver uten match på org i Kind</p>
 							</div><!-- /.info-box-content -->
 						</div>
@@ -173,8 +173,11 @@
 						<h3 class="box-title icon ion-ios-pie"> Fordeling i TB</i></h3>
 					</div>
 					<div class="box-body">
-						<canvas id="chartOrgsUsagePieSuperAdmin" style="cursor: pointer;">
-							<!--buildOrgsDiskusageChart-->
+						<canvas id="pieOrgsDiskusageSuper" style="cursor: pointer;">
+							<!--_buildPieOrgsDiskusageSuper-->
+							<div class="overlay ajax">
+								<i class="fa ion-load-d fa-spin"></i>
+							</div>
 						</canvas>
 					</div><!-- /.box-body -->
 					<div class="box-footer text-muted">
@@ -195,7 +198,7 @@
 					<div class="box-body">
 						<p>
 							Estimatoren er i utgangspunktet hardkodet med en pris per TB p&aring;
-							<em>kr. <span class="storageCostPerTB"><!--updateUserUI()--></span></em>.
+							<span class="storageCostPerTB"><!--updateUserUI()--></span>.
 							Du kan endre dette i feltet under og klikke p&aring; kalkulatoren.
 						</p>
 						<p>
@@ -204,7 +207,7 @@
 						</p>
 
 						<div class="input-group input-group-sm" style="margin-bottom: 10px;">
-	                        <input id="inputCostTB" type="text" placeholder="Pris per TB" value="" class="form-control pull-right" style="width: 100px;">
+	                        <input class="inputCostTB" type="text" placeholder="Pris per TB" value="" class="form-control pull-right" style="width: 100px;">
 	                        <span class="input-group-btn">
 	                            <button id="btnInvoiceCalc" class="btn btn-info btn-sm btn-flat ion ion-calculator" type="button">&nbsp;</button>
 	                        </span>
@@ -215,7 +218,7 @@
 						<div class="row">
 							<div class="col-md-6 col-sm-6 col-xs-6">
 								<div class="description-block border-right">
-									<h5 class="description-header costPerTB"><!-- --></h5>
+									<h5 class="description-header storageCostPerTB"><!-- --></h5>
 									<span class="description-text">PER TB</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->

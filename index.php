@@ -39,25 +39,12 @@
 			<?php include_once('app/pages/index_sidebar.php'); ?>
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper">
-				<!-- TODO: Using dummy vars ATM (in config.php) - switch to auth.php -->
 				<?php
+					// Pull in all pages
 					include_once('app/pages/page_loading.php');
 					include_once('app/pages/page_dashboard.php');
 					include_once('app/pages/page_org_admin.php');
 					include_once('app/pages/page_super_admin.php');
-
-				/*
-					//echo $api_auth->getToken();
-					if($feideAuthObj->isOrgSubscriber()) {
-						include_once('app/pages/page_dashboard.php');
-					}
-					if($feideAuthObj->isSuperAdmin()) {
-						include_once('app/pages/page_super_admin.php');
-					}
-					if($feideAuthObj->isOrgAdmin()) {
-						include_once('app/pages/page_org_admin.php');
-					}
-				*/
 				?>
 			</div><!-- /.content-wrapper -->
 
@@ -86,7 +73,7 @@
 		<script src="dist/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
 		<!-- Chart.js -->
 		<script src="dist/plugins/chartjs/Chart.min.js" type="text/javascript"></script>
-		<!-- MediasiteAdmin -->
+		<!-- MediasiteAdmin, the bulks of scripts are loaded in page_loading.php -->
 		<script src="app/js/etc/config.js" type="text/javascript"></script>
 		<script src="app/js/app.js" type="text/javascript"></script>
 		<!-- DataTables -->

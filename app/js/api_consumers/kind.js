@@ -80,24 +80,6 @@ var KIND = (function() {
 		return count;
 	}
 
-	function isSuperAdmin(){
-		return (DATAPORTEN.user().username.indexOf("@uninett.no") > -1);
-	}
-
-	function isOrgAdmin() {
-		if($.isEmptyObject(subscriberDetails)){
-			return false;
-		} else {
-			return (DATAPORTEN.user().email.indexOf(subscriberDetails.contact.e_post.toLowerCase()) > -1);
-		}
-	}
-
-	function getRole() {
-		if(isSuperAdmin()) return 'SuperAdmin';
-		if(isOrgAdmin()) return 'OrgAdmin';
-		return 'Bruker';
-	}
-
 	// Returns a number
 	function getOrgSubscriptionStatusCode(requestedOrg){
 		var status = 404; // Default code in case org is not found
@@ -129,15 +111,6 @@ var KIND = (function() {
 		},
 		subscriberDetails: function() {
 			return subscriberDetails;
-		},
-		isSuperAdmin: function(){
-			return isSuperAdmin();
-		},
-		isOrgAdmin: function(){
-			return isOrgAdmin();
-		},
-		getRole: function() {
-			return getRole();
 		},
 		getOrgSubscriptionStatusCode : function(requiredOrg){
 			return getOrgSubscriptionStatusCode(requiredOrg);

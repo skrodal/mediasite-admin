@@ -55,14 +55,12 @@ var DATAPORTEN = (function () {
 				// Defaults
 				USER.affiliation = null;
 				USER.org.name = null;
-				USER.inAccessGroup = false;
 
 				if (groups.length === 0) {
 					UTILS.showAuthError("Mangler rettigheter", "Du har dessverre ikke tilgang til denne tjenesten (fikk ikke tak i din tilh&oslash;righet)");
 				} else {
 					// Loop all groups
 					$.each(groups, function (index, group) {
-
 						// 1. Find out if user is member of a higher_education FC:ORG group
 						// orgType is only present for org-type group
 						if (group.orgType !== undefined && group.type !== undefined) {
@@ -77,10 +75,6 @@ var DATAPORTEN = (function () {
 								USER.org.name = group.displayName;
 							}
 						}
-						// 2. Find out if user is member of ad-hoc access group
-						if(group.id == DP_AUTH.config().access_group.groupID) {
-							USER.inAccessGroup = true;
-						}
 					});
 
 					if (USER.affiliation.toLowerCase() !== 'employee') {
@@ -94,9 +88,9 @@ var DATAPORTEN = (function () {
 				UTILS.showAuthError("Grupper", jqXHR);
 			});
 	}
-
-
 	// ------------------- ./ GRUPPER -------------------
+
+
 
 
 	/*** Expose public functions ***/

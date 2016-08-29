@@ -3,6 +3,7 @@ var UTILS = (function () {
 	var GB_to_TB = 0.001; // Used in MiB_to_GB to GB_to_TB conversion
 	var MiB_to_GB = 0.001048576; // From MiB to MiB_to_GB
 	var MiB_to_MB = 1.048576; // From Mib to MiB_to_MB
+	var MIN_DIFF_STORAGE_THRESHOLD = 100; // Min. variation in storage for adding a new plot on graphs
 
 	// When Org ID is not the same as folder name
 	var mapOrgToFolder =
@@ -17,7 +18,6 @@ var UTILS = (function () {
 		"medinfo": "oslo-universitetssykehus",
 		"ck": "c-k",
 	};
-
 
 
 	/**** AUTH CYCLE ****/
@@ -53,6 +53,11 @@ var UTILS = (function () {
 		return mapFolderToOrg[folder] || folder;
 	}
 
+	function randomRGBA(transparency) {
+		transparency = transparency ? transparency : 0.2;
+		return 'rgba(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ', ' + transparency + ')';
+	}
+
 	/**
 	 * Make the users JSON object more palatable for DataTables
 	 * @param dataObject
@@ -83,7 +88,7 @@ var UTILS = (function () {
 		mapMediasiteFolderToFeideOrg: function (folder) {
 			return mapMediasiteFolderToFeideOrg(folder);
 		},
-		orgToFolderMap: function(){
+		orgToFolderMap: function () {
 			return mapOrgToFolder;
 		},
 		mib2mb: function (mib) {
@@ -95,8 +100,14 @@ var UTILS = (function () {
 		mib2tb: function (mib) {
 			return (mib * MiB_to_GB) * GB_to_TB;
 		},
-		convertDataTablesData : function(dataObject){
+		convertDataTablesData: function (dataObject) {
 			return convertDataTablesData(dataObject);
+		},
+		randomRGBA: function (transparency) {
+			return randomRGBA(transparency);
+		},
+		minDiffStorageThreshold: function(){
+			return MIN_DIFF_STORAGE_THRESHOLD;
 		}
 	}
 })();

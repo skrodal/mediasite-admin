@@ -57,7 +57,7 @@
 						<h3 class="box-title ion-ios-pie"> Lagring fordelt p&aring; abonnenter (i TB)</h3>
 					</div>
 					<div class="box-body">
-						<canvas id="chartOrgsDiskusageDashboard">
+						<canvas id="pieOrgsDiskusageDashboard">
 							<!--buildDashboardOrgsDiskusagePie-->
 							<div class="overlay ajax">
 								<i class="fa ion-load-d fa-spin"></i>

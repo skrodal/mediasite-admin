@@ -1,14 +1,20 @@
 var APP = (function () {
 
-
-	//
+	/**
+	 * Entry point after loading is done and dusted.
+	 *
+	 * Run once only.
+	 */
 	$(document).ready(function () {
 		// User/groups first, then Kind (depends on readyUser)
 		$.when(DATAPORTEN.readyUser(), DATAPORTEN.readyGroups()).done(function () {
 			$.when(KIND.ready()).done(function () {
 				DASHBOARD.init();
-				MENU.init();
-				updateUserUI();
+				// MS is ready when user role is fetched from the API
+				$.when(MEDIASITE.ready()).done(function () {
+					MENU.init();
+					updateUserUI();
+				});
 			});
 		});
 	});
@@ -21,17 +27,16 @@ var APP = (function () {
 		// Populate public Mediasite
 		updateMediasiteData();
 
-		if (KIND.isOrgAdmin()) {
-			$('.dashInfoForAdmins').html('<p>' + DATAPORTEN.user().name.first + ', du er <b>Org</b>Admin for <code>' + DATAPORTEN.user().org.name + '</code>!</p><p> Bruk menyen til venstre for å hente mer informasjon.</p>');
+		if (MEDIASITE.userRole().isOrgAdmin) {
+			$('.dashInfoForAdmins').html('<h4>Hey ' + DATAPORTEN.user().name.first + ', du er <b>Org</b>Admin for <code>' + DATAPORTEN.user().org.name + '</code></h4><p> Bruk menyen til venstre for å hente mer informasjon.</p>');
 		}
-		if (KIND.isSuperAdmin()) {
-			$('.dashInfoForAdmins').html('<p>' + DATAPORTEN.user().name.first + ', du er <b>Super</b>Admin for hele skiten <i class="icon ion-beer"></i></p><p>Bruk menyen til venstre for å hente mer detaljert informasjon.</p>');
+		if (MEDIASITE.userRole().isSuperAdmin) {
+			$('.dashInfoForAdmins').html('<h4>Hey ' + DATAPORTEN.user().name.first + ', du er <b>Super</b>Admin</h4><p>Bruk menyen til venstre for å hente mer detaljert informasjon.</p>');
 		}
-
 		// User-specific
 		$('.userFirstName').html(' ' + DATAPORTEN.user().name.first);
 		$('.userFullName').html(' ' + DATAPORTEN.user().name.full);
-		$('.userRole').html(' ' + KIND.getRole());
+		$('.userRole').html(' ' + MEDIASITE.userRole().title);
 		$('.feideOrg').html(' ' + DATAPORTEN.user().org.name);
 		var affiliation = DATAPORTEN.user().affiliation == "employee" ? "Ansatt" : "Student";
 		$('.feideAffiliation').html(' ' + affiliation);
@@ -41,12 +46,12 @@ var APP = (function () {
 		$('.subscribersTrialCount').html(KIND.subscriptionCount().trial);
 		$('.subscribersOtherCount').html(KIND.subscriptionCount().other);
 		$('.subscribersTotalCount').html(KIND.subscriptionCount().total);
-		// Invoicing
-		$('.storageCostPerTB').html(MEDIASITE.storageCostTB());
 		// Dev
 		$('#dataportenSessionInfo').text(JSON.stringify(DATAPORTEN.user(), undefined, 2));
 		// Show top logout dropdown
 		$('#userMenu').fadeIn().removeClass('hidden');
+		// Update references to threshold used for making a new plot on diskusage charts
+		$('.minDiffStorageThreshold').html(UTILS.minDiffStorageThreshold());
 	}
 
 	function updateMediasiteData() {
@@ -61,13 +66,3 @@ var APP = (function () {
 
 	}
 })();
-
-
-/*
- // SUPER ADMIN
- if (is_super_admin) {
- org_active_subscribers = getActiveSubscribersCount(SUBSCRIBERS_KIND_ARR);
- buildSubscribersTable(SUBSCRIBERS_KIND_ARR);
- populateSubscribersDropdown(SUBSCRIBERS_KIND_ARR);
- }
- */

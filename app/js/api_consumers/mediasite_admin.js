@@ -1,11 +1,18 @@
+/**
+ * Information from the API at the super level.
+ *
+ * Feeds the superAdmin js/view.
+ */
+
 var MEDIASITE_ADMIN = (function () {
+	var orgsDiskusageList = null
+		orgsDiskusageAvgList = null,
+		orgDiskusageList = [];
 
-var
-	orgsDiskusageList = null
-	orgsDiskusageAvgList = null, 
-	orgDiskusageList = [];
-
-
+	/**
+	 * Latest storage record per org, in MiB.
+	 * @returns {*}
+	 */
 	function orgsDiskusageListXHR() {
 		var endpoint = "admin/orgs/diskusage/list/";
 
@@ -28,6 +35,11 @@ var
 		return orgsDiskusageList;
 	}
 
+	/**
+	 * Average storage per org for current year.
+	 *
+	 * @returns {*}
+	 */
 	function orgsDiskusageAvgListXHR() {
 		var endpoint = "admin/orgs/diskusage/avg/list/";
 
@@ -50,6 +62,11 @@ var
 		return orgsDiskusageAvgList;
 	}
 
+	/**
+	 * Org diskusage history for the current year for selected org.
+	 * @param org
+	 * @returns {*}
+	 */
 	function orgDiskusageListXHR(org){
 		org = UTILS.mapFeideOrgToMediasiteFolder(org.split('.')[0]);
 		var endpoint = "org/"+org+"/diskusage/list/";
@@ -87,8 +104,6 @@ var
 		orgDiskusageListXHR: function (org) {
 			return orgDiskusageListXHR(org);
 		}
-
-
 
 	}
 	

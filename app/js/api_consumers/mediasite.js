@@ -1,17 +1,70 @@
+/**
+ * Controls public-level info (from API) and keeps track of client constants.
+ */
+
 var MEDIASITE = (function () {
 	// CONSTANTS
 	var STORAGE_COST_PER_TB = 12000;
+	//
+	var XHR_MEDIASITE;
 
 	// FROM API
 	var
 		serviceDiskusageTotal = null,
 		serviceDiskusageAvgThisYear = null,
 		serviceDiskusageList = null,
-		homeOrgDiskusageTotal = null;
+		homeOrgDiskusageTotal = null,
+		userRole = null;
+
+	(function () {
+		XHR_MEDIASITE = userRoleXHR();
+	})();
+
+	/**
+	 * The API provides role determined by affiliation (uninett==superadmin)
+	 * and Dataporten MediasiteAdmin group membership (true==orgadmin).
+	 *
+	 * API returns a string: "SuperAdmin" | "OrgAdmin" | "Basic"
+	 * @returns {*}
+	 */
+	function userRoleXHR(){
+		if(!userRole) {
+			return DP_AUTH.jso().ajax({
+				url: DP_AUTH.config().api_endpoints.mediasite + "me/role/",
+				datatype: 'json'
+			})
+				.pipe(function (response) {
+					userRole = {};
+					userRole.title = response.data;
+					userRole.isSuperAdmin = false;
+					userRole.isOrgAdmin = false;
+					//
+					switch (response.data.toLowerCase()) {
+						case "superadmin":
+							userRole.isSuperAdmin = true;
+							break;
+						case "orgadmin":
+							userRole.isOrgAdmin = true;
+							break;
+					}
+					return userRole;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>me/role/</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		// {title: 'string', isSuperAdmin: bool, isOrgAdmin: bool}
+		return userRole;
+	}
 
 
-
-
+	/**
+	 * Latest diskusage reading for home org.
+	 * @returns {*}
+	 */
 	function homeOrgDiskusageTotalXHR() {
 		if (!homeOrgDiskusageTotal) {
 			return DP_AUTH.jso().ajax({
@@ -32,6 +85,10 @@ var MEDIASITE = (function () {
 		return homeOrgDiskusageTotal;
 	}
 
+	/**
+	 * Latest diskusage read for every org, summarised.
+	 * @returns {*}
+	 */
 	function serviceDiskusageTotalXHR() {
 		if (!serviceDiskusageTotal) {
 			return DP_AUTH.jso().ajax({
@@ -52,6 +109,10 @@ var MEDIASITE = (function () {
 		return serviceDiskusageTotal;
 	}
 
+	/**
+	 * All record entries this year for all orgs summed up and average returned.
+	 * @returns {*}
+	 */
 	function serviceDiskusageAvgThisYearXHR() {
 		if (!serviceDiskusageAvgThisYear) {
 			return DP_AUTH.jso().ajax({
@@ -72,7 +133,10 @@ var MEDIASITE = (function () {
 		return serviceDiskusageAvgThisYear;
 	}
 
-	// Array of storage numbers per folder. No folder names are returned.
+	/**
+	 * List of latest folder storage records. No folder names, values only.
+	 * @returns {*}
+	 */
 	function serviceDiskusageListXHR() {
 		if (!serviceDiskusageList) {
 			return DP_AUTH.jso().ajax({
@@ -95,7 +159,9 @@ var MEDIASITE = (function () {
 
 
 	return {
-
+		ready: function() {
+			return XHR_MEDIASITE;
+		},
 		homeOrgDiskusageTotalXHR: function(){
 			return homeOrgDiskusageTotalXHR();
 		},
@@ -124,6 +190,9 @@ var MEDIASITE = (function () {
 			}
 			STORAGE_COST_PER_TB = cost;
 			return true;
+		},
+		userRole: function(){
+			return userRole;
 		}
 	}
 })();

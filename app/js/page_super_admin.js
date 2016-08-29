@@ -4,8 +4,8 @@
 
 var SUPER_ADMIN = (function () {
 	// CHART
-	var chartOrgsUsagePie = false; // The Chart instance
-	var chartOrgUsageLine = false; // The Chart instance
+	var pieOrgsDiskusageSuper = false; // The Chart instance
+	var lineOrgDiskUsageSuper = false; // The Chart instance
 	// SUBSCRIBERS TABLE
 	var orgSubscribersTable;        // The DataTable instance
 	// Selected org for stats/chart
@@ -26,18 +26,18 @@ var SUPER_ADMIN = (function () {
 	function onShowListener() {
 		// Use current storage data in pie
 		$.when(MEDIASITE_ADMIN.orgsDiskusageListXHR()).done(function (storageData) {
-			chartOrgsUsagePie = _buildOrgsDiskusagePieChart(storageData);
+			pieOrgsDiskusageSuper = _buildPieOrgsDiskusageSuper(storageData);
 		});
 
 		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (storageData) {
-			chartOrgUsageLine = _buildOrgDiskusageLineChart(SELECTED_ORG, storageData);
+			lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(SELECTED_ORG, storageData);
 			_updateUI();
 		});
 	}
 
 	function onHideListener() {
-		_destroyOrgsDiskusagePieChart();
-		_destroyOrgDiskusageLineChart();
+		_destroyPieOrgsDiskusageSuper();
+		_destroyLineOrgDiskusageSuper();
 	}
 
 
@@ -53,17 +53,15 @@ var SUPER_ADMIN = (function () {
 		$('#pageSuperAdmin').find('.selectedOrg').text(feideOrgID);
 		// Number of dates available in org's storage history (max 30 days)
 		$('#pageSuperAdmin').find('.selectedOrgRecordedDatesNum').text(SELECTED_ORG_RECORDED_DATES_NUM);
-		// Calculator
-		$('#pageSuperAdmin').find('#inputCostTB').val(MEDIASITE.storageCostTB());
-		// All fields referring to cost defined by calculator
-		$('#pageSuperAdmin').find('.costPerTB').text("kr. " + MEDIASITE.storageCostTB());
 		// Total average this year
 		$.when(MEDIASITE.serviceDiskusageAvgThisYearXHR()).done(function (storage) {
 			$('#pageSuperAdmin').find('.subscribersDiskusageAvgThisYear').html(UTILS.mib2tb(storage).toFixed(2) + "TB");
-			$('#pageSuperAdmin').find('.totalAvgStorageCostEstimate').text("kr. " + (UTILS.mib2tb(storage) * MEDIASITE.storageCostTB()).toFixed());
+			$('#pageSuperAdmin').find('.totalAvgStorageCostEstimate').html("<kbd>kr. " + (UTILS.mib2tb(storage) * MEDIASITE.storageCostTB()).toFixed() + "</kbd>");
 		});
-
-
+		// Calculator
+		$('#pageSuperAdmin').find('.inputCostTB').val(MEDIASITE.storageCostTB());
+		// All fields referring to cost defined by calculator
+		$('#pageSuperAdmin').find('.storageCostPerTB').html("<kbd>kr. " + MEDIASITE.storageCostTB() + "</kbd>");
 		// QuickStats below line graph
 		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (response) {
 			// Total storage now
@@ -80,7 +78,7 @@ var SUPER_ADMIN = (function () {
 			orgAvgStorageMiB = orgAvgStorageMiB / response.length;
 			$('#pageSuperAdmin').find('.orgAvgStorageThisYear').text(UTILS.mib2tb(orgAvgStorageMiB).toFixed(2) + " TB");
 			// Cost estimate based on average
-			$('#pageSuperAdmin').find('.orgInvoiceEstimateThisYear').text("kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed());
+			$('#pageSuperAdmin').find('.orgInvoiceEstimateThisYear').html("<kbd>kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed() + "</kbd>");
 			//
 			var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
 			// Avg storage is greater than today's storage use
@@ -96,55 +94,47 @@ var SUPER_ADMIN = (function () {
 
 
 	/** ----------------- PIE CHART ----------------- **/
-
-	function _buildOrgsDiskusagePieChart(data) {
-		_destroyOrgsDiskusagePieChart();
-		var orgsUsageChartData = [];
-
+	function _buildPieOrgsDiskusageSuper(data) {
+		_destroyPieOrgsDiskusageSuper();
+		var pieOrgsDiskusageSuperData = {};
+		pieOrgsDiskusageSuperData.labels = [];
+		pieOrgsDiskusageSuperData.datasets = [];
+		pieOrgsDiskusageSuperData.datasets[0] = {};
+		pieOrgsDiskusageSuperData.datasets[0].data = [];
+		pieOrgsDiskusageSuperData.datasets[0].backgroundColor = [];
+		pieOrgsDiskusageSuperData.datasets[0].hoverBackgroundColor = [];
+		//
 		$.each(data, function (index, orgObj) {
 			// Chart prefs and data
-			orgsUsageChartData.push({
-				value: +UTILS.mib2tb(orgObj.storage_mib).toFixed(2),
-				color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8),
-				highlight: '#' + (Math.random().toString(16) + '0000000').slice(2, 8),
-				label: orgObj.org
-			});
+			pieOrgsDiskusageSuperData.labels.push(orgObj.org);
+			pieOrgsDiskusageSuperData.datasets[0].data.push(UTILS.mib2tb(orgObj.storage_mib).toFixed(2));
+			pieOrgsDiskusageSuperData.datasets[0].backgroundColor.push(UTILS.randomRGBA(0.6));
+			pieOrgsDiskusageSuperData.datasets[0].hoverBackgroundColor.push(UTILS.randomRGBA(1));
 		});
-
-		var ctx = document.getElementById("chartOrgsUsagePieSuperAdmin").getContext("2d");
-		return new Chart(ctx).Pie(orgsUsageChartData, {
-			legendTemplate: "<% for (var i=0; i<segments.length; i++){%>" +
-			"<tr>" +
-			"<td style='background-color:<%=segments[i].fillColor%>'></td>" +
-			//"<td><%if(segments[i].label){%> <%=segments[i].label%> <%}%></td>" +
-			//"<td><%if(segments[i].value){%> <%=segments[i].value%> <%}%></td>" +
-			"<td><%=segments[i].label%></td>" +
-			"<td><%=segments[i].value%></td>" +
-			"<% i = i+1; %> <%if(i<segments.length){%>" +
-			"<td style='background-color:<%=segments[i].fillColor%>'></td>" +
-			"<td><%=segments[i].label%></td>" +
-			"<td><%=segments[i].value%></td>" +
-			"<%}%>" +
-			"</tr>" +
-			"<%}%>"
+		var ctx = $('#pieOrgsDiskusageSuper');
+		return new Chart(ctx, {
+			type: 'pie',
+			data: pieOrgsDiskusageSuperData
 		});
 	}
 
-	function _destroyOrgsDiskusagePieChart() {
-		if (chartOrgsUsagePie !== false) {
-			chartOrgsUsagePie.destroy();
-			chartOrgsUsagePie = false;
+	function _destroyPieOrgsDiskusageSuper() {
+		if (pieOrgsDiskusageSuper !== false) {
+			pieOrgsDiskusageSuper.destroy();
+			pieOrgsDiskusageSuper = false;
 		}
 	}
 
 	// Update line chart on click on pie
-	$("#chartOrgsUsagePieSuperAdmin").on('click', function (evt) {
-		var activePoints = chartOrgsUsagePie.getSegmentsAtEvent(evt);
-		//console.log(activePoints);
-		var selected_org = activePoints[0].label;
+	$("#pieOrgsDiskusageSuper").on('click', function (evt) {
+		var activePoint = pieOrgsDiskusageSuper.getElementsAtEvent(evt)[0];
+		var selected_org = activePoint._view.label;
+		console.log(activePoint);
+		console.log(activePoint._view.backgroundColor);
+		console.log(activePoint._model.backgroundColor);
 		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
 			$('#pageSuperAdmin').find('h2#org_details')[0].scrollIntoView(true);
-			chartOrgUsageLine = _buildOrgDiskusageLineChart(selected_org, storageData, activePoints[0]._saved.fillColor); // Label is org name :-)
+			lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(selected_org, storageData); // Label is org name :-)
 			_updateUI();
 		});
 	});
@@ -158,12 +148,13 @@ var SUPER_ADMIN = (function () {
 	$('ul#orgListSuperAdmin').on('click', 'li.orgLineChartSelector', function () {
 		var selected_org = $(this).data('org');
 		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
-			chartOrgUsageLine = _buildOrgDiskusageLineChart(selected_org, storageData);
+			lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(selected_org, storageData);
 			_updateUI();
 		});
 	});
 
-	function _buildOrgDiskusageLineChart(org, storageData, fillColor) {
+
+	function _buildLineOrgDiskusageSuper(org, storageData) {
 		var orgUsageChartData = [];
 		//
 		org = UTILS.mapFeideOrgToMediasiteFolder(org);
@@ -173,13 +164,16 @@ var SUPER_ADMIN = (function () {
 			return false;
 		}
 		// Before we build a new one...
-		_destroyOrgDiskusageLineChart();
+		_destroyLineOrgDiskusageSuper();
 		SELECTED_ORG = org;
 		// Max 30 days
-		var daysToShow = 30;
-		var counter = daysToShow;
+		var maxDaysToShow = 30;
+		var counter = maxDaysToShow;
 		var labels = [];
 		var data = [];
+		// Pointers for chart increments
+		var curMib = 0; // Pointer
+
 		// "Clone" since we will be reversing and shit later on
 		orgUsageChartData.storage = JSON.parse(JSON.stringify(storageData));
 		// Start from most recent date and count backwards in time
@@ -187,69 +181,76 @@ var SUPER_ADMIN = (function () {
 		//
 		$.each(orgUsageChartData.storage, function (index, storageObj) {
 			var date = new Date(storageObj.timestamp.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
+			// Find diff between previous and current read
+			var diff = Math.abs(curMib - storageObj.storage_mib);
+			if (UTILS.minDiffStorageThreshold() >= diff) {
+				// Skip if differrence from previous is not more/less than {minDiff}
+				return true;
+			}
+			//
+			curMib = storageObj.storage_mib;
 			// Chart labels and data
-			labels.push(date.getUTCDate() + '.' + date.getUTCMonth() + '.' + date.getUTCFullYear());      // Add label
+			labels.push(date.getDate() + '.' + (date.getUTCMonth() + 1) + '.' + date.getUTCFullYear());      // Add label
 			data.push(UTILS.mib2gb(storageObj.storage_mib).toFixed(2));    // And value
 			counter--;
 			if (counter == 0) return false;
 		});
 		// In case there exist less than 30 days worth of data
-		SELECTED_ORG_RECORDED_DATES_NUM = daysToShow - counter;
+		SELECTED_ORG_RECORDED_DATES_NUM = maxDaysToShow - counter;
 		// Reverse back so we get most recent date last
 		data.reverse();
 		labels.reverse();
-		//
-		fillColor = typeof fillColor !== 'undefined' ? fillColor : '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+
 		// Build dataset
 		var lineChartData = {
 			labels: labels,
 			datasets: [
 				{
-					label: "Diskforbruk siste " + data.length + ' dager',
-					fillColor: fillColor,
-					strokeColor: "#666",
-					pointColor: "#fff",
-					pointStrokeColor: "#666",
-					pointHighlightFill: "#285C85",
-					pointHighlightStroke: "rgba(60,141,188,1)",
+					label: "Diskforbruk i GB ",
+					fill: true,
+					lineTension: 0.1,
+					backgroundColor: UTILS.randomRGBA(0.3),
+					borderColor: "#999",
+					borderCapStyle: 'butt',
+					borderJoinStyle: 'miter',
+					borderWidth: 2,
+					pointBorderColor: "rgba(111,111,111,0.4)",
+					pointBorderWidth: 1,
+					pointHoverRadius: 7,
+					pointBackgroundColor: "#666",
+					pointHoverBackgroundColor: UTILS.randomRGBA(0.5),
+					pointHoverBorderColor: UTILS.randomRGBA(0.5),
+					pointHoverBorderWidth: 2,
+					pointRadius: 3,
+					pointHitRadius: 14,
+					spanGaps: false,
 					data: data
 				}
 			]
 		};
 
-
-		var ctx = document.getElementById("orgUsageLineChartSuperAdmin").getContext("2d");
-		return new Chart(ctx).Line(lineChartData,
-			{
-				showScale: true,
-				scaleShowGridLines: false,
-				scaleShowHorizontalLines: true,
-				scaleShowVerticalLines: true,
-				bezierCurve: true,
-				bezierCurveTension: 0.3,
-				pointDot: true,
-				pointDotRadius: 4,
-				pointDotStrokeWidth: 1,
-				pointHitDetectionRadius: 5,
-				datasetStroke: true,
-				datasetStrokeWidth: 2,
-				datasetFill: true,
-				maintainAspectRatio: false
+		var ctx = $('#orgUsageLineChartSuperAdmin');
+		return new Chart(ctx, {
+				type: 'line',
+				data: lineChartData,
+				options: {
+					maintainAspectRatio: false
+				}
 			}
 		);
 	}
 
-	function _destroyOrgDiskusageLineChart() {
-		if (chartOrgUsageLine !== false) {
-			chartOrgUsageLine.destroy();
-			chartOrgUsageLine = false;
+	function _destroyLineOrgDiskusageSuper() {
+		if (lineOrgDiskUsageSuper !== false) {
+			lineOrgDiskUsageSuper.destroy();
+			lineOrgDiskUsageSuper = false;
 		}
 	}
 
 	// Update chart color
 	$("#orgUsageLineChartSuperAdmin").on('click', function (evt) {
-		chartOrgUsageLine.datasets[0].fillColor = '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
-		chartOrgUsageLine.update();
+		lineOrgDiskUsageSuper.config.data.datasets[0].backgroundColor = UTILS.randomRGBA(0.3);
+		lineOrgDiskUsageSuper.update();
 	});
 
 	/** ----------------- ./ LINE CHART ----------------- **/
@@ -433,7 +434,7 @@ var SUPER_ADMIN = (function () {
 	 * Update cost column when calc-button is pressed
 	 */
 	function _setInvoiceEstimate() {
-		var cost_tb = $('#pageSuperAdmin').find('#inputCostTB').val();
+		var cost_tb = $('#pageSuperAdmin').find('.inputCostTB').val();
 		// Returns error if not a number
 		if (MEDIASITE.setStorageCost(cost_tb)) {
 			_updateUI();
