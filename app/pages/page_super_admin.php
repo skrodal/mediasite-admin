@@ -198,7 +198,7 @@
 					<div class="box-body">
 						<p>
 							Estimatoren er i utgangspunktet hardkodet med en pris per TB p&aring;
-							<span class="storageCostPerTB"><!--updateUserUI()--></span>.
+							<span class="defaultStorageCostPerTB"><!--updateUserUI()--></span>.
 							Du kan endre dette i feltet under og klikke p&aring; kalkulatoren.
 						</p>
 						<p>
@@ -243,7 +243,7 @@
 						<h3 class="box-title icon ion-arrow-graph-up-right"> Viser oversikt for <code class="selectedOrg"></code></h3>
 						<div class="box-tools pull-right">
 							<div class="btn-group">
-								<button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="ion ion-university"></i> VELG ORG</button>
+								<button class="btn btn-box-tool btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="ion ion-university"></i> VELG ORG</button>
 								<ul id="orgListSuperAdmin" class="dropdown-menu" role="menu">
 									<!-- OrgList -->
 								</ul>
@@ -256,8 +256,14 @@
 							<span class="info-box-icon bg-aqua"><i class="ion ion-arrow-graph-up-right"></i></span>
 							<div class="info-box-content">
 								<p>
-									Registrert diskforbruk (i GB) siste <code class="selectedOrgRecordedDatesNum"></code> dager for <code class="selectedOrg"></code>.
+									Grafen viser <code class="selectedOrgRecordedDatesNum"><!-- --></code> dager med diskforbruk (i GB),
+									<u>der variasjon i forbruk fra forrige lesing er større enn <span class="minDiffStorageThreshold"><!-- --></span>MB</u>.
 								</p>
+
+								<p class="text-muted">
+									Følg derfor med på dato når du leser grafen.
+								</p>
+
 								<p>
 									Velg org i tittellinja over eller ved &aring; klikke p&aring; pai-grafen. Sistnevnte tar med ALLE mapper p&aring; filserver, ogs&aring; mapper som ikke
 									tilh&oslash;rer en abonnent/org.
@@ -300,7 +306,7 @@
 							</div><!-- /.col -->
 							<div class="col-sm-3 col-xs-6">
 								<div class="description-block">
-									<span class="description-percentage text-gray"><i class="fa fa-calendar-o"></i> Per i dag</span>
+									<span class="description-percentage text-muted"><i class="fa fa-calendar-o"></i> Per i dag</span>
 									<h5 class="description-header orgInvoiceEstimateThisYear"><!-- --></h5>
 									<span class="description-text">ESTIMAT</span>
 								</div><!-- /.description-block -->

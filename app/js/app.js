@@ -33,6 +33,7 @@ var APP = (function () {
 		if (MEDIASITE.userRole().isSuperAdmin) {
 			$('.dashInfoForAdmins').html('<h4>Hey ' + DATAPORTEN.user().name.first + ', du er <b>Super</b>Admin</h4><p>Bruk menyen til venstre for å hente mer detaljert informasjon.</p>');
 		}
+		$('.defaultStorageCostPerTB').text(CONFIG.defaultStorageCostPerTB());
 		// User-specific
 		$('.userFirstName').html(' ' + DATAPORTEN.user().name.first);
 		$('.userFullName').html(' ' + DATAPORTEN.user().name.full);
@@ -51,7 +52,7 @@ var APP = (function () {
 		// Show top logout dropdown
 		$('#userMenu').fadeIn().removeClass('hidden');
 		// Update references to threshold used for making a new plot on diskusage charts
-		$('.minDiffStorageThreshold').html(UTILS.minDiffStorageThreshold());
+		$('.minDiffStorageThreshold').html(CONFIG.minDiffStorageThreshold());
 	}
 
 	function updateMediasiteData() {

@@ -130,7 +130,7 @@
 							</div><!-- /.col -->
 							<div class="col-sm-3 col-xs-6">
 								<div class="description-block">
-									<span class="description-percentage text-gray"><i class="fa fa-calendar-o"></i> Per i dag</span>
+									<span class="description-percentage text-muted"><i class="fa fa-calendar-o"></i> Per i dag</span>
 									<h5 class="description-header orgInvoiceEstimateThisYear"><!-- --></h5>
 									<span class="description-text">ESTIMAT</span>
 								</div><!-- /.description-block -->
@@ -154,7 +154,7 @@
 					<div class="box-body">
 						<p>
 							Estimatoren er i utgangspunktet hardkodet med en pris per TB p&aring;
-							<span class="storageCostPerTB"><!--updateUserUI()--></span>.
+							<span class="defaultStorageCostPerTB"><!--updateUserUI()--></span>.
 							Du kan endre dette i feltet under og klikke p&aring; kalkulatoren.
 						</p>
 						<p>

@@ -3,22 +3,6 @@ var UTILS = (function () {
 	var GB_to_TB = 0.001; // Used in MiB_to_GB to GB_to_TB conversion
 	var MiB_to_GB = 0.001048576; // From MiB to MiB_to_GB
 	var MiB_to_MB = 1.048576; // From Mib to MiB_to_MB
-	var MIN_DIFF_STORAGE_THRESHOLD = 100; // Min. variation in storage for adding a new plot on graphs
-
-	// When Org ID is not the same as folder name
-	var mapOrgToFolder =
-	{
-		"oslo-universitetssykehus": "medinfo",
-		"c-k": "ck",
-	};
-
-	// Reverse the above
-	var mapFolderToOrg =
-	{
-		"medinfo": "oslo-universitetssykehus",
-		"ck": "c-k",
-	};
-
 
 	/**** AUTH CYCLE ****/
 	function updateAuthProgress(msg) {
@@ -45,12 +29,12 @@ var UTILS = (function () {
 
 	function mapFeideOrgToMediasiteFolder(org) {
 		org = org.toLowerCase();
-		return mapOrgToFolder[org] || org;
+		return CONFIG.orgToFolderMap()[org] || org;
 	}
 
 	function mapMediasiteFolderToFeideOrg(folder) {
 		folder = folder.toLowerCase();
-		return mapFolderToOrg[folder] || folder;
+		return CONFIG.folderToOrgMap()[folder] || folder;
 	}
 
 	function randomRGBA(transparency) {
@@ -88,9 +72,6 @@ var UTILS = (function () {
 		mapMediasiteFolderToFeideOrg: function (folder) {
 			return mapMediasiteFolderToFeideOrg(folder);
 		},
-		orgToFolderMap: function () {
-			return mapOrgToFolder;
-		},
 		mib2mb: function (mib) {
 			return mib * MiB_to_MB;
 		},
@@ -105,9 +86,6 @@ var UTILS = (function () {
 		},
 		randomRGBA: function (transparency) {
 			return randomRGBA(transparency);
-		},
-		minDiffStorageThreshold: function(){
-			return MIN_DIFF_STORAGE_THRESHOLD;
 		}
 	}
 })();

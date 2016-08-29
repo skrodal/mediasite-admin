@@ -1,28 +1,41 @@
-/**
- * Created by Wintermild on 22/06/15.
- */
 
-// Charts.js global config
-Chart.defaults.global.responsive = true;
-Chart.defaults.global.legend = false;
-//
-var dataTablesLanguage =
-{
-	"emptyTable":     "Ingen informasjon tilgjengelig",
-	"info":           "Viser _START_ til _END_ av _TOTAL_ innslag",
-	"infoEmpty":      "Viser 0 til 0 av 0 innslag",
-	"infoFiltered":   "(filtrert fra totalt _MAX_ innslag)",
-	"infoPostFix":    "",
-	"thousands":      ",",
-	"lengthMenu":     "Vis _MENU_ innslag per side",
-	"loadingRecords": "Henter...",
-	"processing":     "Vennligst vent...",
-	"search":         "Søk: ",
-	"zeroRecords":    "Fant ingen innslag",
-	'paginate': {
-		'first': 'F&oslash;rste',
-		'previous': '&larr;',
-		'next': '&rarr;',
-		'last': 'Siste'
+var CONFIG = (function () {
+
+	var STORAGE_COST_PER_TB = 12000;        // Default on app load
+	var MIN_DIFF_STORAGE_THRESHOLD = 100;   // Min. variation in storage for adding a new plot on graphs
+
+	// When Org ID is not the same as folder name
+	var orgToFolderMap =
+	{
+		"oslo-universitetssykehus": "medinfo",
+		"c-k": "ck",
+		//"???": "kth",
+		//"kristiania": "???",
+
+	};
+
+	// Reverse the above
+	var folderToOrgMap =
+	{
+		"medinfo": "oslo-universitetssykehus",
+		"ck": "c-k",
+		//"kth": "???"
+		//"???": "kristiania"
+	};
+
+
+	return {
+		minDiffStorageThreshold: function(){
+			return MIN_DIFF_STORAGE_THRESHOLD;
+		},
+		defaultStorageCostPerTB: function(){
+			return STORAGE_COST_PER_TB;
+		},
+		folderToOrgMap: function(){
+			return folderToOrgMap;
+		},
+		orgToFolderMap: function(){
+			return orgToFolderMap;
+		},
 	}
-}
+})();

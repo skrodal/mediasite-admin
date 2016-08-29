@@ -104,7 +104,7 @@ var ORG_ADMIN = (function () {
 			var date = new Date(storageObj.timestamp.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
 			// Find diff between previous and current read
 			var diff = Math.abs(curMib - storageObj.storage_mib);
-			if (UTILS.minDiffStorageThreshold() >= diff) {
+			if (CONFIG.minDiffStorageThreshold() >= diff) {
 				// Skip if differrence from previous is not more/less than {minDiff}
 				return true;
 			}

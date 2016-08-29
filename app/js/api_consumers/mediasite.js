@@ -3,8 +3,8 @@
  */
 
 var MEDIASITE = (function () {
-	// CONSTANTS
-	var STORAGE_COST_PER_TB = 12000;
+	// Initialise with default cost
+	var STORAGE_COST_PER_TB = CONFIG.defaultStorageCostPerTB();
 	//
 	var XHR_MEDIASITE;
 

@@ -34,6 +34,7 @@
 </section>
 <!-- -->
 <script src="app/js/etc/utils.js"></script>
+<script src="app/js/etc/config.js" type="text/javascript"></script>
 <!-- JSO -->
 <script src="app/js/auth/jso.js"></script>
 <script src="app/js/auth/dataporten_auth.js"></script>

@@ -73,13 +73,13 @@
 		<script src="dist/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
 		<!-- Chart.js -->
 		<script src="dist/plugins/chartjs/Chart.min.js" type="text/javascript"></script>
-		<!-- MediasiteAdmin, the bulks of scripts are loaded in page_loading.php -->
-		<script src="app/js/etc/config.js" type="text/javascript"></script>
-		<script src="app/js/app.js" type="text/javascript"></script>
 		<!-- DataTables -->
 		<script src="dist/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
 		<script src="dist/plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
 		<script src="dist/plugins/datatables/tabletools/js/dataTables.tableTools.min.js" type="text/javascript"></script>
+		<!-- MediasiteAdmin, the bulks of scripts are loaded in page_loading.php -->
+		<script src="app/js/app.js" type="text/javascript"></script>
+		<script src="app/js/etc/defaults.js" type="text/javascript"></script>
 	</body>
 </html>
 

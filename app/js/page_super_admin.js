@@ -19,7 +19,7 @@ var SUPER_ADMIN = (function () {
 		});
 
 		SELECTED_ORG = DATAPORTEN.user().org.shortname;
-		$('#orgToFolderMap').html(JSON.stringify(UTILS.orgToFolderMap(), null, 4));
+		$('#orgToFolderMap').html(JSON.stringify(CONFIG.orgToFolderMap(), null, 4));
 	};
 
 	// Refresh for each time
@@ -128,15 +128,16 @@ var SUPER_ADMIN = (function () {
 	// Update line chart on click on pie
 	$("#pieOrgsDiskusageSuper").on('click', function (evt) {
 		var activePoint = pieOrgsDiskusageSuper.getElementsAtEvent(evt)[0];
-		var selected_org = activePoint._view.label;
-		console.log(activePoint);
-		console.log(activePoint._view.backgroundColor);
-		console.log(activePoint._model.backgroundColor);
-		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
-			$('#pageSuperAdmin').find('h2#org_details')[0].scrollIntoView(true);
-			lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(selected_org, storageData); // Label is org name :-)
-			_updateUI();
-		});
+		// Catch clicks outside the pie
+		var selected_org = activePoint !== undefined ? activePoint._view.label : false;
+		if(selected_org){
+			$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
+				$('#pageSuperAdmin').find('h2#org_details')[0].scrollIntoView(true);
+				lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(selected_org, storageData); // Label is org name :-)
+				_updateUI();
+			});
+		}
+
 	});
 
 
@@ -183,7 +184,7 @@ var SUPER_ADMIN = (function () {
 			var date = new Date(storageObj.timestamp.replace(/-/g, "/"));   // replace hack seems to fix Safari issue...
 			// Find diff between previous and current read
 			var diff = Math.abs(curMib - storageObj.storage_mib);
-			if (UTILS.minDiffStorageThreshold() >= diff) {
+			if (CONFIG.minDiffStorageThreshold() >= diff) {
 				// Skip if differrence from previous is not more/less than {minDiff}
 				return true;
 			}
