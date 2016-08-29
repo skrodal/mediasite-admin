@@ -11,7 +11,7 @@ Tjenesten forventer tilgang til alle Dataporten scopes fra Mediasite API (basic,
 MediasiteAdmin er en klient for UNINETTs Mediasite tjeneste. Den tilbyr to tilgangsnivå:
 
 * SuperAdmin - for UNINETT ansatte
-* OrgAdmin - for abonnent teknisk kontakt
+* OrgAdmin - for medlemmer av Dataporten-gruppe `MediasiteAdmin`
 
 ...og tre ulike views: 
 
@@ -19,11 +19,12 @@ MediasiteAdmin er en klient for UNINETTs Mediasite tjeneste. Den tilbyr to tilga
 * Superadmin - for internbruk (abonnenter, stats, kostnader, diskbruk, etc); krever SuperAdmin rolle
 * OrgAdmin - for abonnentbruk (stats, diskbruk, kostnader, etc); krever OrgAdmin rolle ('teknisk kontakt' i Kind)
 
+For å få status som OrgAdmin må bruker altså få en invitasjonslenke (kan hentes via [MediasiteAPI](https://github.com/skrodal/mediasite-api)) 
+av eksisterende Org/SuperAdmins.
+
 ## TODO ##
 
-* Endre tilgangsstyring til å bruke ad-hoc gruppe istedenfor KIND...
-* Dato-selektor for lagringsdata (nå er siste 30 dager eneste valg i UI, API tillater mer...)
-* Caching (i API) hadde vært fint, men absolutt ikke nødvendig 
+* Dato-selektor for lagringsdata (nå er siste 30 dager eneste valg i UI, API tillater mer...) 
 
 ## Avhengigheter ##
 
