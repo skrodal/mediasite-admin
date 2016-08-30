@@ -235,7 +235,7 @@ var SUPER_ADMIN = (function () {
 				type: 'line',
 				data: lineChartData,
 				options: {
-					maintainAspectRatio: false
+					maintainAspectRatio: true
 				}
 			}
 		);

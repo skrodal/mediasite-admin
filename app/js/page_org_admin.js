@@ -155,7 +155,7 @@ var ORG_ADMIN = (function () {
 				type: 'line',
 				data: lineChartData,
 				options: {
-					maintainAspectRatio: false
+					maintainAspectRatio: true
 				}
 			}
 		);
