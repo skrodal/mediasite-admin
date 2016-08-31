@@ -128,22 +128,9 @@ var ORG_ADMIN = (function () {
 			datasets: [
 				{
 					label: "Diskforbruk i GB ",
-					fill: true,
-					lineTension: 0.1,
 					backgroundColor: UTILS.randomRGBA(0.3),
-					borderColor: "#999",
-					borderCapStyle: 'butt',
-					borderJoinStyle: 'miter',
-					borderWidth: 2,
-					pointBorderColor: "rgba(111,111,111,0.4)",
-					pointBorderWidth: 1,
-					pointHoverRadius: 7,
-					pointBackgroundColor: "#666",
 					pointHoverBackgroundColor: UTILS.randomRGBA(0.5),
 					pointHoverBorderColor: UTILS.randomRGBA(0.5),
-					pointHoverBorderWidth: 2,
-					pointRadius: 3,
-					pointHitRadius: 14,
 					spanGaps: false,
 					data: data
 				}

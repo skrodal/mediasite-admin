@@ -8,21 +8,15 @@ var CONFIG = (function () {
 	var orgToFolderMap =
 	{
 		"oslo-universitetssykehus": "medinfo",
-		"kristiania": "ck",
-		//"???": "kth",
-		//"kristiania": "???",
-
+		"kristiania": "ck"
 	};
 
 	// Reverse the above
 	var folderToOrgMap =
 	{
 		"medinfo": "oslo-universitetssykehus",
-		"ck": "kristiania",
-		//"kth": "???"
-		//"???": "kristiania"
+		"ck": "kristiania"
 	};
-
 
 	return {
 		minDiffStorageThreshold: function(){

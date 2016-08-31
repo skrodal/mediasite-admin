@@ -37,7 +37,7 @@ var DASHBOARD = (function() {
 			labelText = KIND.subscriptionCodesToNames()[orgObj.subscription_code];
 			labelColor = KIND.subscriptionCodesToColors()[orgObj.subscription_code];
 			// To highlight home org
-			if(orgObj.org_id.toLowerCase() == user.org.id.toLowerCase()){ rowClass = 'active'; }
+			if(orgObj.org_id.toLowerCase() == user.org.id.toLowerCase()){ rowClass = 'success'; }
 			// New row
 			$('#subscriber_table_body').append(
 				"<tr class='" + rowClass + "'>" +

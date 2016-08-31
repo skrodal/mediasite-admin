@@ -272,7 +272,7 @@
 						</div>
 
 						<div class="chart">
-							<canvas id="orgUsageLineChartSuperAdmin" style="min-height: 350px; max-height: 350px;">
+							<canvas id="orgUsageLineChartSuperAdmin" style="min-height: 300px;">
 								<!-- Line Chart -->
 							</canvas>
 							<span class="text-muted">Klikk for &aring; endre farge, høyreklikk for å lagre som bildefil (png).</span>
