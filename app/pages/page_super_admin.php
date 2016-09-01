@@ -207,7 +207,7 @@
 						</p>
 
 						<div class="input-group input-group-sm" style="margin-bottom: 10px;">
-	                        <input class="inputCostTB" type="text" placeholder="Pris per TB" value="" class="form-control pull-right" style="width: 100px;">
+	                        <input class="inputCostTB form-control pull-right" type="text" placeholder="Pris per TB" value="" style="width: 100px;">
 	                        <span class="input-group-btn">
 	                            <button id="btnInvoiceCalc" class="btn btn-info btn-sm btn-flat ion ion-calculator" type="button">&nbsp;</button>
 	                        </span>
