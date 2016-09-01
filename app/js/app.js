@@ -47,6 +47,10 @@ var APP = (function () {
 		$('.subscribersTrialCount').html(KIND.subscriptionCount().trial);
 		$('.subscribersOtherCount').html(KIND.subscriptionCount().other);
 		$('.subscribersTotalCount').html(KIND.subscriptionCount().total);
+		$.when(MEDIASITE.serviceDiskusageListXHR()).done(function (list) {
+			$('.foldersWithNoKindSubscriptionTotalCount').html(list.length - KIND.subscriptionCount().full);
+		});
+
 		// Dev
 		$('#dataportenSessionInfo').text(JSON.stringify(DATAPORTEN.user(), undefined, 2));
 		// Show top logout dropdown

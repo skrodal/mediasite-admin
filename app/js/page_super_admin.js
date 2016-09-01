@@ -261,7 +261,7 @@ var SUPER_ADMIN = (function () {
 		});
 
 		$.each(storageData, function (org, storage) {
-			// Some physical org folders (e.g. bibsys) are NOT found in Kind subscribers list
+			// Some physical org folders (e.g. `bibsys`) are NOT found in Kind subscribers list
 			if (orgs[org] === undefined) {
 				orgs[org] = {};
 				orgs[org].subscriber = false;

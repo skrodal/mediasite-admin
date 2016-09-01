@@ -78,6 +78,8 @@
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-ios-home"> Abonnenter</h3>
 						<div class="box-tools pull-right">
+							<!-- Modal with info about different subscription codes-->
+							<button class="btn btn-box-tool icon ion-ios-information" style="margin-right: 15px;" data-toggle="modal" data-target="#subscriptionStatusInfoModal">&nbsp;info&hellip;</button>
 							<span data-toggle="tooltip" title="Totalt" class="badge bg-blue subscribersTotalCount"><!--updateUserUI--></span>
 							<span data-toggle="tooltip" title="Aktive" class="badge bg-green subscribersCount"><!--updateUserUI--></span>
 							<span data-toggle="tooltip" title="Utpr&oslash;ving" class="badge bg-orange subscribersTrialCount"><!--updateUserUI--></span>
@@ -90,9 +92,12 @@
 						<div class="info-box">
 							<span class="info-box-icon bg-blue-active"><i class="ion ion-ios-home"></i></span>
 							<div class="info-box-content">
-										<p>Abonnementsinformasjon er hentet fra Kind. </p>
-										<p>Lagring er snittverdier for <?php echo date("Y"); ?> og brukt i utregning av kostnad  — <code>lagring * pris per TB</code>.</p>
-										<p>Status <code>ukjent</code> betyr at det ligger innhold (mappe) på filserver uten match på org i Kind</p>
+								<ul>
+									<li><span class="subscribersTotalCount"></span> abonnenter funnet i Kind.</li>
+									<li><span class="foldersWithNoKindSubscriptionTotalCount"></span> mapper på disk uten match på org i Kind <span class="text-muted">(disse har status som <code>ukjent</code> i tabellen)</span>.</li>
+									<li>Lagring/kostnad er basert på snittverdier for <?php echo date("Y"); ?> <span class="text-muted">(lagring * pris per TB)</span>.</li>
+
+								</ul>
 							</div><!-- /.info-box-content -->
 						</div>
 
@@ -333,6 +338,40 @@
 
 
     </section><!-- /.content -->
+
+
+	    <!-- SUBSCRIPTION INFO MODAL -->
+		<div id="subscriptionStatusInfoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSubscriptionInfoTitle" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-dark-gray">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">&nbsp;&nbsp;&nbsp;<span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="modalInfoTitle">Status abonnement</h4>
+					</div>
+					<div class="modal-body">
+						<div class="list-group">
+							<div class="list-group-item bg-green">
+								<h4 class="list-group-item-heading">Abonnent</h4>
+								<p class="list-group-item-text">Avtaleverk signert</p>
+							</div>
+
+							<div class="list-group-item bg-orange">
+								<h4 class="list-group-item-heading">Utpr&oslash;ving</h4>
+								<p class="list-group-item-text">Mangler avtaleverk - &aring;pnet for testing i en tidsbegrenset periode</p>
+							</div>
+
+							<div class="list-group-item bg-red">
+								<h4 class="list-group-item-heading">Andre</h4>
+								<p class="list-group-item-text">Mangler avtaleverk - abonnement/utpr&oslash;ving avsluttet, eller org funsjonert</p>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer bg-dark-gray">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 <!-- Scripts pertaining only to SuperAdmin -->
 <script src="app/js/page_super_admin.js" type="text/javascript"></script>

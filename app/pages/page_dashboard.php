@@ -34,10 +34,13 @@
 						<div class="info-box bg-light-blue">
 							<span class="info-box-icon"><i class="icon ion-home"></i></span>
 							<div class="info-box-content">
-								Abonnenter: <span class="subscribersCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span><br>
-								Utprøving: <span class="subscribersTrialCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span><br>
-								Andre: <span class="subscribersOtherCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span><br>
-								Totalt: <span class="subscribersTotalCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span>
+								<span class="info-box-text">Abonnenter</span>
+								<h3><span class="subscribersCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span></h3>
+								<!--
+								Utprøving: <span class="subscribersTrialCount"><i class="fa ion-load-d fa-spin"></i></span><br>
+								Andre: <span class="subscribersOtherCount"><i class="fa ion-load-d fa-spin"></i></span><br>
+								Totalt: <span class="subscribersTotalCount"><i class="fa ion-load-d fa-spin"></i></span>
+								-->
 							</div>
 						</div>
 
@@ -99,11 +102,12 @@
 					<div class="box-header with-border">
 						<h3 class="box-title ion-ios-home"> Abonnenter</h3>
 						<div class="box-tools pull-right">
-							<button class="btn btn-box-tool icon ion-ios-information" style="margin-right: 15px;" data-toggle="modal" data-target="#subscriptionInfoDashModal">&nbsp;info&hellip;</button>
-							<span data-toggle="tooltip" title="Totalt" class="badge bg-blue subscribersTotalCount"><!--updateUserUI--></span>
-							<span data-toggle="tooltip" title="Aktive" class="badge bg-green subscribersCount"><!--updateUserUI--></span>
-							<span data-toggle="tooltip" title="Utpr&oslash;ving" class="badge bg-orange subscribersTrialCount"><!--updateUserUI--></span>
-							<span data-toggle="tooltip" title="Andre" class="badge bg-red subscribersOtherCount"><!--updateUserUI--></span>
+							<!-- No need for this on Dash
+							<span data-toggle="tooltip" title="Totalt" class="badge bg-blue subscribersTotalCount"></span>
+							<span data-toggle="tooltip" title="Aktive" class="badge bg-green subscribersCount"></span>
+							<span data-toggle="tooltip" title="Utpr&oslash;ving" class="badge bg-orange subscribersTrialCount"></span>
+							<span data-toggle="tooltip" title="Andre" class="badge bg-red subscribersOtherCount"></span>
+							-->
 							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 						</div>
 					</div>
@@ -136,40 +140,6 @@
 
         </div><!-- /.row -->
 
-
-
-	    <!-- SUBSCRIPTION INFO MODAL -->
-		<div id="subscriptionInfoDashModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSubscriptionInfoTitle" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header bg-dark-gray">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">&nbsp;&nbsp;&nbsp;<span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="modalInfoTitle">Status abonnement</h4>
-					</div>
-					<div class="modal-body">
-						<div class="list-group">
-							<div class="list-group-item bg-green">
-								<h4 class="list-group-item-heading">Abonnent</h4>
-								<p class="list-group-item-text">Avtaleverk signert</p>
-							</div>
-
-							<div class="list-group-item bg-orange">
-								<h4 class="list-group-item-heading">Utpr&oslash;ving</h4>
-								<p class="list-group-item-text">Mangler avtaleverk - &aring;pnet for testing i en tidsbegrenset periode</p>
-							</div>
-
-							<div class="list-group-item bg-red">
-								<h4 class="list-group-item-heading">Andre</h4>
-								<p class="list-group-item-text">Mangler avtaleverk - abonnement/utpr&oslash;ving avsluttet, eller org funsjonert</p>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer bg-dark-gray">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
-					</div>
-				</div>
-			</div>
-		</div>
 
 		<!-- INFO MODAL -->
 		<div class="modal fade" id="infoDashModal" tabindex="-1" role="dialog" aria-labelledby="modalInfoTitle" aria-hidden="true">

@@ -25,26 +25,35 @@ var DASHBOARD = (function() {
 	}
 
 
-	// Build simple subscribers table from KIND data
+	/**
+	 * Simple subscribers table from KIND data - ONLY active subscribers
+	 *
+	 * @param subscribersArr
+	 * @param user
+	 * @private
+	 */
 	function _buildOrgsTableDashboard(subscribersArr, user){
 		$('#subscriber_table_body').empty();
 		var labelText = '---', labelColor = 'red';
 		var rowClass;
 		// Loop all subscribers
 		$.each(subscribersArr, function (org, orgObj){
-			rowClass = '';
-			// Text/color for subscription status
-			labelText = KIND.subscriptionCodesToNames()[orgObj.subscription_code];
-			labelColor = KIND.subscriptionCodesToColors()[orgObj.subscription_code];
-			// To highlight home org
-			if(orgObj.org_id.toLowerCase() == user.org.id.toLowerCase()){ rowClass = 'success'; }
-			// New row
-			$('#subscriber_table_body').append(
-				"<tr class='" + rowClass + "'>" +
+			// Endret 1. sep. 2016: Vis kun fullverdige abonnenter på dashboard.
+			if(orgObj.subscription_code == 20){
+				rowClass = '';
+				// Text/color for subscription status
+				labelText = KIND.subscriptionCodesToNames()[orgObj.subscription_code];
+				labelColor = KIND.subscriptionCodesToColors()[orgObj.subscription_code];
+				// To highlight home org
+				if(orgObj.org_id.toLowerCase() == user.org.id.toLowerCase()){ rowClass = 'success'; }
+				// New row
+				$('#subscriber_table_body').append(
+					"<tr class='" + rowClass + "'>" +
 					"<td>" + orgObj.org_id + "</td>" +
 					"<td style='text-align: center;'><span class='label bg-" + labelColor + "'>" + labelText + "</span></td>" +
 					"</tr>"
-			);
+				);
+			}
 		});
 		//
 		$('#subscribersTableBoxDashboard').find('.ajax').hide();

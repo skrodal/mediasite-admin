@@ -36,7 +36,7 @@ var MEDIASITE_ADMIN = (function () {
 	}
 
 	/**
-	 * Average storage per org for current year.
+	 * Average storage per org (folder) for current year.
 	 *
 	 * @returns {*}
 	 */

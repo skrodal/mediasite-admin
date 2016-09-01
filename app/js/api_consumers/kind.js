@@ -61,7 +61,7 @@ var KIND = (function() {
 					count.trial++;
 					break;
 				default:
-					count.others++;
+					count.other++;
 					break;
 			}
 			count.total++;
