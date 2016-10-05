@@ -5,6 +5,8 @@ var ORG_ADMIN = (function () {
 	var MEDIASITE_FOLDER,
 		ORG_RECORDED_DATES_NUM = 0;
 
+	var orgTotalStorageMiB, orgAvgStorageMiB;
+
 	function init() {
 		MEDIASITE_FOLDER = UTILS.mapFeideOrgToMediasiteFolder(DATAPORTEN.user().org.shortname);
 		_updateOrgAdminKindUI();
@@ -13,6 +15,15 @@ var ORG_ADMIN = (function () {
 	function onShowListener() {
 		$.when(MEDIASITE_ORG.storageRecordsThisYearXHR()).done(function (storageArr){
 			lineOrgDiskusage = _buildLineOrgDiskusage(storageArr);
+			// Last recorded storage
+			orgTotalStorageMiB = parseInt(storageArr[storageArr.length - 1].storage_mib);
+			// Calc average storage
+			var total = 0;
+			$.each(storageArr, function (index, storageObj) {
+				total += parseInt(storageObj.storage_mib);
+			});
+			orgAvgStorageMiB = total / storageArr.length;
+
 			_updateUI();
 		});
 
@@ -23,6 +34,10 @@ var ORG_ADMIN = (function () {
 	}
 
 	function _updateUI() {
+		//
+		$.when(MEDIASITE_ORG.invitationLinkXHR()).done(function (link){
+			$('#pageOrgAdmin').find('.orgAdminGroupLink').text(link);
+		});
 		// Number of dates available in org's storage history (max 30 days)
 		$('#pageOrgAdmin').find('.orgRecordedDatesNum').text(ORG_RECORDED_DATES_NUM);
 		//
@@ -32,14 +47,16 @@ var ORG_ADMIN = (function () {
 		// All fields referring to cost defined by calculator
 		$('#pageOrgAdmin').find('.storageCostPerTB').html("<kbd>kr. " + MEDIASITE.storageCostTB() + "</kbd>");
 		// QuickStats below line graph
-		var orgTotalStorageMiB = MEDIASITE_ORG.totalStorage();
-		var orgStoragePercentageGlobal = ( (orgTotalStorageMiB / MEDIASITE.serviceDiskusageTotalXHR()) * 100).toFixed(2);
-		var orgAvgStorageMiB = MEDIASITE_ORG.avgStorageThisYear();
+		var orgStoragePercentageGlobal;
+		$.when(MEDIASITE.serviceDiskusageTotalXHR()).done(function (response) {
+			orgStoragePercentageGlobal = ( (orgTotalStorageMiB / response) * 100 ).toFixed(2);
+			// Usage percentage overall
+			$('#pageOrgAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal);
+		});
+
 		var orgTotalStoragePercentageOfOrgAvg = (orgAvgStorageMiB / orgTotalStorageMiB) * 100;
 
 		// -- QUICKSTATS
-		// Usage percentage overall
-		$('#pageOrgAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal);
 		// On disk as of last reading (total)
 		$('#pageOrgAdmin').find('.orgTotalStorage').text(UTILS.mib2tb(orgTotalStorageMiB).toFixed(2) + "TB");
 		// The average usage this year
@@ -56,10 +73,6 @@ var ORG_ADMIN = (function () {
 		}
 		//
 		$('#pageOrgAdmin').find('.orgInvoiceEstimateThisYear').html("<kbd>kr. " + (UTILS.mib2tb(orgAvgStorageMiB) * MEDIASITE.storageCostTB()).toFixed() + "</kbd>");
-		//
-		$.when(MEDIASITE_ORG.invitationLinkXHR()).done(function (link){
-			$('#pageOrgAdmin').find('.orgAdminGroupLink').text(link);
-		});
 	}
 
 	/**

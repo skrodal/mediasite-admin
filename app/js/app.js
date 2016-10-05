@@ -60,7 +60,6 @@ var APP = (function () {
 	}
 
 	function updateMediasiteData() {
-
 		$.when(MEDIASITE.homeOrgDiskusageTotalXHR()).done(function (storage_mib) {
 			$('.homeOrgDiskusage').text(UTILS.mib2tb(storage_mib).toFixed(2) + "TB");
 		});
@@ -68,6 +67,5 @@ var APP = (function () {
 		$.when(MEDIASITE.serviceDiskusageTotalXHR()).done(function (storage) {
 			$('.subscribersDiskusageTotal').html(UTILS.mib2tb(storage).toFixed(2) + "TB");
 		});
-
 	}
 })();

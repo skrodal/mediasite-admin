@@ -22,7 +22,7 @@
 					<span class="info-box-icon bg-aqua"><i class="ion ion-university"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">ABONNENTER</span>
-						<span class="info-box-number subscribersCount"><!-- --></span>
+						<span class="info-box-number subscribersCount"><!-- --><i class="fa fa-spinner fa-pulse"></i></span>
 						<div class="progress bg-aqua"></div>
 						<span class="progress-description text-muted">Fullverdige</span>
 					</div><!-- /.info-box-content -->
@@ -34,7 +34,7 @@
 					<span class="info-box-icon bg-red"><i class="ion ion-upload"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">LAGRING</span>
-						<span class="info-box-number subscribersDiskusageTotal"><!-- --></span>
+						<span class="info-box-number subscribersDiskusageTotal"><!-- --><i class="fa fa-spinner fa-pulse"></i></span>
 						<div class="progress bg-red"></div>
 						<span class="progress-description text-muted">Akkurat n&aring;</span>
 					</div><!-- /.info-box-content -->
@@ -49,7 +49,7 @@
 					<span class="info-box-icon bg-yellow"><i class="ion ion-android-calendar"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">SNITT</span>
-						<span class="info-box-number subscribersDiskusageAvgThisYear"><!-- --></span>
+						<span class="info-box-number subscribersDiskusageAvgThisYear"><!-- --><i class="fa fa-spinner fa-pulse"></i></span>
 						<div class="progress bg-yellow"></div>
 						<span class="progress-description text-muted">For dette &aring;r</span>
 					</div><!-- /.info-box-content -->
@@ -61,7 +61,7 @@
 					<span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">FAKTURERBART</span>
-						<span class="info-box-number description-header totalAvgStorageCostEstimate"><!-- --></span>
+						<span class="info-box-number description-header totalAvgStorageCostEstimate"><!-- --><i class="fa fa-spinner fa-pulse"></i></span>
 						<div class="progress bg-green"></div>
 						<span class="progress-description text-muted">Estimat</span>
 					</div><!-- /.info-box-content -->
@@ -172,7 +172,7 @@
 	    <h2 class="page-header">Lagring &amp; Fakturering</h2>
 
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-lg-8 col-md-8">
 				<div class="box box-success">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-ios-pie"> Fordeling i TB</i></h3>
@@ -191,7 +191,7 @@
 				</div><!-- /.box -->
 			</div><!-- /.col -->
 
-			<div class="col-md-4">
+			<div class="col-lg-4 col-md-4">
 				<div class="box box-success">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-arrow-graph-down-right"> Kostnadsestimator</h3>
@@ -242,7 +242,7 @@
 		<h2 id="org_details" class="page-header">Detaljvisning</h2>
 
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-lg-8 col-md-8">
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-arrow-graph-up-right"> Viser oversikt for <code class="selectedOrg"></code></h3>

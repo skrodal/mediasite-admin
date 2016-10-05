@@ -27,11 +27,11 @@ var SUPER_ADMIN = (function () {
 		// Use current storage data in pie
 		$.when(MEDIASITE_ADMIN.orgsDiskusageListXHR()).done(function (storageData) {
 			pieOrgsDiskusageSuper = _buildPieOrgsDiskusageSuper(storageData);
-		});
-
-		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (storageData) {
-			lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(SELECTED_ORG, storageData);
-			_updateUI();
+			// 
+			$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (storageData) {
+				lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(SELECTED_ORG, storageData);
+				_updateUI();
+			});
 		});
 	}
 
@@ -66,10 +66,14 @@ var SUPER_ADMIN = (function () {
 		$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (response) {
 			// Total storage now
 			var orgTotalStorageMiB = response[response.length - 1].storage_mib;
+			var orgStoragePercentageGlobal;
 			$('#pageSuperAdmin').find('.orgTotalStorage').text(UTILS.mib2tb(orgTotalStorageMiB).toFixed(2) + " TB");
 			// Percentage of entire service
-			var orgStoragePercentageGlobal = (orgTotalStorageMiB / MEDIASITE.serviceDiskusageTotalXHR()) * 100;
-			$('#pageSuperAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal.toFixed(2));
+			$.when(MEDIASITE.serviceDiskusageTotalXHR()).done(function (response) {
+				orgStoragePercentageGlobal = (orgTotalStorageMiB / response) * 100;
+				$('#pageSuperAdmin').find('.orgStoragePercentageGlobal').text(orgStoragePercentageGlobal.toFixed(2));
+			});
+
 			// Average this year
 			var orgAvgStorageMiB = 0;
 			$.each(response, function (index, data) {
