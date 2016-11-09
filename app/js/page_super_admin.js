@@ -27,7 +27,7 @@ var SUPER_ADMIN = (function () {
 		// Use current storage data in pie
 		$.when(MEDIASITE_ADMIN.orgsDiskusageListXHR()).done(function (storageData) {
 			pieOrgsDiskusageSuper = _buildPieOrgsDiskusageSuper(storageData);
-			// 
+			//
 			$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(SELECTED_ORG)).done(function (storageData) {
 				lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(SELECTED_ORG, storageData);
 				_updateUI();

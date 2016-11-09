@@ -10,6 +10,10 @@ var MEDIASITE = (function () {
 
 	// FROM API
 	var userRole = false;
+	var homeOrgDiskusageTotal = false;
+	var serviceDiskusageTotal = false;
+	var serviceDiskusageAvgThisYear = false;
+	var serviceDiskusageList = false;
 
 	(function () {
 		XHR_MEDIASITE = userRoleXHR();
@@ -22,33 +26,37 @@ var MEDIASITE = (function () {
 	 * API returns a string: "SuperAdmin" | "OrgAdmin" | "Basic"
 	 * @returns {*}
 	 */
-	function userRoleXHR(){
-		return DP_AUTH.jso().ajax({
-			url: DP_AUTH.config().api_endpoints.mediasite + "me/role/",
-			datatype: 'json'
-		})
-			.pipe(function (response) {
-				userRole = {};
-				userRole.title = response.data;
-				userRole.isSuperAdmin = false;
-				userRole.isOrgAdmin = false;
-				//
-				switch (response.data.toLowerCase()) {
-					case "superadmin":
-						userRole.isSuperAdmin = true;
-						break;
-					case "orgadmin":
-						userRole.isOrgAdmin = true;
-						break;
-				}
-				return userRole;
+	function userRoleXHR() {
+		if (!userRole) {
+			return DP_AUTH.jso().ajax({
+				url: DP_AUTH.config().api_endpoints.mediasite + "me/role/",
+				datatype: 'json'
 			})
-			.fail(function (jqXHR, textStatus, error) {
-				var title = "Mediasite API — <code>me/role/</code>";
-				var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
-				UTILS.alertError(title, message);
-				UTILS.showAuthError(title, message);
-			});
+				.pipe(function (response) {
+					userRole = {};
+					userRole.title = response.data;
+					userRole.isSuperAdmin = false;
+					userRole.isOrgAdmin = false;
+					//
+					switch (response.data.toLowerCase()) {
+						case "superadmin":
+							userRole.isSuperAdmin = true;
+							break;
+						case "orgadmin":
+							userRole.isOrgAdmin = true;
+							break;
+					}
+					return userRole;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>me/role/</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return userRole;
+
 	}
 
 	/**
@@ -56,19 +64,23 @@ var MEDIASITE = (function () {
 	 * @returns {*}
 	 */
 	function homeOrgDiskusageTotalXHR() {
-		return DP_AUTH.jso().ajax({
+		if (!homeOrgDiskusageTotal) {
+			return DP_AUTH.jso().ajax({
 				url: DP_AUTH.config().api_endpoints.mediasite + "me/diskusage/total/",
 				datatype: 'json'
 			})
-			.pipe(function (response) {
-				return response.data;
-			})
-			.fail(function (jqXHR, textStatus, error) {
-				var title = "Mediasite API — <code>me/diskusage/total/</code>";
-				var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
-				UTILS.alertError(title, message);
-				UTILS.showAuthError(title, message);
-			});
+				.pipe(function (response) {
+					homeOrgDiskusageTotal = response.data;
+					return homeOrgDiskusageTotal;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>me/diskusage/total/</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return homeOrgDiskusageTotal;
 	}
 
 	/**
@@ -76,19 +88,23 @@ var MEDIASITE = (function () {
 	 * @returns {*}
 	 */
 	function serviceDiskusageTotalXHR() {
-		return DP_AUTH.jso().ajax({
+		if (!serviceDiskusageTotal) {
+			return DP_AUTH.jso().ajax({
 				url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/total/",
 				datatype: 'json'
 			})
-			.pipe(function (response) {
-				return response.data;
-			})
-			.fail(function (jqXHR, textStatus, error) {
-				var title = "Mediasite API — <code>service/diskusage/total/</code>";
-				var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
-				UTILS.alertError(title, message);
-				UTILS.showAuthError(title, message);
-			});
+				.pipe(function (response) {
+					serviceDiskusageTotal = response.data;
+					return serviceDiskusageTotal;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>service/diskusage/total/</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return serviceDiskusageTotal;
 	}
 
 	/**
@@ -96,19 +112,23 @@ var MEDIASITE = (function () {
 	 * @returns {*}
 	 */
 	function serviceDiskusageAvgThisYearXHR() {
-		return DP_AUTH.jso().ajax({
+		if (!serviceDiskusageAvgThisYear) {
+			return DP_AUTH.jso().ajax({
 				url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/avg/",
 				datatype: 'json'
 			})
-			.pipe(function (response) {
-				return response.data;
-			})
-			.fail(function (jqXHR, textStatus, error) {
-				var title = "Mediasite API — <code>service/diskusage/avg/</code>";
-				var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
-				UTILS.alertError(title, message);
-				UTILS.showAuthError(title, message);
-			});
+				.pipe(function (response) {
+					serviceDiskusageAvgThisYear = response.data;
+					return serviceDiskusageAvgThisYear;
+				})
+				.fail(function (jqXHR, textStatus, error) {
+					var title = "Mediasite API — <code>service/diskusage/avg/</code>";
+					var message = "Mediasite API avslo foresp&oslash;rselen - manglende rettigheter?."
+					UTILS.alertError(title, message);
+					UTILS.showAuthError(title, message);
+				});
+		}
+		return serviceDiskusageAvgThisYear;
 	}
 
 	/**
@@ -116,12 +136,14 @@ var MEDIASITE = (function () {
 	 * @returns {*}
 	 */
 	function serviceDiskusageListXHR() {
+		if (!serviceDiskusageList) {
 			return DP_AUTH.jso().ajax({
-					url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/list/",
-					datatype: 'json'
-				})
+				url: DP_AUTH.config().api_endpoints.mediasite + "service/diskusage/list/",
+				datatype: 'json'
+			})
 				.pipe(function (response) {
-					return response.data;
+					serviceDiskusageList = response.data;
+					return serviceDiskusageList;
 				})
 				.fail(function (jqXHR, textStatus, error) {
 					var title = "Mediasite API — <code>service/diskusage/list/</code>";
@@ -129,14 +151,18 @@ var MEDIASITE = (function () {
 					UTILS.alertError(title, message);
 					UTILS.showAuthError(title, message);
 				});
+		}
+		return serviceDiskusageList;
+
+
 	}
 
 
 	return {
-		ready: function() {
+		ready: function () {
 			return XHR_MEDIASITE;
 		},
-		homeOrgDiskusageTotalXHR: function(){
+		homeOrgDiskusageTotalXHR: function () {
 			return homeOrgDiskusageTotalXHR();
 		},
 		// Total MiB on disk as of last read
@@ -165,7 +191,7 @@ var MEDIASITE = (function () {
 			STORAGE_COST_PER_TB = cost;
 			return true;
 		},
-		userRole: function(){
+		userRole: function () {
 			return userRole;
 		}
 	}
