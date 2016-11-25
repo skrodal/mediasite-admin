@@ -8,13 +8,11 @@ var APP = (function () {
 	$(document).ready(function () {
 		// User/groups first, then Kind (depends on readyUser)
 		$.when(DATAPORTEN.readyUser(), DATAPORTEN.readyGroups()).done(function () {
-			$.when(KIND.ready()).done(function () {
-				DASHBOARD.init();
-				// MS is ready when user role is fetched from the API
-				$.when(MEDIASITE.ready()).done(function () {
-					MENU.init();
-					updateUserUI();
-				});
+			DASHBOARD.init();
+			// MS is ready when user role is fetched from the API
+			$.when(MEDIASITE.ready()).done(function () {
+				MENU.init();
+				updateUserUI();
 			});
 		});
 	});
@@ -43,12 +41,15 @@ var APP = (function () {
 		$('.feideAffiliation').html(' ' + affiliation);
 		$('.userImage').attr('src', DATAPORTEN.user().photo);
 		// Org/subscription=specific
+		// TODO: KIND
+		/*
 		$('.subscribersCount').html(KIND.subscriptionCount().full);
 		$('.subscribersTrialCount').html(KIND.subscriptionCount().trial);
 		$('.subscribersOtherCount').html(KIND.subscriptionCount().other);
 		$('.subscribersTotalCount').html(KIND.subscriptionCount().total);
+		*/
 		$.when(MEDIASITE.serviceDiskusageListXHR()).done(function (list) {
-			$('.foldersWithNoKindSubscriptionTotalCount').html(list.length - KIND.subscriptionCount().full);
+			$('.foldersWithNoKindSubscriptionTotalCount').html(list.length);
 		});
 
 		// Dev

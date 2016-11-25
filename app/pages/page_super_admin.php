@@ -21,10 +21,10 @@
 				<div class="info-box">
 					<span class="info-box-icon bg-aqua"><i class="ion ion-university"></i></span>
 					<div class="info-box-content">
-						<span class="info-box-text">ABONNENTER</span>
-						<span class="info-box-number subscribersCount"><!-- --><i class="fa fa-spinner fa-pulse"></i></span>
+						<span class="info-box-text">ORGS</span>
+						<span class="info-box-number orgCount"><!-- --><i class="fa fa-spinner fa-pulse"></i></span>
 						<div class="progress bg-aqua"></div>
-						<span class="progress-description text-muted">Fullverdige</span>
+						<span class="progress-description text-muted">På disk</span>
 					</div><!-- /.info-box-content -->
 				</div><!-- /.info-box -->
 			</div><!-- /.col -->
@@ -69,23 +69,14 @@
 			</div><!-- /.col -->
 		</div>
 
-		<h2 class="page-header">Abonnenter og kontaktpunkt</h2>
+		<h2 class="page-header">Organisasjoner</h2>
 
 	    <div class="row">
 		    <div class="col-lg-12">
 				<!-- SUBSCRIBERS TABLE -->
 				<div id="subscribersTableBoxSuperAdmin" class="box box-primary">
 					<div class="box-header with-border">
-						<h3 class="box-title icon ion-ios-home"> Abonnenter</h3>
-						<div class="box-tools pull-right">
-							<!-- Modal with info about different subscription codes-->
-							<button class="btn btn-box-tool icon ion-ios-information" style="margin-right: 15px;" data-toggle="modal" data-target="#subscriptionStatusInfoModal">&nbsp;info&hellip;</button>
-							<span data-toggle="tooltip" title="Totalt" class="badge bg-blue subscribersTotalCount"><!--updateUserUI--></span>
-							<span data-toggle="tooltip" title="Aktive" class="badge bg-green subscribersCount"><!--updateUserUI--></span>
-							<span data-toggle="tooltip" title="Utpr&oslash;ving" class="badge bg-orange subscribersTrialCount"><!--updateUserUI--></span>
-							<span data-toggle="tooltip" title="Andre" class="badge bg-red subscribersOtherCount"><!--updateUserUI--></span>
-							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-						</div>
+						<h3 class="box-title icon ion-ios-home"> Orgmapper på disk</h3>
 					</div>
 					<div class="box-body table-responsive">
 
@@ -93,8 +84,7 @@
 							<span class="info-box-icon bg-blue-active"><i class="ion ion-ios-home"></i></span>
 							<div class="info-box-content">
 								<ul>
-									<li><span class="subscribersTotalCount"></span> abonnenter funnet i Kind.</li>
-									<li><span class="foldersWithNoKindSubscriptionTotalCount"></span> mapper på disk uten match på org i Kind <span class="text-muted">(disse har status som <code>ukjent</code> i tabellen)</span>.</li>
+									<li><span class="orgCount"></span> orgmapper funnet på filserver.</li>
 									<li>Lagring/kostnad er basert på snittverdier for <?php echo date("Y"); ?> <span class="text-muted">(lagring * pris per TB)</span>.</li>
 
 								</ul>
@@ -105,11 +95,8 @@
 	                        <thead class="text-muted">
 	                            <tr>
 	                                <th class="text-nowrap"><i class="icon ion-android-home"></i> Org</th>
-	                                <th class="text-nowrap"><i class="icon ion-android-person"></i> Kontakt</th>
-	                                <th class="text-nowrap"><i class="icon ion-help-buoy"></i> Support</th>
 	                                <th class="text-nowrap"><i class="icon ion-upload"></i> Lagring (TB)</th>
 	                                <th class="text-nowrap"><i class="icon ion-cash"></i> Kostnad (kr)</th>
-		                            <th class="text-nowrap"><i class="icon ion-key"></i> Status</th>
 	                            </tr>
 	                        </thead>
 	                        <tbody>
@@ -118,49 +105,17 @@
 	                        <tfoot class="text-muted">
 	                            <tr>
 	                                <th class="text-nowrap"><i class="icon ion-android-home"></i> Org</th>
-	                                <th class="text-nowrap"><i class="icon ion-android-person"></i> Kontakt</th>
-	                                <th class="text-nowrap"><i class="icon ion-help-buoy"></i> Support</th>
 		                            <th class="text-nowrap"><i class="icon ion-upload"></i> Lagring (TB)</th>
 		                            <th class="text-nowrap"><i class="icon ion-cash"></i> Kostnad (kr)</th>
-		                            <th class="text-nowrap"><i class="icon ion-key"></i> Status</th>
 	                            </tr>
 	                        </tfoot>
 	                    </table>
 					</div><!-- /.box-body -->
 					<div class="box-footer">
-						<div class="input-group-btn">
-							<button type="button" class="btn bg-aqua dropdown-toggle icon ion-ios-email" data-toggle="dropdown"> E-post eksport <span class="fa fa-caret-down"></span></button>
-							<ul class="dropdown-menu">
-								<li><a href="#" class="email_export icon ion-android-people" data-export-group="kontaktpersoner" data-toggle="modal" data-target="#emailExportModal"> Kontakter</a></li>
-								<li class="divider"></li>
-								<li><a href="#" class="email_export icon ion-help-buoy" data-export-group="supportpunkt" data-toggle="modal" data-target="#emailExportModal"> Supportpunkt</a></li>
-							</ul>
-						</div>
+						<p>Organisasjonsnavn og Mediasite foldernavn er ikke alltid i samsvar med hverandre.</p>
+						<p>Nedenfor vises hvilke mappinger som er hardkodet inn i denne klienten (orgnavn : foldernavn).</p>
+					    <pre id="orgToFolderMap" class="well"></pre>
 					</div>
-
-					      <!-- EMAIL EXPORT MODAL -->
-					<div class="modal fade" id="emailExportModal" tabindex="-1" role="dialog" aria-labelledby="modalExportTitle" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header bg-dark-gray">
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">&nbsp;&nbsp;&nbsp;<span aria-hidden="true">&times;</span></button>
-									<h4 class="modal-title" id="modalExportTitle">
-										E-post eksport for <strong id="emailExportTargetGroup"><!--JS--></strong>
-										<span id="emailExportCount" class="badge bg-green pull-right" title="Antall adresser i liste"><!--JS--></span>
-									</h4>
-								</div>
-								<div class="modal-body">
-									<p>Kopier og lim inn i <code>To:</code> / <code>Cc:</code> / <code>BCc:</code> feltet i e-post:</p>
-									<textarea id="emailExportList" style="width: 100%;" rows="10" onclick="$(this).select();"><!--JS--></textarea>
-									<div id="emailMissing" class="text-muted"><!--JS--></div>
-								</div>
-								<div class="modal-footer bg-dark-gray">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					      <!-- //.modal -->
 
 					<div class="overlay ajax">
 						<i class="fa ion-load-d fa-spin"></i>
@@ -169,7 +124,7 @@
 		    </div> <!-- /.col -->
 	    </div><!-- /.row -->
 
-	    <h2 class="page-header">Lagring &amp; Fakturering</h2>
+	    <h2 class="page-header">Lagring & Fakturering</h2>
 
 		<div class="row">
 			<div class="col-lg-8 col-md-8">
@@ -288,28 +243,21 @@
 
 					<div class="box-footer">
 						<div class="row">
-							<div class="col-sm-3 col-xs-6">
-								<div class="description-block border-right">
-									<span class="description-percentage text-green orgSubscriptionStatus">&nbsp;</span>
-									<h5 class="description-header">&nbsp;</h5>
-									<span class="description-text">KIND</span>
-								</div><!-- /.description-block -->
-							</div><!-- /.col -->
-							<div class="col-sm-3 col-xs-6">
+							<div class="col-sm-4 col-xs-4">
 								<div class="description-block border-right">
 									<span class="description-percentage text-green"><i class="fa fa-pie-chart"></i> <span class="orgStoragePercentageGlobal"><!-- --></span>%</span>
 									<h5 class="description-header orgTotalStorage"><!-- --></h5>
 									<span class="description-text">TOTALT</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->
-							<div class="col-sm-3 col-xs-6">
+							<div class="col-sm-4 col-xs-4">
 								<div class="description-block border-right">
 									<span class="orgTotalStoragePercentageOfOrgAvg"><!-- --></span>
 									<h5 class="description-header orgAvgStorageThisYear"><!-- --></h5>
 									<span class="description-text">SNITT I &Aring;R</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->
-							<div class="col-sm-3 col-xs-6">
+							<div class="col-sm-4 col-xs-4">
 								<div class="description-block">
 									<span class="description-percentage text-muted"><i class="fa fa-calendar-o"></i> Per i dag</span>
 									<h5 class="description-header orgInvoiceEstimateThisYear"><!-- --></h5>
@@ -321,57 +269,8 @@
 				</div><!-- /.box -->
 			</div><!-- /.col -->
 		</div><!-- /.row -->
-
-		<h2 class="page-header">Til info...</h2>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="box box-warning">
-					<div class="box-body">
-						<p>Organisasjonsnavn og Mediasite foldernavn er ikke alltid i samsvar med hverandre.</p>
-						<p>Nedenfor vises hvilke mappinger som er hardkodet inn i denne klienten for at en orgs folder (p&aring; h&oslash;yre side) skal bli funnet.</p>
-					    <pre id="orgToFolderMap" class="well"></pre>
-					</div>
-				</div><!-- /.box -->
-			</div><!-- /.col -->
-		</div><!-- /.row -->
-
-
-
     </section><!-- /.content -->
 
-
-	    <!-- SUBSCRIPTION INFO MODAL -->
-		<div id="subscriptionStatusInfoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSubscriptionInfoTitle" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header bg-dark-gray">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">&nbsp;&nbsp;&nbsp;<span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="modalInfoTitle">Status abonnement</h4>
-					</div>
-					<div class="modal-body">
-						<div class="list-group">
-							<div class="list-group-item bg-green">
-								<h4 class="list-group-item-heading">Abonnent</h4>
-								<p class="list-group-item-text">Avtaleverk signert</p>
-							</div>
-
-							<div class="list-group-item bg-orange">
-								<h4 class="list-group-item-heading">Utpr&oslash;ving</h4>
-								<p class="list-group-item-text">Mangler avtaleverk - &aring;pnet for testing i en tidsbegrenset periode</p>
-							</div>
-
-							<div class="list-group-item bg-red">
-								<h4 class="list-group-item-heading">Andre</h4>
-								<p class="list-group-item-text">Mangler avtaleverk - abonnement/utpr&oslash;ving avsluttet, eller org funsjonert</p>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer bg-dark-gray">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button>
-					</div>
-				</div>
-			</div>
-		</div>
 
 <!-- Scripts pertaining only to SuperAdmin -->
 <script src="app/js/page_super_admin.js" type="text/javascript"></script>

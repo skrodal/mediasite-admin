@@ -34,13 +34,8 @@
 						<div class="info-box bg-light-blue">
 							<span class="info-box-icon"><i class="icon ion-home"></i></span>
 							<div class="info-box-content">
-								<span class="info-box-text">Abonnenter</span>
-								<h3><span class="subscribersCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span></h3>
-								<!--
-								Utprøving: <span class="subscribersTrialCount"><i class="fa ion-load-d fa-spin"></i></span><br>
-								Andre: <span class="subscribersOtherCount"><i class="fa ion-load-d fa-spin"></i></span><br>
-								Totalt: <span class="subscribersTotalCount"><i class="fa ion-load-d fa-spin"></i></span>
-								-->
+								<span class="info-box-text">Unike orgs</span>
+								<h3><span class="orgCount"><!--updateUserUI--><i class="fa ion-load-d fa-spin"></i></span></h3>
 							</div>
 						</div>
 
@@ -54,10 +49,29 @@
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
 
-				<!-- PIE CHART -->
+
+
+				<!-- Session info (DEV) -->
 				<div class="box box-warning">
 					<div class="box-header with-border">
-						<h3 class="box-title ion-ios-pie"> Lagring fordelt p&aring; abonnenter (i TB)</h3>
+						<h3 class="box-title ion-code-working"> Sesjonsinformasjon (fra Dataporten)</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+						</div>
+					</div>
+					<div class="box-body">
+						<pre><code id="dataportenSessionInfo"></code></pre>
+					</div><!-- /.box-body -->
+				</div><!-- /.box -->
+
+
+            </div><!-- /.col -->
+
+            <div class="col-md-7">
+	            <!-- PIE CHART -->
+				<div class="box box-warning">
+					<div class="box-header with-border">
+						<h3 class="box-title ion-ios-pie"> Lagring fordelt på orgs (i TB)</h3>
 					</div>
 					<div class="box-body">
 						<canvas id="pieOrgsDiskusageDashboard">
@@ -80,63 +94,6 @@
 					</div><!-- /.box-footer -->
 				</div><!-- /.box -->
 
-				<!-- Session info (DEV) -->
-				<div class="box box-warning">
-					<div class="box-header with-border">
-						<h3 class="box-title ion-code-working"> Sesjonsinformasjon (fra Dataporten)</h3>
-						<div class="box-tools pull-right">
-							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-						</div>
-					</div>
-					<div class="box-body">
-						<pre><code id="dataportenSessionInfo"></code></pre>
-					</div><!-- /.box-body -->
-				</div><!-- /.box -->
-
-
-            </div><!-- /.col -->
-
-            <div class="col-md-7">
-				<!-- TABLE: SUBSCRIBERS -->
-				<div id="subscribersTableBoxDashboard" class="box box-info">
-					<div class="box-header with-border">
-						<h3 class="box-title ion-ios-home"> Abonnenter</h3>
-						<div class="box-tools pull-right">
-							<!-- No need for this on Dash
-							<span data-toggle="tooltip" title="Totalt" class="badge bg-blue subscribersTotalCount"></span>
-							<span data-toggle="tooltip" title="Aktive" class="badge bg-green subscribersCount"></span>
-							<span data-toggle="tooltip" title="Utpr&oslash;ving" class="badge bg-orange subscribersTrialCount"></span>
-							<span data-toggle="tooltip" title="Andre" class="badge bg-red subscribersOtherCount"></span>
-							-->
-							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-						</div>
-					</div>
-
-					<div class="box-body">
-						<div id="subscribers_table_dash" class="table-responsive">
-							<table class="table no-margin">
-								<thead>
-									<tr>
-										<th>Org</th>
-										<th style="text-align: center;">Status</th>
-									</tr>
-								</thead>
-								<tbody id="subscriber_table_body">
-									<!--buildOrgsTableDashboard-->
-								</tbody>
-							</table>
-						</div><!-- /.table-responsive -->
-					</div><!-- /.box-body -->
-
-					<div class="box-footer text-muted">
-						<small><i class="icon ion-ios-information"></i> Abonnementsinformasjon hentet live fra UNINETTs driftsdatabase ('KIND').</small>
-					</div>
-
-					<div class="overlay ajax">
-						<i class="fa ion-load-d fa-spin"></i>
-					</div>
-				</div><!-- /.box -->
-            </div><!-- /.col -->
 
         </div><!-- /.row -->
 

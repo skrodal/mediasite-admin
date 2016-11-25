@@ -25,11 +25,7 @@ var DP_AUTH = (function () {
 			userinfo: "https://auth.dataporten.no/userinfo/",
 		},
 		api_endpoints: {
-			kind: "DASHBOARD",
 			mediasite: "DASHBOARD"
-		},
-		kind: {
-			mediasiteID: "KIND SERVICE ID"
 		}
 	};
 

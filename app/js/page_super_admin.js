@@ -16,6 +16,12 @@ var SUPER_ADMIN = (function () {
 		// Use average storage data in table
 		$.when(MEDIASITE_ADMIN.orgsDiskusageAvgListXHR()).done(function (storageData) {
 			orgSubscribersTable = _buildOrgSubscribersTable(storageData);
+			$('ul#orgListSuperAdmin').html('');
+			// Drop-down for Line Chart
+			 $.each(storageData, function (org, storage) {
+			    $('ul#orgListSuperAdmin').append('<li class="orgLineChartSelector" style="cursor: pointer;" data-org="' + org + '">' + UTILS.mapMediasiteFolderToFeideOrg(org) + '</li>');
+			 });
+
 		});
 
 		SELECTED_ORG = DATAPORTEN.user().org.shortname;
@@ -42,11 +48,6 @@ var SUPER_ADMIN = (function () {
 
 
 	function _updateUI() {
-		$('ul#orgListSuperAdmin').html('');
-		// Drop-down for Line Chart
-		$.each(KIND.subscribingOrgNames(), function (index, org) {
-			$('ul#orgListSuperAdmin').append('<li class="orgLineChartSelector" style="cursor: pointer;" data-org="' + org.split('.')[0] + '">' + org + '</li>');
-		});
 		//
 		var feideOrgID = UTILS.mapMediasiteFolderToFeideOrg(SELECTED_ORG);
 		// Selected from drop-down
@@ -92,8 +93,6 @@ var SUPER_ADMIN = (function () {
 				$('#pageSuperAdmin').find('.orgTotalStoragePercentageOfOrgAvg').html('<span class="description-percentage text-red"><i class="fa fa-caret-down"></i> ' + (orgTotalStoragePercentageOfOrgAvg - 100).toFixed(2) + '%</span>');
 			}
 		});
-
-		$('#pageSuperAdmin').find('.orgSubscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.getOrgSubscriptionStatusCode(feideOrgID)] + '">' + KIND.subscriptionCodesToNames()[KIND.getOrgSubscriptionStatusCode(feideOrgID)] + '</span>');
 	}
 
 
@@ -110,7 +109,7 @@ var SUPER_ADMIN = (function () {
 		//
 		$.each(data, function (index, orgObj) {
 			// Chart prefs and data
-			pieOrgsDiskusageSuperData.labels.push(orgObj.org);
+			pieOrgsDiskusageSuperData.labels.push(UTILS.mapMediasiteFolderToFeideOrg( orgObj.org ));
 			pieOrgsDiskusageSuperData.datasets[0].data.push(UTILS.mib2tb(orgObj.storage_mib).toFixed(2));
 			pieOrgsDiskusageSuperData.datasets[0].backgroundColor.push(UTILS.randomRGBA(0.6));
 			pieOrgsDiskusageSuperData.datasets[0].hoverBackgroundColor.push(UTILS.randomRGBA(1));
@@ -135,6 +134,7 @@ var SUPER_ADMIN = (function () {
 		// Catch clicks outside the pie
 		var selected_org = activePoint !== undefined ? activePoint._view.label : false;
 		if(selected_org){
+			selected_org = UTILS.mapFeideOrgToMediasiteFolder( selected_org );
 			$.when(MEDIASITE_ADMIN.orgDiskusageListXHR(selected_org)).done(function (storageData) {
 				$('#pageSuperAdmin').find('h2#org_details')[0].scrollIntoView(true);
 				lineOrgDiskUsageSuper = _buildLineOrgDiskusageSuper(selected_org, storageData); // Label is org name :-)
@@ -252,28 +252,9 @@ var SUPER_ADMIN = (function () {
 	 * @param subscribersArr
 	 */
 	function _buildOrgSubscribersTable(storageData) {
-		// Clone the array so as to not modify passed original
-		var orgs = JSON.parse(JSON.stringify(KIND.subscribers()));
-		// Before passing dataset to table - add storage consumption per org
-		var orgAvgMiB = 0;
-
-		// Rename object keys from org.no to corresponding folder name
-		// TODO: Some folders do not have a corresponding org in KIND - ask someone...
-		$.each(orgs, function (org, orgObj) {
-			orgs[UTILS.mapFeideOrgToMediasiteFolder(orgObj.org_id.split('.')[0])] = orgs[org];
-			delete orgs[org];
-		});
-
+		var orgArr = [];
 		$.each(storageData, function (org, storage) {
-			// Some physical org folders (e.g. `bibsys`) are NOT found in Kind subscribers list
-			if (orgs[org] === undefined) {
-				orgs[org] = {};
-				orgs[org].subscriber = false;
-				orgs[org].org_id = UTILS.mapMediasiteFolderToFeideOrg(org);
-				orgs[org].subscription_code = "404";
-
-			}
-			orgs[org].storage_mib = storage;
+			orgArr.push({'org' : UTILS.mapMediasiteFolderToFeideOrg(org), 'avg_storage_mib' : storage});
 		});
 
 
@@ -307,62 +288,24 @@ var SUPER_ADMIN = (function () {
 					}
 				]
 			},
-			"data": UTILS.convertDataTablesData(orgs), // Obj to Array,
+			"data": orgArr, //UTILS.convertDataTablesData(orgs), // Obj to Array,
 			"columns": [
 				{
-					"data": "org_id",
+					"data": "org"/*,
 					"render": function (data, type, full, meta) {
 						return full.org_id;
-					}
+					}*/
 				},
 				{
-					"data": "contact_person",
+					"data": "avg_storage_mib",
 					"render": function (data, type, full, meta) {
-						var contact;
-						try {
-							// TODO: POPUP WITH DETAILS
-							contact = '<a class="icon ion-ios-email" href="mailto:' + (full.contact_person.e_post).toLowerCase() + '"> ' + full.contact_person.navn + '</a>';
-						} catch (e) {
-							contact = "<span class='label bg-red'>MANGLER!</span>";
-						}
-						return contact;
-					}
-				},
-				{
-					"data": "contact_support",
-					"render": function (data, type, full, meta) {
-						var support;
-						try {
-							if ((full.contact_support.e_post).indexOf('http') == -1) {
-								support = '<a class="icon ion-ios-email" href="mailto:' + (full.contact_support.e_post).toLowerCase() + '"> ' + full.contact_support.navn + '</a>';
-							} else {
-								support = '<a class="icon ion-android-open" href="' + (full.contact_support.e_post).toLowerCase() + '" target="_blank"> ' + full.contact_support.navn + '</a>';
-							}
-						} catch (e) {
-							support = "<span class='label bg-red'>MANGLER!</span>";
-						}
-						return support;
-					}
-				},
-				{
-					"data": "storage_mib",
-					"width": "5%",
-					"render": function (data, type, full, meta) {
-						return parseFloat(UTILS.mib2tb(full.storage_mib).toFixed(2));
+						return parseFloat(UTILS.mib2tb(data).toFixed(2));
 					}
 				},
 				{
 					"data": "cost",
-					"width": "5%",
 					"render": function (data, type, full, meta) {
-						return parseInt(parseFloat(UTILS.mib2tb(full.storage_mib)) * MEDIASITE.storageCostTB());
-					}
-				},
-				{
-					"data": "subscription_code",
-					"width": "5%",
-					"render": function (data, type, full, meta) {
-						return "<span class='label bg-" + KIND.subscriptionCodesToColors()[full.subscription_code] + "'>" + KIND.subscriptionCodesToNames()[full.subscription_code] + "</span>";
+						return parseInt(parseFloat(UTILS.mib2tb(full.avg_storage_mib)) * MEDIASITE.storageCostTB());
 					}
 				}
 			]
@@ -372,55 +315,6 @@ var SUPER_ADMIN = (function () {
 
 
 	}
-
-	/**
-	 * Email export modal, displaying either contacts or supports depending on which button was clicked
-	 */
-	function _showEmailExportModal(btn) {
-		var $btnClicked = btn;
-		// Add group name to modal title
-		$('#emailExportModal').find('#emailExportTargetGroup').html($btnClicked.data("exportGroup"));
-		var emailList = [];
-		var tmpContact = "";
-		var nonEmailList = {'count': 0, 'orgs': ''};
-		var contactObj;
-
-		$.each(KIND.subscribers(), function (org, orgObj) {
-			// Teknisk ansvarlig or support?
-			contactObj = $btnClicked.data("exportGroup") == 'kontaktpersoner' ? orgObj.contact_person : orgObj.contact_support;
-			//
-			if (contactObj !== null && (orgObj.subscription_code == 20 || orgObj.subscription_code == 15)) {
-				if (contactObj.e_post !== null && contactObj.e_post.indexOf('http') == -1) {
-					tmpContact = '<' + contactObj.e_post.trim() + '>';
-					if (contactObj.navn !== null) {
-						tmpContact = contactObj.navn.trim() + ' ' + tmpContact;
-					}
-					emailList.push(tmpContact);
-
-				} else {
-					nonEmailList.count++;
-					nonEmailList.orgs += "<span class='label bg-red'>" + orgObj.org_id + "</span> ";
-				}
-			} else {
-				nonEmailList.count++;
-				nonEmailList.orgs += "<span class='label bg-red'>" + orgObj.org_id + "</span> ";
-			}
-		});
-		// Badge number in modal title
-		$('#emailExportModal').find('#emailExportCount').html(emailList.length);
-		// TextArea
-		$('#emailExportModal').find('#emailExportList').html(emailList.toString());
-		// Missing contact email adress
-		if (nonEmailList.count > 0) {
-			$('#emailExportModal').find('#emailMissing').html("<span class='badge bg-red'>" + nonEmailList.count + "</span> mangler kontaktadresse: " + nonEmailList.orgs);
-		}
-	}
-
-	// Trigger modal
-	$('.email_export').on('click', function () {
-		_showEmailExportModal($(this));
-	});
-
 
 	/**
 	 * Update cost column when calc-button is pressed

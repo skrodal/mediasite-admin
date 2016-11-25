@@ -107,28 +107,21 @@
 					</div><!-- /.box-body -->
 					<div class="box-footer">
 						<div class="row">
-							<div class="col-sm-3 col-xs-6">
-								<div class="description-block border-right">
-									<span class="description-percentage text-green orgSubscriptionStatus">&nbsp;</span>
-									<h5 class="description-header">&nbsp;</h5>
-									<span class="description-text">STATUS</span>
-								</div><!-- /.description-block -->
-							</div><!-- /.col -->
-							<div class="col-sm-3 col-xs-6">
+							<div class="col-sm-4 col-xs-4">
 								<div class="description-block border-right">
 									<span class="description-percentage text-green"><i class="fa fa-pie-chart"></i> <span class="orgStoragePercentageGlobal"><!-- --></span>%</span>
 									<h5 class="description-header orgTotalStorage"><!-- --></h5>
 									<span class="description-text">TOTALT</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->
-							<div class="col-sm-3 col-xs-6">
+							<div class="col-sm-4 col-xs-4">
 								<div class="description-block border-right">
 									<span class="orgTotalStoragePercentageOfOrgAvg"><!-- --></span>
 									<h5 class="description-header orgAvgStorageThisYear"><!-- --></h5>
 									<span class="description-text">SNITT I &Aring;R</span>
 								</div><!-- /.description-block -->
 							</div><!-- /.col -->
-							<div class="col-sm-3 col-xs-6">
+							<div class="col-sm-4 col-xs-4">
 								<div class="description-block">
 									<span class="description-percentage text-muted"><i class="fa fa-calendar-o"></i> Per i dag</span>
 									<h5 class="description-header orgInvoiceEstimateThisYear"><!-- --></h5>
@@ -194,7 +187,7 @@
 	    <h2 class="page-header">Tjenesteinfo og tilgang for <span class="feideOrg"></span></h2>
 
 	    <div class="row">
-			<div class="col-lg-6">
+			<div class="col-lg-8">
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<h3 class="box-title icon ion-ios-contact"> Tilgang til MediasiteAdmin</h3>
@@ -213,37 +206,6 @@
 					</div>
 					<div class="box-footer text-muted">
 						Informer mottaker om at URL ikke skal deles med hvemsomhelst.
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-6">
-				<div class="box box-info">
-					<div class="box-header with-border">
-						<h3 class="box-title icon ion-ios-contact"> Registrerte detaljer for Mediasite abonnement</h3>
-						<div class="box-tools pull-right">
-							<span class="subscriptionStatus"><!-- --></span>
-							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-						</div>
-					</div>
-					<div class="box-body">
-						<dl>
-							<dt>Kontaktperson:</dt>
-							<dd class="serviceContact"><!--updateOrgAdminUI()--></dd>
-							<dt>Supportpunkt</dt>
-							<dd class="serviceSupport"><!--updateOrgAdminUI()--></dd>
-							<dt>Tjeneste URL:</dt>
-							<dd class="serviceUrl"><!--updateOrgAdminUI()--></dd>
-						</dl>
-
-						<p>
-							Stemmer informasjonen ovenfor? Ønsker om endringer sendes til <a href="mailto:kontakt@uninett.no">kontakt@uninett.no</a>
-						</p>
-					</div>
-					<div class="box-footer text-muted">
-						<small>
-							Informasjonen er registrert i UNINETTs driftsdatabase ('KIND')
-						</small>
 					</div>
 				</div>
 			</div>

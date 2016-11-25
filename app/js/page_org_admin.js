@@ -9,7 +9,6 @@ var ORG_ADMIN = (function () {
 
 	function init() {
 		MEDIASITE_FOLDER = UTILS.mapFeideOrgToMediasiteFolder(DATAPORTEN.user().org.shortname);
-		_updateOrgAdminKindUI();
 	}
 
 	function onShowListener() {
@@ -40,8 +39,8 @@ var ORG_ADMIN = (function () {
 		});
 		// Number of dates available in org's storage history (max 30 days)
 		$('#pageOrgAdmin').find('.orgRecordedDatesNum').text(ORG_RECORDED_DATES_NUM);
-		//
-		$('#pageOrgAdmin').find('.orgSubscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.getOrgSubscriptionStatusCode(DATAPORTEN.user().org.id)] + '">' + KIND.subscriptionCodesToNames()[KIND.getOrgSubscriptionStatusCode(DATAPORTEN.user().org.id)] + '</span>');
+		// TODO: KIND
+		// $('#pageOrgAdmin').find('.orgSubscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.getOrgSubscriptionStatusCode(DATAPORTEN.user().org.id)] + '">' + KIND.subscriptionCodesToNames()[KIND.getOrgSubscriptionStatusCode(DATAPORTEN.user().org.id)] + '</span>');
 		// Calculator
 		$('#pageOrgAdmin').find('.inputCostTB').val(MEDIASITE.storageCostTB());
 		// All fields referring to cost defined by calculator
@@ -175,40 +174,6 @@ var ORG_ADMIN = (function () {
 	});
 
 	/** ----------------- ./ LINE CHART ----------------- **/
-
-	function _updateOrgAdminKindUI() {
-		var tabs = '&nbsp;&nbsp;&nbsp;';
-		var contactName = KIND.subscriberDetails().contact.navn !== "" ? KIND.subscriberDetails().contact.navn : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var contactEmail = KIND.subscriberDetails().contact.e_post !== "" ? KIND.subscriberDetails().contact.e_post : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var contactPhone = KIND.subscriberDetails().contact.direkte_telefon !== "" ? KIND.subscriberDetails().contact.direkte_telefon : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var contactMobile = KIND.subscriberDetails().contact.mobil_telefon !== "" ? KIND.subscriberDetails().contact.mobil_telefon : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var supportName = KIND.subscriberDetails().support.navn !== "" ? KIND.subscriberDetails().support.navn : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var supportEmail = KIND.subscriberDetails().support.e_post !== "" ? KIND.subscriberDetails().support.e_post : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var supportPhone = KIND.subscriberDetails().support.direkte_telefon !== "" ? KIND.subscriberDetails().support.direkte_telefon : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var supportMobile = KIND.subscriberDetails().support.mobil_telefon !== "" ? KIND.subscriberDetails().support.mobil_telefon : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-		var serviceURL = KIND.subscriberDetails().service_url !== "" ? KIND.subscriberDetails().service_url : '<span class="label label-warning icon ion-android-warning"> Mangler</span>';
-
-		//SUBSCRIBER_ORG_DETAILS_OBJ
-		$('.serviceContact').html('<p>' +
-			tabs + '<i class="icon ion-android-person text-muted"></i>'         + tabs + contactName + '<br>' +
-			tabs + '<i class="icon ion-ios-email text-muted"></i>'              + tabs + contactEmail + '<br>' +
-			tabs + '<i class="icon ion-ios-telephone text-muted"></i>'          + tabs + contactPhone + '<br>' +
-			tabs + '<i class="icon ion-android-phone-portrait text-muted"></i>' + tabs + contactMobile +
-			'</p>'
-		);
-		$('.serviceSupport').html('<p>' +
-			tabs + '<i class="icon ion-help-buoy text-muted"></i>'              + tabs + supportName + '<br>' +
-			tabs + '<i class="icon ion-ios-email text-muted"></i>'              + tabs + supportEmail + '<br>' +
-			tabs + '<i class="icon ion-ios-telephone text-muted"></i>'          + tabs + supportPhone + '<br>' +
-			tabs + '<i class="icon ion-android-phone-portrait text-muted"></i>' + tabs + supportMobile +
-			'</p>'
-		);
-		$('.serviceUrl').html('<p>' +
-			tabs + '<i class="icon ion-link text-muted"> </i> <a href="' + serviceURL + '" target="_blank">' + serviceURL + '</a>' +
-			'</p>'
-		);
-		$('.subscriptionStatus').html('<span class="label bg-' + KIND.subscriptionCodesToColors()[KIND.subscriberDetails().subscription_status] + '">' + KIND.subscriptionCodesToNames()[KIND.subscriberDetails().subscription_status] + '</span>');
-	}
 
 	return {
 		init: function () {
